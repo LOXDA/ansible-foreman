@@ -1,0 +1,21 @@
+---
+# foreman domains
+foreman_domain:
+
+  - name: loxda.net
+    description: domaine loxda.net
+    organizations:
+      - LAB
+      - MGMT
+    locations:
+      - LAB
+      - MGMT
+      - PROD
+
+  - name: lab.loxda.net
+    description: domaine lab.loxda.net
+    organizations:
+      - MGMT
+      - LAB
+    locations:
+      - LAB

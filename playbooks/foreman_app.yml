@@ -1,0 +1,28 @@
+---
+
+- hosts: tfm_app
+  gather_facts: true
+  roles:
+    - role: foreman-app
+  tags:
+    - tfm
+    - app
+
+# fetch oauth_consumer_* info
+- hosts: "{{ groups['tfm_app'][0] }}"
+  gather_facts: true
+  tasks:
+    - name: Fetch settings.yaml
+      slurp:
+        src: /etc/foreman/settings.yaml
+      register: settingsyaml
+    - name: Fetch oauth_consumer_key
+      set_fact:
+        oauth_consumer_key: "{{ settingsyaml['content'] | b64decode | regex_findall(':oauth_consumer_key: (.+)') | first }}"
+    - name: Fetch oauth_consumer_secret
+      set_fact:
+        oauth_consumer_secret: "{{ settingsyaml['content'] | b64decode | regex_findall(':oauth_consumer_secret: (.+)') | first }}"
+  tags:
+    - tfm
+    - app
+    - oauth

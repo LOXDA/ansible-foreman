@@ -1,0 +1,69 @@
+---
+
+deploy_git_repos:
+
+  - name: ansible-role-mirror
+    repo: http://mirror.lab.loxda.net/git/ansible-role-mirror.git/
+    dest: /etc/ansible/roles/ansible-role-mirror
+    clean: true
+
+  - name: ansible-role-deploy-git-repos
+    repo: http://mirror.lab.loxda.net/git/ansible-role-deploy-git-repos.git/
+    dest: /etc/ansible/roles/ansible-role-deploy-git-repos
+    clean: true
+
+  - name: ansible-role-ca-certificates
+    repo: http://mirror.lab.loxda.net/git/ansible-role-ca-certificates.git/
+    dest: /etc/ansible/roles/ansible-role-ca-certificates
+    clean: true
+
+  - name: ansible-role-grub
+    repo: http://mirror.lab.loxda.net/git/ansible-role-grub.git/
+    dest: /etc/ansible/roles/ansible-role-grub
+    clean: true
+
+  - name: ansible-role-tmux
+    repo: http://mirror.lab.loxda.net/git/ansible-role-tmux.git/
+    dest: /etc/ansible/roles/ansible-role-tmux
+    clean: true
+
+  - name: ansible-role-ldap
+    repo: http://mirror.lab.loxda.net/git/ansible-role-ldap.git/
+    dest: /etc/ansible/roles/ansible-role-ldap
+    clean: true
+
+  - name: ansible-role-windows-proxy
+    repo: http://mirror.lab.loxda.net/git/ansible-role-windows-proxy.git/
+    dest: /etc/ansible/roles/ansible-role-windows-proxy
+    clean: true
+
+  - name: ansible-role-windows-bginfo
+    repo: http://mirror.lab.loxda.net/git/ansible-role-windows-bginfo.git/
+    dest: /etc/ansible/roles/ansible-role-windows-bginfo
+    clean: true
+
+  - name: ansible-role-windows-firefoxesr
+    repo: http://mirror.lab.loxda.net/git/ansible-role-windows-firefoxesr.git/
+    dest: /etc/ansible/roles/ansible-role-windows-firefoxesr
+    clean: true
+
+  # - name: ansible-firefox-config
+  #   repo: http://mirror.lab.loxda.net/git/ansible-firefox-config.git/
+  #   dest: /etc/ansible/roles/ansible-firefox-config
+  #   clean: true
+
+  # - name: Test
+  #   repo: git@github.com:gcoop-libre/ansible-role-deploy-git-repos.git
+  #   version: master (default)
+  #   dest: /var/www
+  #   subtree: app
+  #   excludes:
+  #     - .git*
+  #   clean: false (default)
+  #   key_file: "~/.ssh/id_rsa"
+  #   perms:
+  #     - path: cache
+  #       owner: www-data
+  #       group: www-data
+  #       mode: '0775'
+  #       recurse: false

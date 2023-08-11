@@ -1,0 +1,70 @@
+---
+vault_foreman_admin_username: admin
+vault_foreman_admin_password: P4p1llon!!
+vault_foreman_db_username: foreman
+vault_foreman_db_password: p4p1llon
+
+# defaults file for common
+foreman_version: 3.6
+puppet_version: puppet7
+disable_puppet: false
+
+# install options
+foreman_cmd_options: []
+
+# General config.
+foreman_puppet_server: tfm-puppet-mgmt.lab.loxda.net
+
+foreman_admin_username: "{{ vault_foreman_admin_username }}"
+foreman_admin_password: "{{ vault_foreman_admin_password }}"
+
+# db manage true for All-in-one setup, false if you have a separate db
+foreman_db_manage: false
+foreman_db_host: tfm-db-mgmt.lab.loxda.net
+foreman_db_database: foreman
+foreman_db_username: "{{ vault_foreman_db_username }}"
+foreman_db_password: "{{ vault_foreman_db_password }}"
+
+# Plugins/Capability. []
+foreman_plugins: 
+  - remote-execution
+  - templates
+  - ansible
+  - puppet
+  - tasks
+  - hooks
+
+foreman_proxy_plugins: []
+
+foreman_compute:
+  - vmware
+
+# Options. {}
+foreman_options:
+  - foreman-url: 'https://{{ inventory_hostname }}'
+  - hsts-enabled: 'false'
+  - servername: "{{ inventory_hostname }}"
+  - telemetry-prometheus-enabled: 'true'
+  - foreman-service-puma-threads-max: '5'
+  - rails-cache-store: 'redis'
+  - dynflow-manage-services: 'true'
+  - dynflow-orchestrator-ensure: 'present'
+  - dynflow-redis-url: 'redis://localhost:6379/6'
+  - dynflow-worker-concurrency: '5'
+  - dynflow-worker-instances: '1'
+  - keycloak: 'false'
+  # When enabled still relies on manually running keycloak-httpd-client-install
+  - keycloak-app-name: 'foreman-openidc'
+  - keycloak-realm: 'ssl-realm'
+
+foreman_plugin_options:
+  - tasks-automatic-cleanup: 'true'
+  - tasks-backup: 'true'
+  # - tasks-cron-line: '45 18 * * *'
+  # - cors-domains: "['https://lisa.loxda.net']"
+
+foreman_proxy_options: {}
+foreman_proxy_plugin_options: {}
+foreman_compute_options: {}
+puppet_options: {}
+puppet_server_options: {}

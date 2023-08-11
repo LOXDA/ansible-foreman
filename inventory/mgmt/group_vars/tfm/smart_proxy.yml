@@ -1,0 +1,11 @@
+---
+foreman_smart_proxy:
+  - name: "{{ foreman_host_proxy }}"
+    url: "{{ foreman_url_proxy }}"
+    organizations:
+      - MGMT
+      - LAB
+    locations:
+      - MGMT
+      - PROD
+      - LAB

@@ -1,0 +1,19 @@
+---
+
+# deploy var
+foreman_mgmt_host_app: tfm-app.loxda.net
+foreman_mgmt_host_proxy: tfm-proxy.loxda.net
+foreman_mgmt_host_puppet: tfm-puppet.loxda.net
+foreman_mgmt_url_app: https://{{ foreman_mgmt_host_app }}
+foreman_mgmt_url_puppet: https://{{ foreman_mgmt_host_puppet }}:8140
+foreman_mgmt_url_proxy: https://{{ foreman_mgmt_host_proxy }}:8443
+
+# accès a l'app foreman mgmt déployée pour provisioning
+foreman_url_app: "{{ foreman_mgmt_url_app }}"
+foreman_url_proxy: "{{ foreman_mgmt_url_proxy }}"
+foreman_host_app: "{{ foreman_mgmt_host_app }}"
+foreman_host_proxy: "{{ foreman_mgmt_host_proxy }}"
+foreman_host_puppet: "{{ foreman_mgmt_host_puppet }}"
+
+foreman_admin_username: admin
+foreman_admin_password: P4p1llon!!

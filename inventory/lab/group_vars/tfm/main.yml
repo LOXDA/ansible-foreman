@@ -1,0 +1,36 @@
+---
+puppet_version: 7
+foreman_version: 3.7
+
+vault_foreman_admin_username: admin
+vault_foreman_admin_password: P4p1llon!!
+vault_foreman_db_username: foreman
+vault_foreman_db_password: p4p1llon
+
+foreman_admin_username: "{{ vault_foreman_admin_username }}"
+foreman_admin_password: "{{ vault_foreman_admin_password }}"
+
+# db var
+foreman_db_manage: 'false'
+foreman_db_name: foreman
+foreman_db_username: "{{ vault_foreman_db_username }}"
+foreman_db_password: "{{ vault_foreman_db_password }}"
+
+initial_organization: LAB
+initial_location: LAB
+
+# deploy var
+foreman_lab_host_app: tfm-app.lab.loxda.net
+foreman_lab_host_proxy: tfm-proxy.lab.loxda.net
+foreman_lab_host_puppet: tfm-puppet.lab.loxda.net
+
+# accès a l'app foreman lab déployée pour provisioning
+foreman_host_app: tfm-app.lab.loxda.net
+foreman_host_proxy: tfm-proxy.lab.loxda.net
+foreman_host_puppet: tfm-puppet.lab.loxda.net
+foreman_host_puppetserver: tfm-puppet.lab.loxda.net
+
+foreman_url_app: https://{{ foreman_host_app }}
+foreman_url_app_http: http://{{ foreman_host_app }}
+foreman_url_proxy: https://{{ foreman_host_proxy }}:8443
+foreman_url_puppet: https://{{ foreman_host_puppet }}:8140

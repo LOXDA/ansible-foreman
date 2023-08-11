@@ -1,0 +1,81 @@
+---
+
+foreman_provisioning_template:
+
+  # Debian
+
+  - name: Preseed default PXELinux FIXED
+    file_name: template_prov_preseed_default_pxelinux_fix
+    kind: PXELinux
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "LAB"
+
+  - name: preseed_kernel_options_fix
+    file_name: template_snippet_preseed_kernel_options_fix
+    kind: snippet
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "LAB"
+
+  # ESXi
+
+  - name: ESXi iPXE Common
+    file_name: template_ipxe_esxi_ipxe_common
+    kind: iPXE
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "LAB"
+
+  - name: ESXi Minimal Kickstart
+    file_name: template_prov_esxi_minimal_kickstart
+    kind: provision
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "LAB"
+
+  - name: ESXi Complex Kickstart
+    file_name: template_prov_esxi_complex_kickstart
+    kind: provision
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "LAB"
+
+  # Windows
+
+  - name: Windows default iPXE httpboot imgfree
+    file_name: template_prov_windows_ipxe_httpboot_imgfree
+    kind: iPXE
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "LAB"
+
+  - name: Windows peSetup.cmd noproxy
+    file_name: template_prov_windows_pesetup_noproxy
+    kind: script
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "LAB"
+
+  - name: Windows default finish FR
+    file_name: template_prov_windows_default_finish_fr
+    kind: finish
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "LAB"

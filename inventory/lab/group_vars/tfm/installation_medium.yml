@@ -1,0 +1,60 @@
+---
+
+foreman_installation_medium:
+
+  - name: CentOS 8 mirror
+    path: http://mirror.centos.org/centos/$major/BaseOS/$arch/kickstart
+    os_family: Redhat
+    operatingsystems: 
+      - CentOS Linux 8.3.2011
+    locations:
+      - LAB
+    organizations:
+      - LAB
+
+  - name: CentOS 7 mirror
+    path: http://mirror.centos.org/centos/$major/os/$arch
+    os_family: Redhat
+    operatingsystems: 
+      - CentOS Linux 7.9.2009
+    locations:
+      - LAB
+    organizations:
+      - LAB
+
+  - name: Debian mirror
+    path: http://mirror.lab.loxda.net/debian
+    os_family: Debian
+    operatingsystems: 
+      - Debian 10.0
+      - Debian 11.0
+    locations:
+      - LAB
+    organizations:
+      - LAB
+
+  - name: ESXi dummy
+    path: "http://{{ foreman_host_proxy }}:8000/httpboot/esxi"
+    os_family: Redhat
+    operatingsystems:
+      - ESXi-6.5.0-14320405
+      - ESXi-6.7.0-15160138
+      - ESXi-7.0.1-16850804
+      - ESXi-7.0.3-19193900
+      - ESXi-8.0.1-21495797
+    locations:
+      - LAB
+    organizations:
+      - LAB
+
+  - name: Windows images
+    path: "http://{{ foreman_host_proxy }}:8000/httpboot/wimimages/$arch/$major"
+    os_family: Windows
+    operatingsystems:
+      - Windows 10
+      - WindowsServerStd 2016
+      - WindowsServerStd 2019
+    locations:
+      - LAB
+    organizations:
+      - LAB

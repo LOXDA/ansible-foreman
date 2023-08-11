@@ -1,0 +1,44 @@
+---
+foreman_compute_resources:
+  # - name: pve-gsw
+  #   organizations:
+  #     - MGMT
+  #     - LAB
+  #   locations:
+  #     - MGMT
+  #     - PROD
+  #     - LAB
+  #   provider: proxmox
+  #   provider_params:
+  #     url: https://172.16.202.11:8006/api2/json
+  #     ssl_verify_peer: false
+  #     user: root@pam
+  #     password: Cya4WLP0
+  - name: vc-dc1
+    organizations:
+      - MGMT
+      - LAB
+    locations:
+      - MGMT
+      - PROD
+      - LAB
+    provider: vmware
+    provider_params:
+      url: vc-dc1.lab.loxda.net
+      user: administrator@lab.loxda.net
+      password: P4p1llon!!
+      datacenter: DC-DC1
+  - name: vc-dc2
+    organizations:
+      - MGMT
+      - LAB
+    locations:
+      - MGMT
+      - PROD
+      - LAB
+    provider: vmware
+    provider_params:
+      url: vc-dc2.lab.loxda.net
+      user: administrator@lab.loxda.net
+      password: P4p1llon!!
+      datacenter: DC-DC2

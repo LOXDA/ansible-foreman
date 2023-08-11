@@ -1,0 +1,9 @@
+---
+
+- hosts: tfm_db
+  gather_facts: true
+  roles:
+    - role: foreman-db
+  tags:
+    - tfm
+    - db

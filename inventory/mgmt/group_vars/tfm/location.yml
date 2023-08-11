@@ -1,0 +1,74 @@
+---
+# foreman location
+foreman_location:
+
+  - name: MGMT
+    organizations: 
+      - MGMT
+    parent: 
+  - name: INFRA
+    organizations: 
+      - MGMT
+    parent: MGMT
+  - name: DNS
+    organizations: 
+      - MGMT
+    parent: MGMT/INFRA
+  - name: LDAP
+    organizations: 
+      - MGMT
+    parent: MGMT/INFRA
+  - name: FOREMAN
+    organizations: 
+      - MGMT
+    parent: MGMT/INFRA
+  - name: VSPHERE
+    organizations: 
+      - MGMT
+    parent: MGMT/INFRA
+  - name: PROXMOX
+    organizations: 
+      - MGMT
+    parent: MGMT/INFRA
+
+  - name: PROD
+    organizations: 
+      - LOXDA
+    parent: 
+  - name: INFRA
+    organizations: 
+      - LOXDA
+    parent: PROD
+  - name: DNS
+    organizations: 
+      - LOXDA
+    parent: PROD/INFRA
+  - name: FOREMAN
+    organizations: 
+      - LOXDA
+    parent: PROD/INFRA
+  - name: PROXMOX
+    organizations: 
+      - LOXDA
+    parent: PROD/INFRA
+
+  - name: LAB
+    organizations: 
+      - LAB
+    parent: 
+  - name: v10
+    organizations: 
+      - LAB
+    parent: LAB
+  - name: v11
+    organizations: 
+      - LAB
+    parent: LAB
+  - name: v12
+    organizations: 
+      - LAB
+    parent: LAB
+  - name: v13
+    organizations: 
+      - LAB
+    parent: LAB

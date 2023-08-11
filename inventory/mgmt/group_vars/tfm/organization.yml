@@ -1,0 +1,7 @@
+---
+# foreman organization
+foreman_organization:
+
+  - name: LOXDA
+  - name: MGMT
+  - name: LAB

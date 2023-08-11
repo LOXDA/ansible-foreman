@@ -1,0 +1,570 @@
+---
+
+# guest_id:
+# identifier list found at
+# https://vdc-repo.vmware.com/vmwb-repository/dcr-public/da47f910-60ac-438b-8b9b-6122f4d14524/16b7274a-bf8b-4b4c-a05e-746f2aa93c8c/doc/vim.vm.GuestOsDescriptor.GuestOsIdentifier.html
+# scsi_controllers list found at
+# https://vdc-download.vmware.com/vmwb-repository/dcr-public/9fd87c06-14a3-41e5-b28d-277864a80f29/d6112c2a-b124-4fa5-96d7-9fb4b6f1bb50/doc/vim.vm.device.VirtualController.html
+# https://vdc-download.vmware.com/vmwb-repository/dcr-public/9fd87c06-14a3-41e5-b28d-277864a80f29/d6112c2a-b124-4fa5-96d7-9fb4b6f1bb50/doc/vim.vm.device.VirtualSATAController.html
+# https://vdc-repo.vmware.com/vmwb-repository/dcr-public/3d076a12-29a2-4d17-9269-cb8150b5a37f/8b5969e2-1a66-4425-af17-feff6d6f705d/doc/vim.vm.device.VirtualSCSIController.html
+
+foreman_compute_profil:
+
+###################################################################################################
+# Debian
+###################################################################################################
+
+  - name: debian-small
+    compute_attributes:
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 1
+        corespersocket: 1
+        memory_mb: 1024
+        firmware: bios
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab2
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 1
+        corespersocket: 1
+        memory_mb: 1024
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC2-Z02
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab3
+
+###################################################################################################
+
+  - name: debian-medium
+    compute_attributes:
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 1
+        memory_mb: 2048
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+            key: 1000
+        interfaces_attributes:
+          0:
+            type: VirtualVmxnet3
+            network: LAB_INT
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab2
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 1
+        memory_mb: 2048
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC2-Z02
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+            key: 1000
+        interfaces_attributes:
+          0:
+            type: VirtualVmxnet3
+            network: LAB_INT
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab3
+
+###################################################################################################
+
+  - name: debian-large
+    compute_attributes:
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 2
+        memory_mb: 4096
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+            key: 1000
+        interfaces_attributes:
+          0:
+            type: VirtualVmxnet3
+            network: LAB_INT
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab2
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 2
+        memory_mb: 4096
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC2-Z02
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+            key: 1000
+        interfaces_attributes:
+          0:
+            type: VirtualVmxnet3
+            network: LAB_INT
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab3
+
+###################################################################################################
+# Windows
+###################################################################################################
+
+  - name: windows-small
+    compute_attributes:
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 1
+        corespersocket: 1
+        memory_mb: 1024
+        firmware: bios
+        guest_id: windows9_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 40
+            datastore: nfslab2
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 1
+        corespersocket: 1
+        memory_mb: 1024
+        firmware: automatic
+        guest_id: windows9_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC2-Z02
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 40
+            datastore: nfslab3
+
+###################################################################################################
+
+  - name: windows-medium
+    compute_attributes:
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 1
+        corespersocket: 1
+        memory_mb: 2048
+        firmware: bios
+        guest_id: windows9_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 40
+            datastore: nfslab2
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 1
+        corespersocket: 1
+        memory_mb: 2048
+        firmware: automatic
+        guest_id: windows9_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC2-Z02
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 40
+            datastore: nfslab3
+
+###################################################################################################
+
+  - name: windows-large
+    compute_attributes:
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 1
+        corespersocket: 2
+        memory_mb: 4096
+        firmware: bios
+        guest_id: windows9_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 40
+            datastore: nfslab2
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 1
+        corespersocket: 2
+        memory_mb: 4096
+        firmware: automatic
+        guest_id: windows9_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC2-Z02
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 40
+            datastore: nfslab3
+
+###################################################################################################
+
+  - name: windows-xlarge
+    compute_attributes:
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 1
+        corespersocket: 2
+        memory_mb: 8192
+        firmware: bios
+        guest_id: windows9_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 40
+            datastore: nfslab2
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 1
+        corespersocket: 2
+        memory_mb: 8192
+        firmware: automatic
+        guest_id: windows9_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC2-Z02
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 40
+            datastore: nfslab3
+
+###################################################################################################

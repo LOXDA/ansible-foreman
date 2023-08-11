@@ -1,0 +1,633 @@
+---
+foreman_operatingsystems:
+
+###################################################################################################
+# CENTOS
+###################################################################################################
+
+  - name: CentOS
+    description: CentOS Linux 8.5.2111
+    release_name: CentOS Linux 8.5.2111
+    major: 8
+    minor: 5.2111
+    family: Redhat
+    password_hash: SHA256
+    architectures: x86_64
+    media: CentOS 8 mirror
+    ptables:
+      - Kickstart default
+    parameters:
+      - name: "bootloader-append"
+        parameter_type: string
+        value: "nofb quiet splash=quiet"
+      - name: "disable-firewall"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-epel"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-puppetlabs-puppet6-repo"
+        parameter_type: boolean
+        value: "true"
+      - name: "keyboard"
+        parameter_type: string
+        value: "fr"
+      - name: "lang"
+        parameter_type: string
+        value: "fr_FR.UTF-8"
+      - name: "time-zone"
+        parameter_type: string
+        value: "Europe/Paris"
+      - name: "package_upgrade"
+        parameter_type: boolean
+        value: "true"
+      - name: "selinux-mode"
+        parameter_type: string
+        value: "enforcing"
+    state: present
+
+  - name: CentOS
+    description: CentOS Linux 8.3.2011
+    release_name: CentOS Linux 8.3.2011
+    major: 8
+    minor: 3.2011
+    family: Redhat
+    password_hash: SHA256
+    architectures: x86_64
+    media: CentOS 8 mirror
+    ptables:
+      - Kickstart default
+    parameters:
+      - name: "bootloader-append"
+        parameter_type: string
+        value: "nofb quiet splash=quiet"
+      - name: "disable-firewall"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-epel"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-puppetlabs-puppet6-repo"
+        parameter_type: boolean
+        value: "true"
+      - name: "keyboard"
+        parameter_type: string
+        value: "fr"
+      - name: "lang"
+        parameter_type: string
+        value: "fr_FR.UTF-8"
+      - name: "time-zone"
+        parameter_type: string
+        value: "Europe/Paris"
+      - name: "package_upgrade"
+        parameter_type: boolean
+        value: "true"
+      - name: "selinux-mode"
+        parameter_type: string
+        value: "enforcing"
+    state: present
+
+  - name: CentOS
+    description: CentOS Linux 7.9.2009
+    release_name: CentOS Linux 7.9.2009
+    major: 7
+    minor: 9.2009
+    family: Redhat
+    password_hash: SHA256
+    architectures: x86_64
+    media: CentOS 7 mirror
+    ptables:
+      - Kickstart default
+    parameters:
+      - name: "bootloader-append"
+        parameter_type: string
+        value: "nofb quiet splash=quiet"
+      - name: "disable-firewall"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-epel"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-puppetlabs-puppet6-repo"
+        parameter_type: boolean
+        value: "true"
+      - name: "keyboard"
+        parameter_type: string
+        value: "fr"
+      - name: "lang"
+        parameter_type: string
+        value: "fr_FR.UTF-8"
+      - name: "time-zone"
+        parameter_type: string
+        value: "Europe/Paris"
+      - name: "package_upgrade"
+        parameter_type: boolean
+        value: "true"
+      - name: "selinux-mode"
+        parameter_type: string
+        value: "enforcing"
+    state: present
+
+###################################################################################################
+# DEBIAN 10
+###################################################################################################
+
+  - name: Debian
+    description: Debian 10.0
+    release_name: buster
+    major: 10
+    minor: 0
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables:
+      - Preseed default LVM
+    parameters:
+      - name: additional-packages
+        value: gnupg ccze qemu-guest-agent
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: enable-puppetlabs-puppet6-repo
+        value: true
+      - name: partitioning-crypto-erase
+        value: false
+      - name: partitioning-crypto-password
+        value: temporarypassword
+      - name: partitioning-crypto-password-weak
+        value: false
+      - name: partitioning-method
+        value: lvm
+      - name: partitioning-recipe
+        value: multi
+      - name: partitioning-vg-name
+        value: vg00
+      - name: preseed-post-install-upgrade
+        value: full-upgrade
+      - name: preseed-update-policy
+        value: unattended-upgrades    
+    state: present
+
+  - name: Debian
+    description: Debian 10.9
+    release_name: buster
+    major: 10
+    minor: 9
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables:
+      - Preseed default LVM
+    parameters:
+      - name: additional-packages
+        value: gnupg ccze qemu-guest-agent
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: enable-puppetlabs-puppet6-repo
+        value: true
+      - name: partitioning-crypto-erase
+        value: false
+      - name: partitioning-crypto-password
+        value: temporarypassword
+      - name: partitioning-crypto-password-weak
+        value: false
+      - name: partitioning-method
+        value: lvm
+      - name: partitioning-recipe
+        value: multi
+      - name: partitioning-vg-name
+        value: vg00
+      - name: preseed-post-install-upgrade
+        value: full-upgrade
+      - name: preseed-update-policy
+        value: unattended-upgrades    
+    state: present
+
+  - name: Debian
+    description: Debian 10.10
+    release_name: buster
+    major: 10
+    minor: 10
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables:
+      - Preseed default LVM
+    parameters:
+      - name: additional-packages
+        value: gnupg ccze qemu-guest-agent
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: enable-puppetlabs-puppet6-repo
+        value: true
+      - name: partitioning-crypto-erase
+        value: false
+      - name: partitioning-crypto-password
+        value: temporarypassword
+      - name: partitioning-crypto-password-weak
+        value: false
+      - name: partitioning-method
+        value: lvm
+      - name: partitioning-recipe
+        value: multi
+      - name: partitioning-vg-name
+        value: vg00
+      - name: preseed-post-install-upgrade
+        value: full-upgrade
+      - name: preseed-update-policy
+        value: unattended-upgrades    
+    state: present
+
+  - name: Debian
+    description: Debian 10.11
+    release_name: buster
+    major: 10
+    minor: 11
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables:
+      - Preseed default LVM
+    parameters:
+      - name: additional-packages
+        value: gnupg ccze qemu-guest-agent
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: enable-puppetlabs-puppet6-repo
+        value: true
+      - name: partitioning-crypto-erase
+        value: false
+      - name: partitioning-crypto-password
+        value: temporarypassword
+      - name: partitioning-crypto-password-weak
+        value: false
+      - name: partitioning-method
+        value: lvm
+      - name: partitioning-recipe
+        value: multi
+      - name: partitioning-vg-name
+        value: vg00
+      - name: preseed-post-install-upgrade
+        value: full-upgrade
+      - name: preseed-update-policy
+        value: unattended-upgrades    
+    state: present
+
+  - name: Debian
+    description: Debian 10.12
+    release_name: buster
+    major: 10
+    minor: 12
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables:
+      - Preseed default LVM
+    parameters:
+      - name: additional-packages
+        value: gnupg ccze qemu-guest-agent
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: enable-puppetlabs-puppet6-repo
+        value: true
+      - name: partitioning-crypto-erase
+        value: false
+      - name: partitioning-crypto-password
+        value: temporarypassword
+      - name: partitioning-crypto-password-weak
+        value: false
+      - name: partitioning-method
+        value: lvm
+      - name: partitioning-recipe
+        value: multi
+      - name: partitioning-vg-name
+        value: vg00
+      - name: preseed-post-install-upgrade
+        value: full-upgrade
+      - name: preseed-update-policy
+        value: unattended-upgrades    
+    state: present
+
+###################################################################################################
+# DEBIAN 11
+###################################################################################################
+
+  - name: Debian
+    description: Debian 11.0
+    release_name: bullseye
+    major: 11
+    minor: 0
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables:
+      - Preseed default LVM
+    parameters:
+      - name: additional-packages
+        value: gnupg ccze qemu-guest-agent
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: enable-puppetlabs-puppet6-repo
+        value: true
+      - name: partitioning-crypto-erase
+        value: false
+      - name: partitioning-crypto-password
+        value: temporarypassword
+      - name: partitioning-crypto-password-weak
+        value: false
+      - name: partitioning-method
+        value: lvm
+      - name: partitioning-recipe
+        value: multi
+      - name: partitioning-vg-name
+        value: vg00
+      - name: preseed-post-install-upgrade
+        value: full-upgrade
+      - name: preseed-update-policy
+        value: unattended-upgrades    
+    state: present
+
+  - name: Debian
+    description: Debian 11.1
+    release_name: bullseye
+    major: 11
+    minor: 1
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables:
+      - Preseed default LVM
+    parameters:
+      - name: additional-packages
+        value: gnupg ccze qemu-guest-agent
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: enable-puppetlabs-puppet6-repo
+        value: true
+      - name: partitioning-crypto-erase
+        value: false
+      - name: partitioning-crypto-password
+        value: temporarypassword
+      - name: partitioning-crypto-password-weak
+        value: false
+      - name: partitioning-method
+        value: lvm
+      - name: partitioning-recipe
+        value: multi
+      - name: partitioning-vg-name
+        value: vg00
+      - name: preseed-post-install-upgrade
+        value: full-upgrade
+      - name: preseed-update-policy
+        value: unattended-upgrades    
+    state: present
+
+  - name: Debian
+    description: Debian 11.2
+    release_name: bullseye
+    major: 11
+    minor: 2
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables:
+      - Preseed default LVM
+    parameters:
+      - name: additional-packages
+        value: gnupg ccze qemu-guest-agent
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: enable-puppetlabs-puppet6-repo
+        value: true
+      - name: partitioning-crypto-erase
+        value: false
+      - name: partitioning-crypto-password
+        value: temporarypassword
+      - name: partitioning-crypto-password-weak
+        value: false
+      - name: partitioning-method
+        value: lvm
+      - name: partitioning-recipe
+        value: multi
+      - name: partitioning-vg-name
+        value: vg00
+      - name: preseed-post-install-upgrade
+        value: full-upgrade
+      - name: preseed-update-policy
+        value: unattended-upgrades    
+    state: present
+
+  - name: Debian
+    description: Debian 11.3
+    release_name: bullseye
+    major: 11
+    minor: 3
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables:
+      - Preseed default LVM
+    parameters:
+      - name: additional-packages
+        value: gnupg ccze qemu-guest-agent
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: enable-puppetlabs-puppet6-repo
+        value: true
+      - name: partitioning-crypto-erase
+        value: false
+      - name: partitioning-crypto-password
+        value: temporarypassword
+      - name: partitioning-crypto-password-weak
+        value: false
+      - name: partitioning-method
+        value: lvm
+      - name: partitioning-recipe
+        value: multi
+      - name: partitioning-vg-name
+        value: vg00
+      - name: preseed-post-install-upgrade
+        value: full-upgrade
+      - name: preseed-update-policy
+        value: unattended-upgrades    
+    state: present
+
+###################################################################################################
+# ESXi 6.7
+###################################################################################################
+
+  - name: ESXi-6.7.0-8169922
+    description: ESXi-6.7.0-8169922
+    release_name: ESXi-6.7.0-8169922
+    major: 6
+    minor: 7
+    family: Redhat
+    password_hash: SHA512
+    architectures: x86_64
+    media: ESXi dummy
+    ptables:
+      - Kickstart default
+    provisioning_template: ESXi Complex Kickstart
+    parameters:
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: serialnum
+        parameter_type: string
+        value: JV425-4H100-VZHH8-Q23NP-3A9PP
+    state: present
+
+###################################################################################################
+# ESXi 7.0
+###################################################################################################
+
+  - name: ESXi-7.0.0-15843807
+    description: ESXi-7.0.0-15843807
+    release_name: ESXi-7.0.0-15843807
+    major: 7
+    minor: 0.0
+    family: Redhat
+    password_hash: SHA512
+    architectures: x86_64
+    media: ESXi dummy
+    ptables:
+      - Kickstart default
+    provisioning_template: ESXi Complex Kickstart
+    parameters:
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: serialnum
+        parameter_type: string
+        value: JV425-4H100-VZHH8-Q23NP-3A9PP
+    state: present
+
+  - name: ESXi-7.0.3-19193900
+    description: ESXi-7.0.3-19193900
+    release_name: ESXi-7.0.3-19193900
+    major: 7
+    minor: 0.3
+    family: Redhat
+    password_hash: SHA512
+    architectures: x86_64
+    media: ESXi dummy
+    ptables:
+      - Kickstart default
+    provisioning_template: ESXi Complex Kickstart
+    parameters:
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: serialnum
+        parameter_type: string
+        value: JV425-4H100-VZHH8-Q23NP-3A9PP
+    state: present
+
+###################################################################################################
+# VCSA 6.7
+###################################################################################################
+
+  - name: VCSA-all-6.7.0-16708996
+    description: VCSA-all-6.7.0-16708996
+    release_name: VCSA-all-6.7.0-16708996
+    major: 6
+    minor: 7.0
+    family: Redhat
+    password_hash: SHA512
+    architectures: x86_64
+    media: ESXi dummy
+    ptables:
+      - Kickstart default
+    parameters:
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: serialnum
+        parameter_type: string
+        value: 104HH-D4343-07879-MV08K-2D2H2
+      - name: serialnumvsan
+        parameter_type: string
+        value: HN0D8-AAJ1Q-07D00-6U924-CX224
+    state: present
+
+###################################################################################################
+# VCSA 7.0
+###################################################################################################
+
+  - name: VCSA-all-7.0.2-17958471
+    description: VCSA-all-7.0.2-17958471
+    release_name: VCSA-all-7.0.2-17958471
+    major: 7
+    minor: 0.2
+    family: Redhat
+    password_hash: SHA512
+    architectures: x86_64
+    media: ESXi dummy
+    ptables:
+      - Kickstart default
+    parameters:
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: serialnum
+        parameter_type: string
+        value: 104HH-D4343-07879-MV08K-2D2H2
+      - name: serialnumvsan
+        parameter_type: string
+        value: HN0D8-AAJ1Q-07D00-6U924-CX224
+    state: present
+
+  - name: VCSA-all-7.0.3-19717403
+    description: VCSA-all-7.0.3-19717403
+    release_name: VCSA-all-7.0.3-19717403
+    major: 7
+    minor: 0.3
+    family: Redhat
+    password_hash: SHA512
+    architectures: x86_64
+    media: ESXi dummy
+    ptables:
+      - Kickstart default
+    parameters:
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: serialnum
+        parameter_type: string
+        value: 104HH-D4343-07879-MV08K-2D2H2
+      - name: serialnumvsan
+        parameter_type: string
+        value: HN0D8-AAJ1Q-07D00-6U924-CX224
+    state: present

@@ -1,0 +1,20 @@
+localhost ansible_connection=local
+
+[dns]
+ns1.infra.lab ansible_host=172.16.203.251 ansible_connection=ssh ansible_user=root ansible_password=papillon
+ns2.infra.lab ansible_host=172.16.203.252 ansible_connection=ssh ansible_user=root ansible_password=papillon
+
+[tfm]
+tfm-app.lab.loxda.net
+
+[tfm_puppet]
+tfm-puppet.lab.loxda.net
+
+[tfm_app]
+tfm-app.lab.loxda.net
+
+[tfm_db]
+tfm-db.lab.loxda.net
+
+[tfm_proxy]
+tfm-proxy.lab.loxda.net

@@ -1,0 +1,42 @@
+---
+
+foreman_location:
+
+  - name: LAB
+    organizations: 
+      - LAB
+    parent: 
+
+  - name: INFRA
+    organizations: 
+      - LAB
+    parent: LAB
+  - name: DNS
+    organizations: 
+      - LAB
+    parent: LAB/INFRA
+  - name: FOREMAN
+    organizations: 
+      - LAB
+    parent: LAB/INFRA
+  - name: PROXMOX
+    organizations: 
+      - LAB
+    parent: LAB/INFRA
+
+  - name: v10
+    organizations: 
+      - LAB
+    parent: LAB
+  - name: v11
+    organizations: 
+      - LAB
+    parent: LAB
+  - name: v12
+    organizations: 
+      - LAB
+    parent: LAB
+  - name: v13
+    organizations: 
+      - LAB
+    parent: LAB

@@ -1,0 +1,9 @@
+---
+
+- hosts: tfm
+  gather_facts: false
+  roles:
+    - role: foreman-custom
+  tags:
+    - never
+    - provisioning

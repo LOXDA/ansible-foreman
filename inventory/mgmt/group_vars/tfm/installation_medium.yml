@@ -1,0 +1,55 @@
+---
+foreman_installation_medium:
+
+  - name: CentOS 8 mirror
+    path: http://mirror.centos.org/centos/$major/BaseOS/$arch/kickstart
+    os_family: Redhat
+    operatingsystems: 
+      - CentOS Linux 8.3.2011
+    locations:
+      - MGMT
+      - PROD
+      - LAB
+    organizations:
+      - MGMT
+      - LAB
+
+  - name: CentOS 7 mirror
+    path: http://mirror.centos.org/centos/$major/os/$arch
+    os_family: Redhat
+    operatingsystems: 
+      - CentOS Linux 7.9.2009
+    locations:
+      - MGMT
+      - PROD
+      - LAB
+    organizations:
+      - MGMT
+      - LAB
+
+  - name: Debian mirror
+    path: http://ftp.fr.debian.org/debian
+    os_family: Debian
+    operatingsystems: 
+      - Debian 10.9
+      - Debian 11.0
+    locations:
+      - MGMT
+      - PROD
+      - LAB
+    organizations:
+      - MGMT
+      - LAB
+
+  - name: ESXi dummy
+    path: "ftp://{{ foreman_host_proxy }}/esxi"
+    os_family: Redhat
+    operatingsystems:
+      - ESXi-6.7.0-8169922
+    locations:
+      - MGMT
+      - PROD
+      - LAB
+    organizations:
+      - MGMT
+      - LAB

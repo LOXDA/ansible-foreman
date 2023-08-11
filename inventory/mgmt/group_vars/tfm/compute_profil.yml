@@ -1,0 +1,332 @@
+---
+
+# guest_id:
+# identifier list found at
+# https://vdc-repo.vmware.com/vmwb-repository/dcr-public/da47f910-60ac-438b-8b9b-6122f4d14524/16b7274a-bf8b-4b4c-a05e-746f2aa93c8c/doc/vim.vm.GuestOsDescriptor.GuestOsIdentifier.html
+
+foreman_compute_profil:
+
+  - name: debian-small
+    compute_attributes:
+
+    - compute_resource: pve-gsw
+      vm_attrs:
+        cores: 1
+        sockets: 1
+        memory: '1073741824'
+        balloon: '1073741824'
+        cpu: cputype=host
+        numa: 1
+        kvm: 1
+        bios: seabios
+        agent: 1
+        ostype: 126
+        shares: 1000
+        vga: std
+        scsihw: virtio-scsi-pci
+        boot: 'order=net0;virtio0'
+        onboot: 1
+        interfaces_attributes:
+          0:
+            id: net0 
+            bridge: vmbr2
+            model: virtio
+        volumes_attributes:
+          0:
+            id: virtio0
+            device: 0
+            controller: virtio
+            storage_type: hard_disk
+            size: 17179869184
+            cache: none
+            storage: zfs
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 1
+        corespersocket: 1
+        memory_mb: 1024
+        firmware: bios
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            size_gb: 16
+            datastore: nfslab1
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 1
+        corespersocket: 1
+        memory_mb: 1024
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        cluster: CL-DC2-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+        interfaces_attributes:
+          0:
+            network: LAB_INT
+            type: VirtualVmxnet3
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            size_gb: 16
+            datastore: nfslab1
+
+  - name: debian-medium
+    compute_attributes:
+
+    - compute_resource: pve-gsw
+      vm_attrs:
+        cores: 1
+        sockets: 2
+        memory: '2147483648'
+        balloon: '2147483648'
+        cpu: cputype=host
+        numa: 1
+        kvm: 1
+        bios: seabios
+        agent: 1
+        ostype: 126
+        shares: 1000
+        vga: std
+        scsihw: virtio-scsi-pci
+        boot: order=net0;virtio0
+        onboot: 1
+        interfaces_attributes:
+          0:
+            id: net0 
+            bridge: vmbr2
+            model: virtio
+        volumes_attributes:
+          0:
+            id: virtio0
+            device: 0
+            controller: virtio
+            storage_type: hard_disk
+            size: 17179869184
+            cache: none
+            storage: zfs
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 2
+        memory_mb: 2048
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+            key: 1000
+        interfaces_attributes:
+          0:
+            type: VirtualVmxnet3
+            network: LAB_INT
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab1
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 2
+        memory_mb: 2048
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC2-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+            key: 1000
+        interfaces_attributes:
+          0:
+            type: VirtualVmxnet3
+            network: LAB_INT
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab1
+
+  - name: debian-large
+    compute_attributes:
+
+    - compute_resource: pve-gsw
+      vm_attrs:
+        cores: 2
+        sockets: 2
+        memory: '4294967296'
+        balloon: '4294967296'
+        cpu: cputype=host
+        numa: 1
+        kvm: 1
+        bios: seabios
+        agent: 1
+        ostype: 126
+        shares: 1000
+        vga: std
+        scsihw: virtio-scsi-pci
+        boot: order=net0;virtio0
+        start: 1
+        onboot: 1
+        interfaces_attributes:
+          0:
+            id: net0 
+            bridge: vmbr2
+            model: virtio
+        volumes_attributes:
+          0:
+            id: virtio0
+            device: 0
+            controller: virtio
+            storage_type: hard_disk
+            size: 17179869184
+            cache: none
+            storage: zfs
+
+
+    - compute_resource: vc-dc1
+      vm_attrs:
+        cpus: 4
+        memory_mb: 4096
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC1-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC1/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+            key: 1000
+        interfaces_attributes:
+          0:
+            type: VirtualVmxnet3
+            network: LAB_INT
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab1
+
+    - compute_resource: vc-dc2
+      vm_attrs:
+        cpus: 4
+        memory_mb: 4096
+        firmware: automatic
+        guest_id: debian10_64Guest
+        memoryHotAddEnabled: 0
+        cpuHotAddEnabled: 0
+        add_cdrom: 0
+        start: 0
+        cluster: CL-DC2-Z01
+        resource_pool: Resources
+        path: /Datacenters/DC-DC2/vm
+        boot_order:
+          - network
+          - disk
+        annotation: 'Foreman controlled vm'
+        scsi_controllers:
+          - type: ParaVirtualSCSIController
+            key: 1000
+        interfaces_attributes:
+          0:
+            type: VirtualVmxnet3
+            network: LAB_INT
+          1:
+            network: LAB_EXT
+            type: VirtualVmxnet3
+        volumes_attributes:
+          0:
+            name: Hard disk
+            thin: true
+            eager_zero: false
+            mode: persistent
+            controller_key: 1000
+            size_gb: 16
+            datastore: nfslab1

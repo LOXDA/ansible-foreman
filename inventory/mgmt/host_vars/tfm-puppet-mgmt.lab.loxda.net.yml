@@ -1,0 +1,31 @@
+---
+# defaults file for common
+foreman_version: 3.6
+puppet_version: puppet7
+
+# install options
+foreman_cmd_options: ['--puppet-server-admin-api-whitelist=localhost --puppet-server-admin-api-whitelist={{ inventory_hostname }} --puppet-server-ca-client-whitelist=localhost --puppet-server-ca-client-whitelist={{ inventory_hostname }}']
+foreman_plugins: []
+foreman_compute: []
+foreman_proxy_plugins: []
+
+# configure options
+foreman_options: []
+foreman_plugin_options: []
+foreman_compute_options: []
+
+# --puppet-
+puppet_options:
+  server: 'true'
+
+# --puppet-server-
+puppet_server_options:
+  foreman-url: "https://tfm-app-mgmt.lab.loxda.net"
+  ca: 'true'
+  admin-api-whitelist: tfm-proxy-mgmt.lab.loxda.net
+  ca-client-whitelist: tfm-proxy-mgmt.lab.loxda.net
+  environment-class-cache-enabled: 'false'
+  envs-dir: '/etc/puppetlabs/code/environments'
+
+foreman_proxy_plugin_options: []
+foreman_proxy_options: []

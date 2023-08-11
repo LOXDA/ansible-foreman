@@ -1,0 +1,16 @@
+---
+# defaults file for common
+foreman_version: 3.7
+puppet_version: puppet7
+postgresql_version: 13
+
+grub_timeout: 2
+grub_options:
+  - option: transparent_hugepage
+    value: never
+
+vault_foreman_db_username: foreman
+vault_foreman_db_password: p4p1llon
+
+foreman_db_username: "{{ vault_foreman_db_username }}"
+foreman_db_password: "{{ vault_foreman_db_password }}"

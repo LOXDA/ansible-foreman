@@ -1,0 +1,10 @@
+---
+
+foreman_domain:
+
+  - name: lab.loxda.net
+    description: domaine lab.loxda.net
+    organizations:
+      - LAB
+    locations:
+      - LAB

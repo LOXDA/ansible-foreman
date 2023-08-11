@@ -1,0 +1,469 @@
+---
+foreman_hostgroup:
+
+###########################################################################################
+# mgmt
+###########################################################################################
+
+  - name: mgmt
+    parent: 
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT
+
+###########################################################################################
+# mgmt/infra
+###########################################################################################
+
+  - name: infra
+    parent: mgmt
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA
+
+  - name: ldap
+    parent: mgmt/infra
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA
+
+  - name: dns
+    parent: mgmt/infra
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/DNS
+
+###########################################################################################
+# mgmt/infra/tfm
+###########################################################################################
+
+  - name: tfm
+    parent: mgmt/infra
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/FOREMAN
+
+  - name: app
+    parent: mgmt/infra/tfm
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/FOREMAN
+
+  - name: proxy
+    parent: mgmt/infra/tfm
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/FOREMAN
+
+  - name: db
+    parent: mgmt/infra/tfm
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/FOREMAN
+
+  - name: puppet
+    parent: mgmt/infra/tfm
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/FOREMAN
+
+###########################################################################################
+# mgmt/infra/vsphere
+###########################################################################################
+
+  - name: vsphere
+    parent: mgmt/infra
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/VSPHERE
+
+  - name: esxi
+    parent: mgmt/infra/vsphere
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/VSPHERE
+
+  - name: vcenter
+    parent: mgmt/infra/vsphere
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/VSPHERE
+
+  - name: proxmox
+    parent: mgmt/infra
+    organizations: 
+      - MGMT
+    locations:
+      - MGMT/INFRA/PROXMOX
+
+###########################################################################################
+# lab
+###########################################################################################
+
+  - name: lab
+    parent: 
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: "http-proxy"
+        parameter_type: string
+        value: "172.16.203.253"
+      - name: "http-proxy-port"
+        parameter_type: string
+        value: "3128"
+      - name: "lang"
+        parameter_type: string
+        value: "fr_FR.UTF8"
+      - name: "time-zone"
+        parameter_type: string
+        value: "Europe/Paris"
+
+###########################################################################################
+# lab/foreman
+###########################################################################################
+
+  - name: foreman
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: app
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    puppetclasses:
+      - foreman
+      - foreman::config
+      - foreman::repo
+      - foreman::compute::vmware
+      - foreman::plugin::dhcp_browser
+      - foreman::plugin::remote_execution
+      - foreman::plugin::ansible
+      - foreman::plugin::salt
+
+  - name: db
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    puppetclasses:
+      - postgresql::server
+      - postgresql::globals
+
+  - name: puppet
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    puppetclasses:
+      - puppet
+      - puppet::server
+
+  - name: proxy
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    puppetclasses:
+      - foreman_proxy
+      - foreman_proxy::plugin::dynflow
+      - foreman_proxy::plugin::ansible
+ 
+  - name: dns
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+###########################################################################################
+# lab/os
+###########################################################################################
+
+  - name: os
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: centos
+    parent: lab/os
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: "bootloader-append"
+        parameter_type: string
+        value: "nofb quiet splash=quiet"
+      - name: "disable-firewall"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-epel"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-puppetlabs-puppet6-repo"
+        parameter_type: boolean
+        value: "true"
+      - name: "keyboard"
+        parameter_type: string
+        value: "fr"
+      - name: "lang"
+        parameter_type: string
+        value: "fr_FR.UTF-8"
+      - name: "time-zone"
+        parameter_type: string
+        value: "Europe/Paris"
+      - name: "package_upgrade"
+        parameter_type: boolean
+        value: "true"
+      - name: "selinux-mode"
+        parameter_type: string
+        value: "enforcing"
+
+  - name: debian
+    parent: lab/os
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: "additional-packages"
+        parameter_type: string
+        value: "gnupg ccze qemu-guest-agent"
+      - name: "enable-puppetlabs-puppet6-repo"
+        parameter_type: boolean
+        value: "true"
+
+  # - name: esxi
+  #   parent: lab/os
+  #   organizations: 
+  #     - LAB
+  #   locations:
+  #     - LAB
+  #   ansible_roles:
+  #     - esxi-add-host
+  #     - esxi-host-facts
+  #     - esxi-host-config
+  #     - esxi-adv-settings
+  #   parameters:
+  #     - name: ansible_become
+  #       parameter_type: boolean
+  #       value: false
+  #     - name: ansible_connection
+  #       parameter_type: string
+  #       value: local
+  #     - name: ansible_gather_facts
+  #       parameter_type: boolean
+  #       value: false
+  #     - name: ansible_ssh_pass
+  #       parameter_type: string
+  #       value: papillon
+  #     - name: ansible_user
+  #       parameter_type: string
+  #       value: root
+  #     - name: esxi_scg_ssh
+  #       parameter_type: boolean
+  #       value: false
+  #     - name: serialnum
+  #       parameter_type: string
+  #       value: JV425-4H100-VZHH8-Q23NP-3A9PP
+  #     - name: vault_esxi_username
+  #       parameter_type: string
+  #       value: root
+  #     - name: vault_esxi_password
+  #       parameter_type: string
+  #       value: papillon
+  #   environment: lab
+  #   compute_resource: pve-gsw
+  #   compute_profile: esxi-medium
+  #   architecture: x86_64
+  #   operatingsystem: ESXi-7.0.3-19193900
+  #   medium: ESXi dummy
+  #   ptable: Kickstart default
+  #   pxe_loader: iPXE Chain BIOS
+
+  - name: vcenter
+    parent: lab/os
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: "ansible_gather_facts"
+        parameter_type: boolean
+        value: false
+
+
+###########################################################################################
+# lab/salt
+###########################################################################################
+
+  - name: salt
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: master
+    parent: lab/salt
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: syndic
+    parent: lab/salt
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+###########################################################################################
+# lab/gitea
+###########################################################################################
+
+  - name: gitea
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+###########################################################################################
+# lab/gitlab
+###########################################################################################
+
+  - name: gitlab
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+###########################################################################################
+# lab/vsphere
+###########################################################################################
+
+  - name: vsphere
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: esxi
+    parent: lab/vsphere
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    ansible_roles:
+      - esxi-add-host
+      - esxi-host-facts
+      - esxi-host-config
+      - esxi-adv-settings
+    parameters:
+      - name: ansible_become
+        parameter_type: boolean
+        value: false
+      - name: ansible_connection
+        parameter_type: string
+        value: local
+      - name: ansible_gather_facts
+        parameter_type: boolean
+        value: false
+      - name: ansible_ssh_pass
+        parameter_type: string
+        value: papillon
+      - name: ansible_user
+        parameter_type: string
+        value: root
+      - name: esxi_scg_ssh
+        parameter_type: boolean
+        value: false
+      - name: serialnum
+        parameter_type: string
+        value: JV425-4H100-VZHH8-Q23NP-3A9PP
+      - name: vault_esxi_username
+        parameter_type: string
+        value: root
+      - name: vault_esxi_password
+        parameter_type: string
+        value: papillon
+      - name: vcenter_username
+        parameter_type: string
+        value: administrator@lab.loxda.net
+      - name: vault_vcenter_password
+        parameter_type: string
+        value: P4p1llon!!
+      - name: vcenter_hostname
+        parameter_type: string
+        value: vc.lab.loxda.net
+    architecture: x86_64
+    operatingsystem: ESXi-6.7.0-8169922
+    medium: ESXi dummy
+    ptable: Kickstart default
+    pxe_loader: iPXE Chain BIOS
+
+  - name: dc1
+    parent: lab/vsphere/esxi
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: vcenter_hostname
+        parameter_type: string
+        value: vc-dc1.lab.loxda.net
+
+  - name: dc2
+    parent: lab/vsphere/esxi
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: vcenter_hostname
+        parameter_type: string
+        value: vc-dc2.lab.loxda.net
+
+  - name: vcenter
+    parent: lab/vsphere
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: ansible_gather_facts
+        parameter_type: boolean
+        value: false
+      - name: serialnum
+        parameter_type: string
+        value: 104HH-D4343-07879-MV08K-2D2H2
+      - name: serialnumvsan
+        parameter_type: string
+        value: HN0D8-AAJ1Q-07D00-6U924-CX224

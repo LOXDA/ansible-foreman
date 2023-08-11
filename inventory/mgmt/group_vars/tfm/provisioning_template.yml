@@ -1,0 +1,32 @@
+---
+foreman_provisioning_template:
+
+  - name: ESXi iPXE Common
+    file_name: template_ipxe_esxi_ipxe_common
+    kind: iPXE
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "MGMT"
+      - "LAB"
+
+  - name: ESXi Minimal Kickstart
+    file_name: template_prov_esxi_minimal_kickstart
+    kind: provision
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "MGMT"
+      - "LAB"
+
+  - name: ESXi Complex Kickstart
+    file_name: template_prov_esxi_complex_kickstart
+    kind: provision
+    state: present
+    locations:
+      - "LAB"
+    organizations:
+      - "MGMT"
+      - "LAB"

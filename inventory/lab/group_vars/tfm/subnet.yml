@@ -1,0 +1,133 @@
+---
+
+foreman_subnets:
+
+  - name: VLAN0003_LAB
+    description: VLAN0003_LAB
+    network: 172.16.203.0
+    mask: 255.255.255.0
+    gateway: 172.16.203.253
+    dns_primary: 172.16.203.253
+    dns_secondary: 172.16.202.4
+    ipam: Internal DB
+    from_ip: 172.16.203.100
+    to_ip: 172.16.203.249
+    boot_mode: Static
+    dhcp_proxy: "{{ foreman_host_proxy }}"
+    tftp_proxy: "{{ foreman_host_proxy }}"
+    httpboot_proxy: "{{ foreman_host_proxy }}"
+    template_proxy: "{{ foreman_host_proxy }}"
+    discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    vlanid: 3
+    mtu: 1500
+    domains:
+      - lab.loxda.net
+    locations:
+      - LAB
+    organizations:
+      - LAB
+
+  - name: VLAN0010_LAB
+    description: VLAN0010_LAB
+    network: 172.16.210.0
+    mask: 255.255.255.0
+    gateway: 172.16.210.253
+    dns_primary: 172.16.210.253
+    dns_secondary: 172.16.202.4
+    ipam: Internal DB
+    from_ip: 172.16.210.100
+    to_ip: 172.16.210.249
+    boot_mode: Static
+    dhcp_proxy: "{{ foreman_host_proxy }}"
+    tftp_proxy: "{{ foreman_host_proxy }}"
+    httpboot_proxy: "{{ foreman_host_proxy }}"
+    template_proxy: "{{ foreman_host_proxy }}"
+    discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    vlanid: 10
+    mtu: 1500
+    domains:
+      - lab.loxda.net
+    locations:
+      - LAB/v10
+    organizations:
+      - LAB
+
+  - name: VLAN0011_LAB
+    description: VLAN0011_LAB
+    network: 172.16.211.0
+    mask: 255.255.255.0
+    gateway: 172.16.211.253
+    dns_primary: 172.16.211.253
+    dns_secondary: 172.16.202.4
+    ipam: Internal DB
+    from_ip: 172.16.211.100
+    to_ip: 172.16.211.249
+    boot_mode: Static
+    dhcp_proxy: "{{ foreman_host_proxy }}"
+    tftp_proxy: "{{ foreman_host_proxy }}"
+    httpboot_proxy: "{{ foreman_host_proxy }}"
+    template_proxy: "{{ foreman_host_proxy }}"
+    discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    vlanid: 11
+    mtu: 1500
+    domains:
+      - lab.loxda.net
+    locations:
+      - LAB/v11
+    organizations:
+      - LAB
+
+  - name: VLAN0012_LAB
+    description: VLAN0012_LAB
+    network: 172.16.212.0
+    mask: 255.255.255.0
+    gateway: 172.16.212.253
+    dns_primary: 172.16.212.253
+    dns_secondary: 172.16.202.4
+    ipam: Internal DB
+    from_ip: 172.16.212.100
+    to_ip: 172.16.212.249
+    boot_mode: Static
+    dhcp_proxy: "{{ foreman_host_proxy }}"
+    tftp_proxy: "{{ foreman_host_proxy }}"
+    httpboot_proxy: "{{ foreman_host_proxy }}"
+    template_proxy: "{{ foreman_host_proxy }}"
+    discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    vlanid: 12
+    mtu: 1500
+    domains:
+      - lab.loxda.net
+    locations:
+      - LAB/v12
+    organizations:
+      - LAB
+
+  - name: VLAN0013_LAB
+    description: VLAN0013_LAB
+    network: 172.16.213.0
+    mask: 255.255.255.0
+    gateway: 172.16.213.253
+    dns_primary: 172.16.213.253
+    dns_secondary: 172.16.202.4
+    ipam: Internal DB
+    from_ip: 172.16.213.100
+    to_ip: 172.16.213.249
+    boot_mode: Static
+    dhcp_proxy: "{{ foreman_host_proxy }}"
+    tftp_proxy: "{{ foreman_host_proxy }}"
+    httpboot_proxy: "{{ foreman_host_proxy }}"
+    template_proxy: "{{ foreman_host_proxy }}"
+    discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    vlanid: 13
+    mtu: 1500
+    domains:
+      - lab.loxda.net
+    locations:
+      - LAB/v13
+    organizations:
+      - LAB

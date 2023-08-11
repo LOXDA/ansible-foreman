@@ -1,0 +1,9 @@
+---
+
+- hosts: tfm_puppet
+  gather_facts: true
+  roles:
+    - role: foreman-puppet
+  tags:
+    - tfm
+    - puppet

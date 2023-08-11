@@ -1,0 +1,27 @@
+---
+
+foreman_compute_resources:
+
+  - name: vc-dc1
+    organizations:
+      - LAB
+    locations:
+      - LAB
+    provider: vmware
+    provider_params:
+      url: vc-dc1.lab.loxda.net
+      user: administrator@lab.loxda.net
+      password: P4p1llon!!
+      datacenter: DC-DC1
+
+  - name: vc-dc2
+    organizations:
+      - LAB
+    locations:
+      - LAB
+    provider: vmware
+    provider_params:
+      url: vc-dc2.lab.loxda.net
+      user: administrator@lab.loxda.net
+      password: P4p1llon!!
+      datacenter: DC-DC2

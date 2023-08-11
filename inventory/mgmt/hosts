@@ -1,0 +1,16 @@
+localhost ansible_connection=local
+
+[tfm]
+tfm-app-mgmt.lab.loxda.net
+
+[tfm_puppet]
+tfm-puppet-mgmt.lab.loxda.net
+
+[tfm_app]
+tfm-app-mgmt.lab.loxda.net
+
+[tfm_db]
+tfm-db-mgmt.lab.loxda.net
+
+[tfm_proxy]
+tfm-proxy-mgmt.lab.loxda.net
