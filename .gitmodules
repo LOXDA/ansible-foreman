@@ -1,9 +1,9 @@
 [submodule "ansible-role-deploy-git-repos"]
 	path = roles/ansible-role-deploy-git-repos
-	url = https://gitea.lab.loxda.net/MIROIR/ansible-role-deploy-git-repos.git
+	url = https://github.com/gcoop-libre/ansible-role-deploy-git-repos.git
 [submodule "ansible-role-grub"]
 	path = roles/ansible-role-grub
-	url = https://gitea.lab.loxda.net/MIROIR/ansible-role-grub.git
+	url = https://github.com/robertdebock/ansible-role-grub.git
 [submodule "foreman-app"]
 	path = roles/foreman-app
 	url = https://github.com/LOXDA/foreman-app.git
@@ -21,4 +21,4 @@
 	url = https://github.com/LOXDA/foreman-puppet.git
 [submodule "ansible-role-bind"]
 	path = roles/ansible-role-bind
-	url = https://gitea.lab.loxda.net/MIROIR/ansible-role-bind.git
+	url = https://github.com/bertvv/ansible-role-bind.git
