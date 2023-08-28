@@ -4,21 +4,21 @@
 [submodule "ansible-role-grub"]
 	path = roles/ansible-role-grub
 	url = https://gitea.lab.loxda.net/MIROIR/ansible-role-grub.git
-[submodule "ansible-role-foreman-app"]
+[submodule "foreman-app"]
 	path = roles/foreman-app
-	url = https://gitea.lab.loxda.net/LAB/ansible-role-foreman-app.git
-[submodule "ansible-role-foreman-proxy"]
+	url = https://github.com/LOXDA/foreman-app.git
+[submodule "foreman-proxy"]
 	path = roles/foreman-proxy
-	url = https://gitea.lab.loxda.net/LAB/ansible-role-foreman-proxy.git
-[submodule "ansible-role-foreman-db"]
+	url = https://github.com/LOXDA/foreman-proxy.git
+[submodule "foreman-db"]
 	path = roles/foreman-db
-	url = https://gitea.lab.loxda.net/LAB/ansible-role-foreman-db.git
-[submodule "ansible-role-foreman-custom"]
+	url = https://github.com/LOXDA/foreman-db.git
+[submodule "foreman-custom"]
 	path = roles/foreman-custom
-	url = https://gitea.lab.loxda.net/LAB/ansible-role-foreman-custom.git
-[submodule "ansible-role-foreman-puppet"]
+	url = https://github.com/LOXDA/foreman-custom.git
+[submodule "foreman-puppet"]
 	path = roles/foreman-puppet
-	url = https://gitea.lab.loxda.net/LAB/ansible-role-foreman-puppet.git
+	url = https://github.com/LOXDA/foreman-puppet.git
 [submodule "ansible-role-bind"]
 	path = roles/ansible-role-bind
 	url = https://gitea.lab.loxda.net/MIROIR/ansible-role-bind.git
