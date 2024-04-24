@@ -1,0 +1,32 @@
+localhost ansible_connection=local
+
+[tfm_app]
+tfm-app.opn.lab 
+
+[tfm_db]
+tfm-db.opn.lab 
+
+[tfm_proxy]
+tfm-proxy.opn.lab 
+
+[tfm_puppet]
+tfm-puppet.opn.lab 
+
+[tfm:children]
+tfm_app
+tfm_db
+tfm_proxy
+tfm_puppet
+
+[tfm:vars]
+ansible_connection=ssh 
+ansible_user=debian 
+ansible_ssh_private_key_file=/root/.ssh/id_rsa
+
+[dns]
+ns1.opn.lab ansible_host=172.16.203.251
+ns2.opn.lab ansible_host=172.16.203.252
+
+[dns:vars]
+ansible_user=root 
+ansible_password=papillon
