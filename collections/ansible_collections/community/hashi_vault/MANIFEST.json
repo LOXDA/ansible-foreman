@@ -2,7 +2,7 @@
  "collection_info": {
   "namespace": "community",
   "name": "hashi_vault",
-  "version": "5.0.0",
+  "version": "6.2.0",
   "authors": [
    "Julie Davila (@juliedavila) <julie(at)davila.io>",
    "Brian Scholer (@briantist)"
@@ -32,7 +32,7 @@
   "name": "FILES.json",
   "ftype": "file",
   "chksum_type": "sha256",
-  "chksum_sha256": "52444fb8348f97a65d0f04fc0f37957b391ebeaa8d2f750d1a52e4de1959a740",
+  "chksum_sha256": "eafb51e763722dc3571899bd632595bc4c449ed0a39e9b8d707b5f6f03caf521",
   "format": 1
  },
  "format": 1

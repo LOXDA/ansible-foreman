@@ -11,9 +11,7 @@ __metaclass__ = type
 
 import base64
 import binascii
-import datetime
 import os
-import sys
 import traceback
 
 from ansible.module_utils.common.text.converters import to_bytes, to_native, to_text
@@ -37,12 +35,21 @@ from ansible_collections.community.crypto.plugins.module_utils.acme.io import re
 
 from ansible_collections.community.crypto.plugins.module_utils.acme.utils import nopad_b64
 
+from ansible_collections.community.crypto.plugins.module_utils.crypto.math import (
+    convert_int_to_bytes,
+    convert_int_to_hex,
+)
+
 from ansible_collections.community.crypto.plugins.module_utils.crypto.support import (
+    get_now_datetime,
+    ensure_utc_timezone,
     parse_name_field,
 )
 
 from ansible_collections.community.crypto.plugins.module_utils.crypto.cryptography_support import (
+    CRYPTOGRAPHY_TIMEZONE,
     cryptography_name_to_oid,
+    get_not_valid_after,
 )
 
 from ansible_collections.community.crypto.plugins.module_utils.crypto.pem import (
@@ -76,40 +83,6 @@ else:
             _cryptography_backend = cryptography.hazmat.backends.default_backend()
     except Exception as dummy:
         CRYPTOGRAPHY_ERROR = traceback.format_exc()
-
-
-if sys.version_info[0] >= 3:
-    # Python 3 (and newer)
-    def _count_bytes(n):
-        return (n.bit_length() + 7) // 8 if n > 0 else 0
-
-    def _convert_int_to_bytes(count, no):
-        return no.to_bytes(count, byteorder='big')
-
-    def _pad_hex(n, digits):
-        res = hex(n)[2:]
-        if len(res) < digits:
-            res = '0' * (digits - len(res)) + res
-        return res
-else:
-    # Python 2
-    def _count_bytes(n):
-        if n <= 0:
-            return 0
-        h = '%x' % n
-        return (len(h) + 1) // 2
-
-    def _convert_int_to_bytes(count, n):
-        h = '%x' % n
-        if len(h) > 2 * count:
-            raise Exception('Number {1} needs more than {0} bytes!'.format(count, n))
-        return ('0' * (2 * count - len(h)) + h).decode('hex')
-
-    def _pad_hex(n, digits):
-        h = '%x' % n
-        if len(h) < digits:
-            h = '0' * (digits - len(h)) + h
-        return h
 
 
 class CryptographyChainMatcher(ChainMatcher):
@@ -223,8 +196,8 @@ class CryptographyBackend(CryptoBackend):
                 'alg': 'RS256',
                 'jwk': {
                     "kty": "RSA",
-                    "e": nopad_b64(_convert_int_to_bytes(_count_bytes(pk.e), pk.e)),
-                    "n": nopad_b64(_convert_int_to_bytes(_count_bytes(pk.n), pk.n)),
+                    "e": nopad_b64(convert_int_to_bytes(pk.e)),
+                    "n": nopad_b64(convert_int_to_bytes(pk.n)),
                 },
                 'hash': 'sha256',
             }
@@ -260,8 +233,8 @@ class CryptographyBackend(CryptoBackend):
                 'jwk': {
                     "kty": "EC",
                     "crv": curve,
-                    "x": nopad_b64(_convert_int_to_bytes(num_bytes, pk.x)),
-                    "y": nopad_b64(_convert_int_to_bytes(num_bytes, pk.y)),
+                    "x": nopad_b64(convert_int_to_bytes(pk.x, count=num_bytes)),
+                    "y": nopad_b64(convert_int_to_bytes(pk.y, count=num_bytes)),
                 },
                 'hash': hashalg,
                 'point_size': point_size,
@@ -288,8 +261,8 @@ class CryptographyBackend(CryptoBackend):
                 hashalg = cryptography.hazmat.primitives.hashes.SHA512
             ecdsa = cryptography.hazmat.primitives.asymmetric.ec.ECDSA(hashalg())
             r, s = cryptography.hazmat.primitives.asymmetric.utils.decode_dss_signature(key_data['key_obj'].sign(sign_payload, ecdsa))
-            rr = _pad_hex(r, 2 * key_data['point_size'])
-            ss = _pad_hex(s, 2 * key_data['point_size'])
+            rr = convert_int_to_hex(r, 2 * key_data['point_size'])
+            ss = convert_int_to_hex(s, 2 * key_data['point_size'])
             signature = binascii.unhexlify(rr) + binascii.unhexlify(ss)
 
         return {
@@ -328,31 +301,51 @@ class CryptographyBackend(CryptoBackend):
             },
         }
 
+    def get_ordered_csr_identifiers(self, csr_filename=None, csr_content=None):
+        '''
+        Return a list of requested identifiers (CN and SANs) for the CSR.
+        Each identifier is a pair (type, identifier), where type is either
+        'dns' or 'ip'.
+
+        The list is deduplicated, and if a CNAME is present, it will be returned
+        as the first element in the result.
+        '''
+        if csr_content is None:
+            csr_content = read_file(csr_filename)
+        else:
+            csr_content = to_bytes(csr_content)
+        csr = cryptography.x509.load_pem_x509_csr(csr_content, _cryptography_backend)
+
+        identifiers = set()
+        result = []
+
+        def add_identifier(identifier):
+            if identifier in identifiers:
+                return
+            identifiers.add(identifier)
+            result.append(identifier)
+
+        for sub in csr.subject:
+            if sub.oid == cryptography.x509.oid.NameOID.COMMON_NAME:
+                add_identifier(('dns', sub.value))
+        for extension in csr.extensions:
+            if extension.oid == cryptography.x509.oid.ExtensionOID.SUBJECT_ALTERNATIVE_NAME:
+                for name in extension.value:
+                    if isinstance(name, cryptography.x509.DNSName):
+                        add_identifier(('dns', name.value))
+                    elif isinstance(name, cryptography.x509.IPAddress):
+                        add_identifier(('ip', name.value.compressed))
+                    else:
+                        raise BackendException('Found unsupported SAN identifier {0}'.format(name))
+        return result
+
     def get_csr_identifiers(self, csr_filename=None, csr_content=None):
         '''
         Return a set of requested identifiers (CN and SANs) for the CSR.
         Each identifier is a pair (type, identifier), where type is either
         'dns' or 'ip'.
         '''
-        identifiers = set([])
-        if csr_content is None:
-            csr_content = read_file(csr_filename)
-        else:
-            csr_content = to_bytes(csr_content)
-        csr = cryptography.x509.load_pem_x509_csr(csr_content, _cryptography_backend)
-        for sub in csr.subject:
-            if sub.oid == cryptography.x509.oid.NameOID.COMMON_NAME:
-                identifiers.add(('dns', sub.value))
-        for extension in csr.extensions:
-            if extension.oid == cryptography.x509.oid.ExtensionOID.SUBJECT_ALTERNATIVE_NAME:
-                for name in extension.value:
-                    if isinstance(name, cryptography.x509.DNSName):
-                        identifiers.add(('dns', name.value))
-                    elif isinstance(name, cryptography.x509.IPAddress):
-                        identifiers.add(('ip', name.value.compressed))
-                    else:
-                        raise BackendException('Found unsupported SAN identifier {0}'.format(name))
-        return identifiers
+        return set(self.get_ordered_csr_identifiers(csr_filename=csr_filename, csr_content=csr_content))
 
     def get_cert_days(self, cert_filename=None, cert_content=None, now=None):
         '''
@@ -383,8 +376,10 @@ class CryptographyBackend(CryptoBackend):
             raise BackendException('Cannot parse certificate {0}: {1}'.format(cert_filename, e))
 
         if now is None:
-            now = datetime.datetime.now()
-        return (cert.not_valid_after - now).days
+            now = get_now_datetime(with_timezone=CRYPTOGRAPHY_TIMEZONE)
+        elif CRYPTOGRAPHY_TIMEZONE:
+            now = ensure_utc_timezone(now)
+        return (get_not_valid_after(cert) - now).days
 
     def create_chain_matcher(self, criterium):
         '''

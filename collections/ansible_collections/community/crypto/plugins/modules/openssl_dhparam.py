@@ -193,7 +193,7 @@ class DHParameterBase(object):
         """Generate DH params."""
         changed = False
 
-        # ony generate when necessary
+        # only generate when necessary
         if self.force or not self._check_params_valid(module):
             self._do_generate(module)
             changed = True
@@ -341,7 +341,7 @@ class DHParameterCryptography(DHParameterBase):
         try:
             with open(self.path, 'rb') as f:
                 data = f.read()
-            params = self.crypto_backend.load_pem_parameters(data)
+            params = cryptography.hazmat.primitives.serialization.load_pem_parameters(data, backend=self.crypto_backend)
         except Exception as dummy:
             return False
         # Check parameters

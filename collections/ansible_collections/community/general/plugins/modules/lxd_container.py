@@ -34,23 +34,24 @@ options:
     project:
         description:
           - 'Project of an instance.
-            See U(https://github.com/lxc/lxd/blob/master/doc/projects.md).'
+            See U(https://documentation.ubuntu.com/lxd/en/latest/projects/).'
         required: false
         type: str
         version_added: 4.8.0
     architecture:
         description:
           - 'The architecture for the instance (for example V(x86_64) or V(i686)).
-            See U(https://github.com/lxc/lxd/blob/master/doc/rest-api.md#post-1).'
+            See U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get).'
         type: str
         required: false
     config:
         description:
           - 'The config for the instance (for example V({"limits.cpu": "2"})).
-            See U(https://github.com/lxc/lxd/blob/master/doc/rest-api.md#post-1).'
+            See U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get).'
           - If the instance already exists and its "config" values in metadata
-            obtained from the LXD API U(https://github.com/lxc/lxd/blob/master/doc/rest-api.md#instances-containers-and-virtual-machines)
-            are different, this module tries to apply the configurations.
+            obtained from the LXD API U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get)
+            are different, then this module tries to apply the configurations
+            U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_put).
           - The keys starting with C(volatile.) are ignored for this comparison when O(ignore_volatile_options=true).
         type: dict
         required: false
@@ -73,13 +74,13 @@ options:
         description:
           - 'The devices for the instance
             (for example V({ "rootfs": { "path": "/dev/kvm", "type": "unix-char" }})).
-            See U(https://github.com/lxc/lxd/blob/master/doc/rest-api.md#post-1).'
+            See U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get).'
         type: dict
         required: false
     ephemeral:
         description:
           - Whether or not the instance is ephemeral (for example V(true) or V(false)).
-            See U(https://github.com/lxc/lxd/blob/master/doc/rest-api.md#post-1).
+            See U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get).
         required: false
         type: bool
     source:
@@ -87,7 +88,7 @@ options:
           - 'The source for the instance
             (for example V({ "type": "image", "mode": "pull", "server": "https://images.linuxcontainers.org",
             "protocol": "lxd", "alias": "ubuntu/xenial/amd64" })).'
-          - 'See U(https://github.com/lxc/lxd/blob/master/doc/rest-api.md#post-1) for complete API documentation.'
+          - 'See U(https://documentation.ubuntu.com/lxd/en/latest/api/) for complete API documentation.'
           - 'Note that C(protocol) accepts two choices: V(lxd) or V(simplestreams).'
         required: false
         type: dict
@@ -435,12 +436,12 @@ ANSIBLE_LXD_DEFAULT_URL = 'unix:/var/lib/lxd/unix.socket'
 
 # CONFIG_PARAMS is a list of config attribute names.
 CONFIG_PARAMS = [
-    'architecture', 'config', 'devices', 'ephemeral', 'profiles', 'source'
+    'architecture', 'config', 'devices', 'ephemeral', 'profiles', 'source', 'type'
 ]
 
 # CONFIG_CREATION_PARAMS is a list of attribute names that are only applied
 # on instance creation.
-CONFIG_CREATION_PARAMS = ['source']
+CONFIG_CREATION_PARAMS = ['source', 'type']
 
 
 class LXDContainerManagement(object):
@@ -465,13 +466,6 @@ class LXDContainerManagement(object):
         self.wait_for_container = self.module.params['wait_for_container']
 
         self.type = self.module.params['type']
-
-        # LXD Rest API provides additional endpoints for creating containers and virtual-machines.
-        self.api_endpoint = None
-        if self.type == 'container':
-            self.api_endpoint = '/1.0/containers'
-        elif self.type == 'virtual-machine':
-            self.api_endpoint = '/1.0/virtual-machines'
 
         self.key_file = self.module.params.get('client_key')
         if self.key_file is None:
@@ -498,6 +492,18 @@ class LXDContainerManagement(object):
             )
         except LXDClientException as e:
             self.module.fail_json(msg=e.msg)
+
+        # LXD (3.19) Rest API provides instances endpoint, failback to containers and virtual-machines
+        # https://documentation.ubuntu.com/lxd/en/latest/rest-api/#instances-containers-and-virtual-machines
+        self.api_endpoint = '/1.0/instances'
+        check_api_endpoint = self.client.do('GET', '{0}?project='.format(self.api_endpoint), ok_error_codes=[404])
+
+        if check_api_endpoint['error_code'] == 404:
+            if self.type == 'container':
+                self.api_endpoint = '/1.0/containers'
+            elif self.type == 'virtual-machine':
+                self.api_endpoint = '/1.0/virtual-machines'
+
         self.trust_password = self.module.params.get('trust_password', None)
         self.actions = []
         self.diff = {'before': {}, 'after': {}}
@@ -550,6 +556,8 @@ class LXDContainerManagement(object):
             url = '{0}?{1}'.format(url, urlencode(url_params))
         config = self.config.copy()
         config['name'] = self.name
+        if self.type not in self.api_endpoint:
+            config['type'] = self.type
         if not self.module.check_mode:
             self.client.do('POST', url, config, wait_for_container=self.wait_for_container)
         self.actions.append('create')

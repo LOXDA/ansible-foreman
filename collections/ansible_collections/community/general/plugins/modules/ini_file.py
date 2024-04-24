@@ -4,6 +4,7 @@
 # Copyright (c) 2012, Jan-Piet Mens <jpmens () gmail.com>
 # Copyright (c) 2015, Ales Nosek <anosek.nosek () gmail.com>
 # Copyright (c) 2017, Ansible Project
+# Copyright (c) 2023, Ansible Project
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -22,8 +23,7 @@ description:
   - Manage (add, remove, change) individual settings in an INI-style file without having
     to manage the file as a whole with, say, M(ansible.builtin.template) or M(ansible.builtin.assemble).
   - Adds missing sections if they don't exist.
-  - Before Ansible 2.0, comments are discarded when the source file is read, and therefore will not show up in the destination file.
-  - Since Ansible 2.3, this module adds missing ending newlines to files to keep in line with the POSIX standard, even when
+  - This module adds missing ending newlines to files to keep in line with the POSIX standard, even when
     no other modifications need to be applied.
 attributes:
   check_mode:
@@ -34,7 +34,6 @@ options:
   path:
     description:
       - Path to the INI-style file; this file is created if required.
-      - Before Ansible 2.3 this option was only usable as O(dest).
     type: path
     required: true
     aliases: [ dest ]
@@ -42,8 +41,8 @@ options:
     description:
       - Section name in INI file. This is added if O(state=present) automatically when
         a single value is being set.
-      - If left empty, being omitted, or being set to V(null), the O(option) will be placed before the first O(section).
-      - Using V(null) is also required if the config format does not support sections.
+      - If being omitted, the O(option) will be placed before the first O(section).
+      - Omitting O(section) is also required if the config format does not support sections.
     type: str
   option:
     description:
@@ -98,6 +97,12 @@ options:
       - Do not insert spaces before and after '=' symbol.
     type: bool
     default: false
+  ignore_spaces:
+    description:
+      - Do not change a line if doing so would only add or remove spaces before or after the V(=) symbol.
+    type: bool
+    default: false
+    version_added: 7.5.0
   create:
     description:
       - If set to V(false), the module will fail if the file does not already exist.
@@ -109,6 +114,14 @@ options:
       - Allow option without value and without '=' symbol.
     type: bool
     default: false
+  modify_inactive_option:
+    description:
+      - By default the module replaces a commented line that matches the given option.
+      - Set this option to V(false) to avoid this. This is useful when you want to keep commented example
+        C(key=value) pairs for documentation purposes.
+    type: bool
+    default: true
+    version_added: 8.0.0
   follow:
     description:
     - This flag indicates that filesystem links, if they exist, should be followed.
@@ -118,7 +131,6 @@ options:
     version_added: 7.1.0
 notes:
    - While it is possible to add an O(option) without specifying a O(value), this makes no sense.
-   - As of Ansible 2.3, the O(dest) option has been changed to O(path) as default, but O(dest) still works as well.
    - As of community.general 3.2.0, UTF-8 BOM markers are discarded when reading files.
 author:
     - Jan-Piet Mens (@jpmens)
@@ -126,7 +138,6 @@ author:
 '''
 
 EXAMPLES = r'''
-# Before Ansible 2.3, option 'dest' was used instead of 'path'
 - name: Ensure "fav=lemonade is in section "[drinks]" in specified file
   community.general.ini_file:
     path: /etc/conf
@@ -164,6 +175,13 @@ EXAMPLES = r'''
       - pepsi
     mode: '0600'
     state: present
+
+- name: Add "beverage=lemon juice" outside a section in specified file
+  community.general.ini_file:
+    path: /etc/conf
+    option: beverage
+    value: lemon juice
+    state: present
 '''
 
 import io
@@ -178,27 +196,35 @@ from ansible.module_utils.common.text.converters import to_bytes, to_text
 
 def match_opt(option, line):
     option = re.escape(option)
-    return re.match('[#;]?( |\t)*(%s)( |\t)*(=|$)( |\t)*(.*)' % option, line)
+    return re.match('([#;]?)( |\t)*(%s)( |\t)*(=|$)( |\t)*(.*)' % option, line)
 
 
 def match_active_opt(option, line):
     option = re.escape(option)
-    return re.match('( |\t)*(%s)( |\t)*(=|$)( |\t)*(.*)' % option, line)
+    return re.match('()( |\t)*(%s)( |\t)*(=|$)( |\t)*(.*)' % option, line)
 
 
-def update_section_line(changed, section_lines, index, changed_lines, newline, msg):
-    option_changed = section_lines[index] != newline
+def update_section_line(option, changed, section_lines, index, changed_lines, ignore_spaces, newline, msg):
+    option_changed = None
+    if ignore_spaces:
+        old_match = match_opt(option, section_lines[index])
+        if not old_match.group(1):
+            new_match = match_opt(option, newline)
+            option_changed = old_match.group(7) != new_match.group(7)
+    if option_changed is None:
+        option_changed = section_lines[index] != newline
+    if option_changed:
+        section_lines[index] = newline
     changed = changed or option_changed
     if option_changed:
         msg = 'option changed'
-    section_lines[index] = newline
     changed_lines[index] = 1
     return (changed, msg)
 
 
 def do_ini(module, filename, section=None, option=None, values=None,
            state='present', exclusive=True, backup=False, no_extra_spaces=False,
-           create=True, allow_no_value=False, follow=False):
+           ignore_spaces=False, create=True, allow_no_value=False, modify_inactive_option=True, follow=False):
 
     if section is not None:
         section = to_text(section)
@@ -278,9 +304,11 @@ def do_ini(module, filename, section=None, option=None, values=None,
     before = after = []
     section_lines = []
 
+    section_pattern = re.compile(to_text(r'^\[\s*%s\s*]' % re.escape(section.strip())))
+
     for index, line in enumerate(ini_lines):
         # find start and end of section
-        if line.startswith(u'[%s]' % section):
+        if section_pattern.match(line):
             within_section = True
             section_start = index
         elif line.startswith(u'['):
@@ -295,6 +323,12 @@ def do_ini(module, filename, section=None, option=None, values=None,
     # Keep track of changed section_lines
     changed_lines = [0] * len(section_lines)
 
+    # Determine whether to consider using commented out/inactive options or only active ones
+    if modify_inactive_option:
+        match_function = match_opt
+    else:
+        match_function = match_active_opt
+
     # handling multiple instances of option=value when state is 'present' with/without exclusive is a bit complex
     #
     # 1. edit all lines where we have a option=value pair with a matching value in values[]
@@ -304,10 +338,10 @@ def do_ini(module, filename, section=None, option=None, values=None,
 
     if state == 'present' and option:
         for index, line in enumerate(section_lines):
-            if match_opt(option, line):
-                match = match_opt(option, line)
-                if values and match.group(6) in values:
-                    matched_value = match.group(6)
+            if match_function(option, line):
+                match = match_function(option, line)
+                if values and match.group(7) in values:
+                    matched_value = match.group(7)
                     if not matched_value and allow_no_value:
                         # replace existing option with no value line(s)
                         newline = u'%s\n' % option
@@ -315,12 +349,12 @@ def do_ini(module, filename, section=None, option=None, values=None,
                     else:
                         # replace existing option=value line(s)
                         newline = assignment_format % (option, matched_value)
-                    (changed, msg) = update_section_line(changed, section_lines, index, changed_lines, newline, msg)
+                    (changed, msg) = update_section_line(option, changed, section_lines, index, changed_lines, ignore_spaces, newline, msg)
                     values.remove(matched_value)
                 elif not values and allow_no_value:
                     # replace existing option with no value line(s)
                     newline = u'%s\n' % option
-                    (changed, msg) = update_section_line(changed, section_lines, index, changed_lines, newline, msg)
+                    (changed, msg) = update_section_line(option, changed, section_lines, index, changed_lines, ignore_spaces, newline, msg)
                     option_no_value_present = True
                     break
 
@@ -328,14 +362,14 @@ def do_ini(module, filename, section=None, option=None, values=None,
         # override option with no value to option with value if not allow_no_value
         if len(values) > 0:
             for index, line in enumerate(section_lines):
-                if not changed_lines[index] and match_opt(option, line):
+                if not changed_lines[index] and match_function(option, line):
                     newline = assignment_format % (option, values.pop(0))
-                    (changed, msg) = update_section_line(changed, section_lines, index, changed_lines, newline, msg)
+                    (changed, msg) = update_section_line(option, changed, section_lines, index, changed_lines, ignore_spaces, newline, msg)
                     if len(values) == 0:
                         break
         # remove all remaining option occurrences from the rest of the section
         for index in range(len(section_lines) - 1, 0, -1):
-            if not changed_lines[index] and match_opt(option, section_lines[index]):
+            if not changed_lines[index] and match_function(option, section_lines[index]):
                 del section_lines[index]
                 del changed_lines[index]
                 changed = True
@@ -379,7 +413,7 @@ def do_ini(module, filename, section=None, option=None, values=None,
                     section_lines = new_section_lines
             elif not exclusive and len(values) > 0:
                 # delete specified option=value line(s)
-                new_section_lines = [i for i in section_lines if not (match_active_opt(option, i) and match_active_opt(option, i).group(6) in values)]
+                new_section_lines = [i for i in section_lines if not (match_active_opt(option, i) and match_active_opt(option, i).group(7) in values)]
                 if section_lines != new_section_lines:
                     changed = True
                     msg = 'option changed'
@@ -449,7 +483,9 @@ def main():
             state=dict(type='str', default='present', choices=['absent', 'present']),
             exclusive=dict(type='bool', default=True),
             no_extra_spaces=dict(type='bool', default=False),
+            ignore_spaces=dict(type='bool', default=False),
             allow_no_value=dict(type='bool', default=False),
+            modify_inactive_option=dict(type='bool', default=True),
             create=dict(type='bool', default=True),
             follow=dict(type='bool', default=False)
         ),
@@ -469,7 +505,9 @@ def main():
     exclusive = module.params['exclusive']
     backup = module.params['backup']
     no_extra_spaces = module.params['no_extra_spaces']
+    ignore_spaces = module.params['ignore_spaces']
     allow_no_value = module.params['allow_no_value']
+    modify_inactive_option = module.params['modify_inactive_option']
     create = module.params['create']
     follow = module.params['follow']
 
@@ -481,7 +519,9 @@ def main():
     elif values is None:
         values = []
 
-    (changed, backup_file, diff, msg) = do_ini(module, path, section, option, values, state, exclusive, backup, no_extra_spaces, create, allow_no_value, follow)
+    (changed, backup_file, diff, msg) = do_ini(
+        module, path, section, option, values, state, exclusive, backup,
+        no_extra_spaces, ignore_spaces, create, allow_no_value, modify_inactive_option, follow)
 
     if not module.check_mode and os.path.exists(path):
         file_args = module.load_file_common_arguments(module.params)

@@ -60,9 +60,9 @@ options:
         description:
             - This is the type of device or network connection that you wish to create or modify.
             - Type V(dummy) is added in community.general 3.5.0.
-            - Type V(generic) is added in Ansible 2.5.
-            - Type V(infiniband) is added in community.general 2.0.0.
             - Type V(gsm) is added in community.general 3.7.0.
+            - Type V(infiniband) is added in community.general 2.0.0.
+            - Type V(loopback) is added in community.general 8.1.0.
             - Type V(macvlan) is added in community.general 6.6.0.
             - Type V(wireguard) is added in community.general 4.3.0.
             - Type V(vpn) is added in community.general 5.1.0.
@@ -70,7 +70,7 @@ options:
             - If you want to control non-ethernet connection attached to V(bond), V(bridge), or V(team) consider using O(slave_type) option.
         type: str
         choices: [ bond, bond-slave, bridge, bridge-slave, dummy, ethernet, generic, gre, infiniband, ipip, macvlan, sit, team, team-slave, vlan, vxlan,
-            wifi, gsm, wireguard, vpn ]
+            wifi, gsm, wireguard, vpn, loopback ]
     mode:
         description:
             - This is the type of device or network connection that you wish to create for a bond or bridge.
@@ -169,7 +169,7 @@ options:
         version_added: 2.0.0
     routing_rules4:
         description:
-            - Is the same as in an C(ip route add) command, except always requires specifying a priority.
+            - Is the same as in an C(ip rule add) command, except always requires specifying a priority.
         type: list
         elements: str
         version_added: 3.3.0
@@ -1489,6 +1489,22 @@ EXAMPLES = r'''
     vlandev: eth0
     vlanid: 5
     state: present
+
+## Defining ip rules while setting a static IP
+## table 'production' is set with id 200 in this example.
+- name: Set Static ips for interface with ip rules and routes
+  community.general.nmcli:
+    type: ethernet
+    conn_name: 'eth0'
+    ip4: '192.168.1.50'
+    gw4: '192.168.1.1'
+    state: present
+    routes4_extended:
+      - ip: "0.0.0.0/0"
+        next_hop: "192.168.1.1"
+        table: "production"
+    routing_rules4:
+      - "priority 0 from 192.168.1.50 table 200"
 '''
 
 RETURN = r"""#
@@ -1743,7 +1759,7 @@ class Nmcli(object):
                 'bridge.priority': self.priority,
                 'bridge.stp': self.stp,
             })
-            # priority make sense when stp enabed, otherwise nmcli keeps bridge-priority to 32768 regrdless of input.
+            # priority make sense when stp enabled, otherwise nmcli keeps bridge-priority to 32768 regrdless of input.
             # force ignoring to save idempotency
             if self.stp:
                 options.update({'bridge.priority': self.priority})
@@ -1816,7 +1832,7 @@ class Nmcli(object):
         elif self.type == 'wifi':
             options.update({
                 '802-11-wireless.ssid': self.ssid,
-                'connection.slave-type': 'bond' if self.master else None,
+                'connection.slave-type': ('bond' if self.slave_type is None else self.slave_type) if self.master else None,
             })
             if self.wifi:
                 for name, value in self.wifi.items():
@@ -1922,6 +1938,7 @@ class Nmcli(object):
             'macvlan',
             'wireguard',
             'vpn',
+            'loopback',
         )
 
     @property
@@ -1934,15 +1951,21 @@ class Nmcli(object):
     @property
     def mtu_conn_type(self):
         return self.type in (
+            'bond',
+            'bond-slave',
             'dummy',
             'ethernet',
+            'infiniband',
             'team-slave',
             'vlan',
         )
 
     @property
     def mtu_setting(self):
-        return '802-3-ethernet.mtu'
+        if self.type == 'infiniband':
+            return 'infiniband.mtu'
+        else:
+            return '802-3-ethernet.mtu'
 
     @staticmethod
     def mtu_to_string(mtu):
@@ -1981,6 +2004,7 @@ class Nmcli(object):
             'bridge-slave',
             'team-slave',
             'wifi',
+            'infiniband',
         )
 
     @property
@@ -2400,6 +2424,7 @@ def main():
                           'macvlan',
                           'wireguard',
                           'vpn',
+                          'loopback',
                       ]),
             ip4=dict(type='list', elements='str'),
             gw4=dict(type='str'),

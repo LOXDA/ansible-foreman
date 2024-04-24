@@ -96,7 +96,7 @@ options:
               obtained using O(request_type).
             - If O(request_type=renew), a renewal will fail if the certificate being renewed has been issued within the past 30 days, so do not set a
               O(remaining_days) value that is within 30 days of the full lifetime of the certificate being acted upon.
-            - For exmaple, if you are requesting Certificates with a 90 day lifetime, do not set O(remaining_days) to a value V(60) or higher).
+            - For example, if you are requesting Certificates with a 90 day lifetime, do not set O(remaining_days) to a value V(60) or higher).
             - The O(force) option may be used to ensure that a new certificate is always obtained.
         type: int
         default: 30
@@ -350,6 +350,8 @@ seealso:
       description: Can be used to create private keys (both for certificates and accounts).
     - module: community.crypto.openssl_csr
       description: Can be used to create a Certificate Signing Request (CSR).
+    - plugin: community.crypto.to_serial
+      plugin_type: filter
 '''
 
 EXAMPLES = r'''
@@ -490,7 +492,10 @@ tracking_id:
     type: int
     sample: 380079
 serial_number:
-    description: The serial number of the issued certificate.
+    description:
+        - The serial number of the issued certificate.
+        - This return value is an B(integer). If you need the serial numbers as a colon-separated hex string,
+          such as C(11:22:33), you need to convert it to that form with P(community.crypto.to_serial#filter).
     returned: success
     type: int
     sample: 1235262234164342

@@ -2,7 +2,7 @@
  "collection_info": {
   "namespace": "devsec",
   "name": "hardening",
-  "version": "8.8.0",
+  "version": "9.0.1",
   "authors": [
    "dev-sec <hello@dev-sec.io>"
   ],
@@ -20,7 +20,10 @@
    "mysql_hardening",
    "nginx_hardening",
    "os_hardening",
-   "ssh_hardening"
+   "ssh_hardening",
+   "database",
+   "linux",
+   "security"
   ],
   "description": "This collection provides battle tested hardening for Linux, SSH, nginx, MySQL",
   "license": [
@@ -42,7 +45,7 @@
   "name": "FILES.json",
   "ftype": "file",
   "chksum_type": "sha256",
-  "chksum_sha256": "19b50713b00de6f36a33aa7a8f749d7b20520ffd13fc21ad271553c8b7f4acaa",
+  "chksum_sha256": "88541ece33c4ecddcdcc6286db17a350259145086ac774bd2b30294b3c38b318",
   "format": 1
  },
  "format": 1

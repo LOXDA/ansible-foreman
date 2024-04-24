@@ -164,6 +164,21 @@ options:
         type: str
         default: sha256
 
+    serial_numbers:
+        description:
+            - This option determines which values will be accepted for O(revoked_certificates[].serial_number).
+            - If set to V(integer) (default), serial numbers are assumed to be integers, for example V(66223).
+              (This example value is equivalent to the hex octet string V(01:02:AF).)
+            - If set to V(hex-octets), serial numbers are assumed to be colon-separated hex octet strings,
+              for example V(01:02:AF).
+              (This example value is equivalent to the integer V(66223).)
+        type: str
+        choices:
+            - integer
+            - hex-octets
+        default: integer
+        version_added: 2.18.0
+
     revoked_certificates:
         description:
             - List of certificates to be revoked.
@@ -193,7 +208,13 @@ options:
                     - Mutually exclusive with O(revoked_certificates[].path) and
                       O(revoked_certificates[].content). One of these three options must
                       be specified.
-                type: int
+                    - This option accepts integers or hex octet strings, depending on the value
+                      of O(serial_numbers).
+                    - If O(serial_numbers=integer), integers such as V(66223) must be provided.
+                    - If O(serial_numbers=hex-octets), strings such as V(01:02:AF) must be provided.
+                    - You can use the filters P(community.crypto.parse_serial#filter) and
+                      P(community.crypto.to_serial#filter) to convert these two representations.
+                type: raw
             revocation_date:
                 description:
                     - The point in time the certificate was revoked.
@@ -271,6 +292,12 @@ options:
 notes:
     - All ASN.1 TIME values should be specified following the YYYYMMDDHHMMSSZ pattern.
     - Date specified should be UTC. Minutes and seconds are mandatory.
+
+seealso:
+    - plugin: community.crypto.parse_serial
+      plugin_type: filter
+    - plugin: community.crypto.to_serial
+      plugin_type: filter
 '''
 
 EXAMPLES = r'''
@@ -356,7 +383,10 @@ revoked_certificates:
     elements: dict
     contains:
         serial_number:
-            description: Serial number of the certificate.
+            description:
+                - Serial number of the certificate.
+                - This return value is an B(integer). If you need the serial numbers as a colon-separated hex string,
+                  such as C(11:22:33), you need to convert it to that form with P(community.crypto.to_serial#filter).
             type: int
             sample: 1234
         revocation_date:
@@ -420,7 +450,9 @@ import traceback
 
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
 from ansible.module_utils.common.text.converters import to_native, to_text
+from ansible.module_utils.common.validation import check_type_int, check_type_str
 
+from ansible_collections.community.crypto.plugins.module_utils.serial import parse_serial
 from ansible_collections.community.crypto.plugins.module_utils.version import LooseVersion
 
 from ansible_collections.community.crypto.plugins.module_utils.io import (
@@ -443,6 +475,7 @@ from ansible_collections.community.crypto.plugins.module_utils.crypto.support im
 )
 
 from ansible_collections.community.crypto.plugins.module_utils.crypto.cryptography_support import (
+    CRYPTOGRAPHY_TIMEZONE,
     cryptography_decode_name,
     cryptography_get_name,
     cryptography_key_needs_digest_for_signing,
@@ -452,11 +485,17 @@ from ansible_collections.community.crypto.plugins.module_utils.crypto.cryptograp
 )
 
 from ansible_collections.community.crypto.plugins.module_utils.crypto.cryptography_crl import (
+    CRYPTOGRAPHY_TIMEZONE_INVALIDITY_DATE,
     REVOCATION_REASON_MAP,
     TIMESTAMP_FORMAT,
     cryptography_decode_revoked_certificate,
     cryptography_dump_revoked,
     cryptography_get_signature_algorithm_oid_from_crl,
+    get_next_update,
+    get_last_update,
+    set_next_update,
+    set_last_update,
+    set_revocation_date,
 )
 
 from ansible_collections.community.crypto.plugins.module_utils.crypto.pem import (
@@ -509,6 +548,7 @@ class CRL(OpenSSLObject):
         self.ignore_timestamps = module.params['ignore_timestamps']
         self.return_content = module.params['return_content']
         self.name_encoding = module.params['name_encoding']
+        self.serial_numbers_format = module.params['serial_numbers']
         self.crl_content = None
 
         self.privatekey_path = module.params['privatekey_path']
@@ -527,12 +567,14 @@ class CRL(OpenSSLObject):
         except (TypeError, ValueError) as exc:
             module.fail_json(msg=to_native(exc))
 
-        self.last_update = get_relative_time_option(module.params['last_update'], 'last_update')
-        self.next_update = get_relative_time_option(module.params['next_update'], 'next_update')
+        self.last_update = get_relative_time_option(module.params['last_update'], 'last_update', with_timezone=CRYPTOGRAPHY_TIMEZONE)
+        self.next_update = get_relative_time_option(module.params['next_update'], 'next_update', with_timezone=CRYPTOGRAPHY_TIMEZONE)
 
         self.digest = select_message_digest(module.params['digest'])
         if self.digest is None:
             raise CRLError('The digest "{0}" is not supported'.format(module.params['digest']))
+
+        self.module = module
 
         self.revoked_certificates = []
         for i, rc in enumerate(module.params['revoked_certificates']):
@@ -565,14 +607,15 @@ class CRL(OpenSSLObject):
                         )
             else:
                 # Specify serial_number (and potentially issuer) directly
-                result['serial_number'] = rc['serial_number']
+                result['serial_number'] = self._parse_serial_number(rc['serial_number'], i)
             # All other options
             if rc['issuer']:
                 result['issuer'] = [cryptography_get_name(issuer, 'issuer') for issuer in rc['issuer']]
                 result['issuer_critical'] = rc['issuer_critical']
             result['revocation_date'] = get_relative_time_option(
                 rc['revocation_date'],
-                path_prefix + 'revocation_date'
+                path_prefix + 'revocation_date',
+                with_timezone=CRYPTOGRAPHY_TIMEZONE,
             )
             if rc['reason']:
                 result['reason'] = REVOCATION_REASON_MAP[rc['reason']]
@@ -580,12 +623,11 @@ class CRL(OpenSSLObject):
             if rc['invalidity_date']:
                 result['invalidity_date'] = get_relative_time_option(
                     rc['invalidity_date'],
-                    path_prefix + 'invalidity_date'
+                    path_prefix + 'invalidity_date',
+                    with_timezone=CRYPTOGRAPHY_TIMEZONE_INVALIDITY_DATE,
                 )
                 result['invalidity_date_critical'] = rc['invalidity_date_critical']
             self.revoked_certificates.append(result)
-
-        self.module = module
 
         self.backup = module.params['backup']
         self.backup_file = None
@@ -619,6 +661,25 @@ class CRL(OpenSSLObject):
             data = None
 
         self.diff_after = self.diff_before = self._get_info(data)
+
+    def _parse_serial_number(self, value, index):
+        if self.serial_numbers_format == 'integer':
+            try:
+                return check_type_int(value)
+            except TypeError as exc:
+                self.module.fail_json(msg='Error while parsing revoked_certificates[{idx}].serial_number as an integer: {exc}'.format(
+                    idx=index + 1,
+                    exc=to_native(exc),
+                ))
+        if self.serial_numbers_format == 'hex-octets':
+            try:
+                return parse_serial(check_type_str(value))
+            except (TypeError, ValueError) as exc:
+                self.module.fail_json(msg='Error while parsing revoked_certificates[{idx}].serial_number as an colon-separated hex octet string: {exc}'.format(
+                    idx=index + 1,
+                    exc=to_native(exc),
+                ))
+        raise RuntimeError('Unexpected value %s of serial_numbers' % (self.serial_numbers_format, ))
 
     def _get_info(self, data):
         if data is None:
@@ -679,9 +740,9 @@ class CRL(OpenSSLObject):
         if self.crl is None:
             return False
 
-        if self.last_update != self.crl.last_update and not self.ignore_timestamps:
+        if self.last_update != get_last_update(self.crl) and not self.ignore_timestamps:
             return False
-        if self.next_update != self.crl.next_update and not self.ignore_timestamps:
+        if self.next_update != get_next_update(self.crl) and not self.ignore_timestamps:
             return False
         if cryptography_key_needs_digest_for_signing(self.privatekey):
             if self.crl.signature_hash_algorithm is None or self.digest.name != self.crl.signature_hash_algorithm.name:
@@ -728,8 +789,8 @@ class CRL(OpenSSLObject):
         except ValueError as e:
             raise CRLError(e)
 
-        crl = crl.last_update(self.last_update)
-        crl = crl.next_update(self.next_update)
+        crl = set_last_update(crl, self.last_update)
+        crl = set_next_update(crl, self.next_update)
 
         if self.update and self.crl:
             new_entries = set([self._compress_entry(entry) for entry in self.revoked_certificates])
@@ -740,7 +801,7 @@ class CRL(OpenSSLObject):
         for entry in self.revoked_certificates:
             revoked_cert = RevokedCertificateBuilder()
             revoked_cert = revoked_cert.serial_number(entry['serial_number'])
-            revoked_cert = revoked_cert.revocation_date(entry['revocation_date'])
+            revoked_cert = set_revocation_date(revoked_cert, entry['revocation_date'])
             if entry['issuer'] is not None:
                 revoked_cert = revoked_cert.add_extension(
                     x509.CertificateIssuer(entry['issuer']),
@@ -824,8 +885,8 @@ class CRL(OpenSSLObject):
             for entry in self.revoked_certificates:
                 result['revoked_certificates'].append(cryptography_dump_revoked(entry, idn_rewrite=self.name_encoding))
         elif self.crl:
-            result['last_update'] = self.crl.last_update.strftime(TIMESTAMP_FORMAT)
-            result['next_update'] = self.crl.next_update.strftime(TIMESTAMP_FORMAT)
+            result['last_update'] = get_last_update(self.crl).strftime(TIMESTAMP_FORMAT)
+            result['next_update'] = get_next_update(self.crl).strftime(TIMESTAMP_FORMAT)
             result['digest'] = cryptography_oid_to_name(cryptography_get_signature_algorithm_oid_from_crl(self.crl))
             issuer = []
             for attribute in self.crl.issuer:
@@ -885,7 +946,7 @@ def main():
                 options=dict(
                     path=dict(type='path'),
                     content=dict(type='str'),
-                    serial_number=dict(type='int'),
+                    serial_number=dict(type='raw'),
                     revocation_date=dict(type='str', default='+0s'),
                     issuer=dict(type='list', elements='str'),
                     issuer_critical=dict(type='bool', default=False),
@@ -905,6 +966,7 @@ def main():
                 mutually_exclusive=[['path', 'content', 'serial_number']],
             ),
             name_encoding=dict(type='str', default='ignore', choices=['ignore', 'idna', 'unicode']),
+            serial_numbers=dict(type='str', default='integer', choices=['integer', 'hex-octets']),
         ),
         required_if=[
             ('state', 'present', ['privatekey_path', 'privatekey_content'], True),

@@ -6,6 +6,73 @@ theforeman.foreman Release Notes
 
 This changelog describes changes after version 0.8.1.
 
+v4.0.0
+======
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- content_view_filter - stop managing rules from this module, ``content_view_filter_rule`` should be used for that
+- inventory plugin - do not default to ``http://localhost:3000`` as the Foreman URL, providing a URL is now mandatory
+
+Bugfixes
+--------
+
+- compute_profile, host - refer to VMware storage pods by name, not id (https://github.com/theforeman/foreman-ansible-modules/issues/1247)
+
+New Modules
+-----------
+
+- theforeman.foreman.registration_command - Manage Registration Command
+- theforeman.foreman.webhook - Manage Webhooks
+
+v3.15.0
+=======
+
+Minor Changes
+-------------
+
+- content_view_publish role - allow passing ``async`` and ``poll`` to the module (https://github.com/theforeman/foreman-ansible-modules/pull/1676)
+- convert2rhel role - install ``convert2rhel`` from ``cdn-public.redhat.com``, dropping the requirement of a custom CA cert
+
+Bugfixes
+--------
+
+- content_view_filter_rule - handle multiple rules for the same package but different architectures and versions correctly (https://bugzilla.redhat.com/show_bug.cgi?id=2189687)
+
+v3.14.0
+=======
+
+Bugfixes
+--------
+
+- content_view_publish role - correctly pass ``version`` not ``description`` to the module (https://bugzilla.redhat.com/show_bug.cgi?id=2234444)
+
+New Modules
+-----------
+
+- theforeman.foreman.smart_class_parameter_override_value - Manage Smart Class Parameter Override Values
+
+v3.13.0
+=======
+
+Minor Changes
+-------------
+
+- compute_resource - add support for OpenStack
+- repositories role - allow disabling/removing of repositories by setting the ``state`` parameter
+
+Bugfixes
+--------
+
+- repository - don't fail when removing a content credential from a repository (https://bugzilla.redhat.com/show_bug.cgi?id=2224122)
+- smart_class_parameter - correctly allow setting ``override`` to ``false`` (https://github.com/theforeman/foreman-ansible-modules/issues/1644)
+
+New Modules
+-----------
+
+- theforeman.foreman.wait_for_task - Wait for a task
+
 v3.12.0
 =======
 

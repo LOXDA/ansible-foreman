@@ -19,7 +19,6 @@ description:
   - Uses Layman to manage an additional repositories for the Portage package manager on Gentoo Linux.
     Please note that Layman must be installed on a managed node prior using this module.
 requirements:
-  - "python >= 2.6"
   - layman python module
 extends_documentation_fragment:
   - community.general.attributes
@@ -39,7 +38,7 @@ options:
     description:
       - An URL of the alternative overlays list that defines the overlay to install.
         This list will be fetched and saved under C(${overlay_defs}/${name}.xml), where
-        C(overlay_defs) is readed from the Layman's configuration.
+        C(overlay_defs) is read from the Layman's configuration.
     aliases: [url]
     type: str
   state:

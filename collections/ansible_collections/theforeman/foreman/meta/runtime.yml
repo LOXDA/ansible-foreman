@@ -53,6 +53,7 @@ action_groups:
   - puppet_environment
   - puppetclasses_import
   - realm
+  - registration_command
   - repository
   - repository_info
   - repository_set
@@ -67,6 +68,7 @@ action_groups:
   - setting
   - setting_info
   - smart_class_parameter
+  - smart_class_parameter_override_value
   - smart_proxy
   - snapshot
   - snapshot_info
@@ -79,6 +81,8 @@ action_groups:
   - templates_import
   - user
   - usergroup
+  - wait_for_task
+  - webhook
 plugin_routing:
   modules:
     foreman_architecture:
@@ -185,4 +189,4 @@ plugin_routing:
       redirect: theforeman.foreman.sync_plan
     katello_upload:
       redirect: theforeman.foreman.content_upload
-requires_ansible: '>=2.9'
+requires_ansible: '>=2.9.17'

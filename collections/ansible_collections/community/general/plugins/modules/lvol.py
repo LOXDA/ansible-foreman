@@ -41,13 +41,13 @@ options:
     description:
     - The size of the logical volume, according to lvcreate(8) --size, by
       default in megabytes or optionally with one of [bBsSkKmMgGtTpPeE] units; or
-      according to lvcreate(8) --extents as a percentage of [VG|PVS|FREE];
+      according to lvcreate(8) --extents as a percentage of [VG|PVS|FREE|ORIGIN];
       Float values must begin with a digit.
     - When resizing, apart from specifying an absolute size you may, according to
       lvextend(8)|lvreduce(8) C(--size), specify the amount to extend the logical volume with
       the prefix V(+) or the amount to reduce the logical volume by with prefix V(-).
     - Resizing using V(+) or V(-) was not supported prior to community.general 3.0.0.
-    - Please note that when using V(+) or V(-), the module is B(not idempotent).
+    - Please note that when using V(+), V(-), or percentage of FREE, the module is B(not idempotent).
   state:
     type: str
     description:
@@ -73,11 +73,12 @@ options:
   snapshot:
     type: str
     description:
-    - The name of the snapshot volume
+    - The name of a snapshot volume to be configured. When creating a snapshot volume, the O(lv) parameter specifies the origin volume.
   pvs:
-    type: str
+    type: list
+    elements: str
     description:
-    - Comma separated list of physical volumes (e.g. /dev/sda,/dev/sdb).
+    - List of physical volumes (for example V(/dev/sda, /dev/sdb)).
   thinpool:
     type: str
     description:
@@ -110,7 +111,9 @@ EXAMPLES = '''
     vg: firefly
     lv: test
     size: 512
-    pvs: /dev/sda,/dev/sdb
+    pvs:
+      - /dev/sda
+      - /dev/sdb
 
 - name: Create cache pool logical volume
   community.general.lvol:
@@ -299,7 +302,7 @@ def main():
             shrink=dict(type='bool', default=True),
             active=dict(type='bool', default=True),
             snapshot=dict(type='str'),
-            pvs=dict(type='str'),
+            pvs=dict(type='list', elements='str'),
             resizefs=dict(type='bool', default=False),
             thinpool=dict(type='str'),
         ),
@@ -340,7 +343,7 @@ def main():
     if pvs is None:
         pvs = ""
     else:
-        pvs = pvs.replace(",", " ")
+        pvs = " ".join(pvs)
 
     if opts is None:
         opts = ""
@@ -368,10 +371,10 @@ def main():
             if size_percent > 100:
                 module.fail_json(msg="Size percentage cannot be larger than 100%")
             size_whole = size_parts[1]
-            if size_whole == 'ORIGIN':
-                module.fail_json(msg="Snapshot Volumes are not supported")
-            elif size_whole not in ['VG', 'PVS', 'FREE']:
-                module.fail_json(msg="Specify extents as a percentage of VG|PVS|FREE")
+            if size_whole == 'ORIGIN' and snapshot is None:
+                module.fail_json(msg="Percentage of ORIGIN supported only for snapshot volumes")
+            elif size_whole not in ['VG', 'PVS', 'FREE', 'ORIGIN']:
+                module.fail_json(msg="Specify extents as a percentage of VG|PVS|FREE|ORIGIN")
             size_opt = 'l'
             size_unit = ''
 
@@ -552,9 +555,9 @@ def main():
                 elif rc == 0:
                     changed = True
                     msg = "Volume %s resized to %s%s" % (this_lv['name'], size_requested, unit)
-                elif "matches existing size" in err:
+                elif "matches existing size" in err or "matches existing size" in out:
                     module.exit_json(changed=False, vg=vg, lv=this_lv['name'], size=this_lv['size'])
-                elif "not larger than existing size" in err:
+                elif "not larger than existing size" in err or "not larger than existing size" in out:
                     module.exit_json(changed=False, vg=vg, lv=this_lv['name'], size=this_lv['size'], msg="Original size is larger than requested size", err=err)
                 else:
                     module.fail_json(msg="Unable to resize %s to %s%s" % (lv, size, size_unit), rc=rc, err=err)
@@ -585,9 +588,9 @@ def main():
                     module.fail_json(msg="Unable to resize %s to %s%s" % (lv, size, size_unit), rc=rc, err=err, out=out)
                 elif rc == 0:
                     changed = True
-                elif "matches existing size" in err:
+                elif "matches existing size" in err or "matches existing size" in out:
                     module.exit_json(changed=False, vg=vg, lv=this_lv['name'], size=this_lv['size'])
-                elif "not larger than existing size" in err:
+                elif "not larger than existing size" in err or "not larger than existing size" in out:
                     module.exit_json(changed=False, vg=vg, lv=this_lv['name'], size=this_lv['size'], msg="Original size is larger than requested size", err=err)
                 else:
                     module.fail_json(msg="Unable to resize %s to %s%s" % (lv, size, size_unit), rc=rc, err=err)

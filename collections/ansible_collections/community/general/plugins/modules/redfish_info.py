@@ -16,8 +16,6 @@ description:
   - Builds Redfish URIs locally and sends them to remote OOB controllers to
     get information back.
   - Information retrieved is placed in a location specified by the user.
-  - This module was called C(redfish_facts) before Ansible 2.9, returning C(ansible_facts).
-    Note that the M(community.general.redfish_info) module no longer returns C(ansible_facts)!
 extends_documentation_fragment:
   - community.general.attributes
   - community.general.attributes.info_module
@@ -57,10 +55,16 @@ options:
       - Security token for authenticating to OOB controller.
     type: str
     version_added: 2.3.0
+  manager:
+    description:
+      - Name of manager on OOB controller to target.
+    type: str
+    version_added: '8.3.0'
   timeout:
     description:
       - Timeout in seconds for HTTP requests to OOB controller.
-    default: 10
+      - The default value for this param is C(10) but that is being deprecated
+        and it will be replaced with C(60) in community.general 9.0.0.
     type: int
   update_handle:
     required: false
@@ -249,6 +253,15 @@ EXAMPLES = '''
       username: "{{ username }}"
       password: "{{ password }}"
 
+  - name: Get service identification
+    community.general.redfish_info:
+      category: Manager
+      command: GetServiceIdentification
+      manager: "{{ manager }}"
+      baseuri: "{{ baseuri }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+
   - name: Get software inventory
     community.general.redfish_info:
       category: Update
@@ -337,6 +350,14 @@ EXAMPLES = '''
       baseuri: "{{ baseuri }}"
       username: "{{ username }}"
       password: "{{ password }}"
+
+  - name: Get BIOS registry
+    community.general.redfish_info:
+      category: Systems
+      command: GetBiosRegistries
+      baseuri: "{{ baseuri }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
 '''
 
 RETURN = '''
@@ -354,7 +375,7 @@ CATEGORY_COMMANDS_ALL = {
     "Systems": ["GetSystemInventory", "GetPsuInventory", "GetCpuInventory",
                 "GetMemoryInventory", "GetNicInventory", "GetHealthReport",
                 "GetStorageControllerInventory", "GetDiskInventory", "GetVolumeInventory",
-                "GetBiosAttributes", "GetBootOrder", "GetBootOverride", "GetVirtualMedia"],
+                "GetBiosAttributes", "GetBootOrder", "GetBootOverride", "GetVirtualMedia", "GetBiosRegistries"],
     "Chassis": ["GetFanInventory", "GetPsuInventory", "GetChassisPower",
                 "GetChassisThermals", "GetChassisInventory", "GetHealthReport", "GetHPEThermalConfig", "GetHPEFanPercentMin"],
     "Accounts": ["ListUsers"],
@@ -362,7 +383,7 @@ CATEGORY_COMMANDS_ALL = {
     "Update": ["GetFirmwareInventory", "GetFirmwareUpdateCapabilities", "GetSoftwareInventory",
                "GetUpdateStatus"],
     "Manager": ["GetManagerNicInventory", "GetVirtualMedia", "GetLogs", "GetNetworkProtocols",
-                "GetHealthReport", "GetHostInterfaces", "GetManagerInventory"],
+                "GetHealthReport", "GetHostInterfaces", "GetManagerInventory", "GetServiceIdentification"],
 }
 
 CATEGORY_COMMANDS_DEFAULT = {
@@ -386,8 +407,9 @@ def main():
             username=dict(),
             password=dict(no_log=True),
             auth_token=dict(no_log=True),
-            timeout=dict(type='int', default=10),
+            timeout=dict(type='int'),
             update_handle=dict(),
+            manager=dict(),
         ),
         required_together=[
             ('username', 'password'),
@@ -401,6 +423,16 @@ def main():
         supports_check_mode=True,
     )
 
+    if module.params['timeout'] is None:
+        timeout = 10
+        module.deprecate(
+            'The default value {0} for parameter param1 is being deprecated and it will be replaced by {1}'.format(
+                10, 60
+            ),
+            version='9.0.0',
+            collection_name='community.general'
+        )
+
     # admin credentials used for authentication
     creds = {'user': module.params['username'],
              'pswd': module.params['password'],
@@ -411,6 +443,9 @@ def main():
 
     # update handle
     update_handle = module.params['update_handle']
+
+    # manager
+    manager = module.params['manager']
 
     # Build root URI
     root_uri = "https://" + module.params['baseuri']
@@ -478,6 +513,8 @@ def main():
                     result["health_report"] = rf_utils.get_multi_system_health_report()
                 elif command == "GetVirtualMedia":
                     result["virtual_media"] = rf_utils.get_multi_virtualmedia(category)
+                elif command == "GetBiosRegistries":
+                    result["bios_registries"] = rf_utils.get_bios_registries()
 
         elif category == "Chassis":
             # execute only if we find Chassis resource
@@ -560,6 +597,8 @@ def main():
                     result["host_interfaces"] = rf_utils.get_hostinterfaces()
                 elif command == "GetManagerInventory":
                     result["manager"] = rf_utils.get_multi_manager_inventory()
+                elif command == "GetServiceIdentification":
+                    result["service_id"] = rf_utils.get_service_identification(manager)
 
     # Return data back
     module.exit_json(redfish_facts=result)

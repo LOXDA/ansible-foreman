@@ -1,9 +1,84 @@
-===================================
-community.hashi_vault Release Notes
-===================================
+====================================
+community.hashi\_vault Release Notes
+====================================
 
 .. contents:: Topics
 
+v6.2.0
+======
+
+Release Summary
+---------------
+
+This release contains a dozen+ new modules for working with Vault's database secrets engine and some new ``vars`` entries for specifying public and private keys in ``cert`` auth.
+
+Minor Changes
+-------------
+
+- cert auth - add option to set the ``cert_auth_public_key`` and ``cert_auth_private_key`` parameters using the variables ``ansible_hashi_vault_cert_auth_public_key`` and ``ansible_hashi_vault_cert_auth_private_key`` (https://github.com/ansible-collections/community.hashi_vault/issues/428).
+
+New Modules
+-----------
+
+- vault_database_connection_configure - Configures the database engine
+- vault_database_connection_delete - Delete a Database Connection
+- vault_database_connection_read - Returns the configuration settings for a O(connection_name)
+- vault_database_connection_reset - Closes a O(connection_name) and its underlying plugin and restarts it with the configuration stored
+- vault_database_connections_list - Returns a list of available connections
+- vault_database_role_create - Creates or updates a (dynamic) role definition
+- vault_database_role_delete - Delete a role definition
+- vault_database_role_read - Queries a dynamic role definition
+- vault_database_roles_list - Returns a list of available (dynamic) roles
+- vault_database_rotate_root_credentials - Rotates the root credentials stored for the database connection. This user must have permissions to update its own password.
+- vault_database_static_role_create - Create or update a static role
+- vault_database_static_role_get_credentials - Returns the current credentials based on the named static role
+- vault_database_static_role_read - Queries a static role definition
+- vault_database_static_role_rotate_credentials - Trigger the credential rotation for a static role
+- vault_database_static_roles_list - Returns a list of available static roles
+
+v6.1.0
+======
+
+Release Summary
+---------------
+
+This release addresses some breaking changes in core that were backported.
+
+Major Changes
+-------------
+
+- requirements - the ``requests`` package which is required by ``hvac`` now has a more restrictive range for this collection in certain use cases due to breaking security changes in ``ansible-core`` that were backported (https://github.com/ansible-collections/community.hashi_vault/pull/416).
+
+v6.0.0
+======
+
+Release Summary
+---------------
+
+This major version of the collection has no functional changes from the previous version, however the minimum versions of ``hvac`` and ``ansible-core`` have been raised. While the collection may still work with those earlier versions, future changes will not test against them.
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- The minimum required version of ``hvac`` is now ``1.2.1`` (https://docs.ansible.com/ansible/devel/collections/community/hashi_vault/docsite/user_guide.html#hvac-version-specifics).
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- The minimum supported version of ``ansible-core`` is now ``2.14``, support for ``2.13`` has been dropped (https://github.com/ansible-collections/community.hashi_vault/pull/403).
+
+v5.0.1
+======
+
+Release Summary
+---------------
+
+This release fixes a bug in ``vault_write`` ahead of the collection's next major release.
+
+Bugfixes
+--------
+
+- vault_write - the ``vault_write`` lookup and module were not able to write data containing keys named ``path`` or ``wrap_ttl`` due to a bug in the ``hvac`` library. These plugins have now been updated to take advantage of fixes in ``hvac>=1.2`` to address this (https://github.com/ansible-collections/community.hashi_vault/issues/389).
 
 v5.0.0
 ======
@@ -616,4 +691,3 @@ Release Summary
 ---------------
 
 Our first release matches the ``hashi_vault`` lookup functionality provided by ``community.general`` version ``1.3.0``.
-

@@ -95,10 +95,9 @@ options:
       description:
         - Whether to encode the ASN.1 values in the RV(extensions) return value with Base64 or not.
         - The documentation claimed for a long time that the values are Base64 encoded, but they
-          never were. For compatibility this option is set to V(false), but that value will eventually
-          be deprecated and changed to V(true).
+          never were. For compatibility this option is set to V(false).
+        - The default value V(false) is B(deprecated) and will change to V(true) in community.crypto 3.0.0.
       type: bool
-      default: false
       version_added: 2.12.0
 
 notes:
@@ -107,6 +106,10 @@ notes:
 requirements:
     - "python >= 2.7 when using O(proxy_host)"
     - "cryptography >= 1.6"
+
+seealso:
+    - plugin: community.crypto.to_serial
+      plugin_type: filter
 '''
 
 RETURN = '''
@@ -148,31 +151,34 @@ extensions:
             type: str
             description: The extension's name.
 issuer:
-    description: Information about the issuer of the cert
+    description: Information about the issuer of the cert.
     returned: success
     type: dict
 not_after:
-    description: Expiration date of the cert
+    description: Expiration date of the cert.
     returned: success
     type: str
 not_before:
-    description: Issue date of the cert
+    description: Issue date of the cert.
     returned: success
     type: str
 serial_number:
-    description: The serial number of the cert
+    description:
+        - The serial number of the cert.
+        - This return value is an B(integer). If you need the serial numbers as a colon-separated hex string,
+          such as C(11:22:33), you need to convert it to that form with P(community.crypto.to_serial#filter).
     returned: success
-    type: str
+    type: int
 signature_algorithm:
-    description: The algorithm used to sign the cert
+    description: The algorithm used to sign the cert.
     returned: success
     type: str
 subject:
-    description: Information about the subject of the cert (OU, CN, etc)
+    description: Information about the subject of the cert (C(OU), C(CN), etc).
     returned: success
     type: dict
 version:
-    description: The version number of the certificate
+    description: The version number of the certificate.
     returned: success
     type: str
 '''
@@ -203,7 +209,6 @@ EXAMPLES = '''
 
 import atexit
 import base64
-import datetime
 import traceback
 
 from os.path import isfile
@@ -215,9 +220,16 @@ from ansible.module_utils.common.text.converters import to_bytes
 
 from ansible_collections.community.crypto.plugins.module_utils.version import LooseVersion
 
+from ansible_collections.community.crypto.plugins.module_utils.crypto.support import (
+    get_now_datetime,
+)
+
 from ansible_collections.community.crypto.plugins.module_utils.crypto.cryptography_support import (
+    CRYPTOGRAPHY_TIMEZONE,
     cryptography_oid_to_name,
     cryptography_get_extensions_from_cert,
+    get_not_valid_after,
+    get_not_valid_before,
 )
 
 MINIMAL_CRYPTOGRAPHY_VERSION = '1.6'
@@ -272,7 +284,7 @@ def main():
             select_crypto_backend=dict(type='str', choices=['auto', 'cryptography'], default='auto'),
             starttls=dict(type='str', choices=['mysql']),
             ciphers=dict(type='list', elements='str'),
-            asn1_base64=dict(type='bool', default=False),
+            asn1_base64=dict(type='bool'),
         ),
     )
 
@@ -286,6 +298,15 @@ def main():
     start_tls_server_type = module.params.get('starttls')
     ciphers = module.params.get('ciphers')
     asn1_base64 = module.params['asn1_base64']
+    if asn1_base64 is None:
+        module.deprecate(
+            'The default value `false` for asn1_base64 is deprecated and will change to `true` in '
+            'community.crypto 3.0.0. If you need this value, it is best to set the value explicitly '
+            'and adjust your roles/playbooks to use `asn1_base64=true` as soon as possible',
+            version='3.0.0',
+            collection_name='community.crypto',
+        )
+        asn1_base64 = False
 
     backend = module.params.get('select_crypto_backend')
     if backend == 'auto':
@@ -377,7 +398,7 @@ def main():
         for attribute in x509.subject:
             result['subject'][cryptography_oid_to_name(attribute.oid, short=True)] = attribute.value
 
-        result['expired'] = x509.not_valid_after < datetime.datetime.utcnow()
+        result['expired'] = get_not_valid_after(x509) < get_now_datetime(with_timezone=CRYPTOGRAPHY_TIMEZONE)
 
         result['extensions'] = []
         for dotted_number, entry in cryptography_get_extensions_from_cert(x509).items():
@@ -395,8 +416,8 @@ def main():
         for attribute in x509.issuer:
             result['issuer'][cryptography_oid_to_name(attribute.oid, short=True)] = attribute.value
 
-        result['not_after'] = x509.not_valid_after.strftime('%Y%m%d%H%M%SZ')
-        result['not_before'] = x509.not_valid_before.strftime('%Y%m%d%H%M%SZ')
+        result['not_after'] = get_not_valid_after(x509).strftime('%Y%m%d%H%M%SZ')
+        result['not_before'] = get_not_valid_before(x509).strftime('%Y%m%d%H%M%SZ')
 
         result['serial_number'] = x509.serial_number
         result['signature_algorithm'] = cryptography_oid_to_name(x509.signature_algorithm_oid)

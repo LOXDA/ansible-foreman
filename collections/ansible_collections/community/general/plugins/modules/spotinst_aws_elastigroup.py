@@ -19,7 +19,6 @@ description:
     token = <YOUR TOKEN>
     Full documentation available at https://help.spotinst.com/hc/en-us/articles/115003530285-Ansible-
 requirements:
-  - python >= 2.7
   - spotinst_sdk >= 1.0.38
 extends_documentation_fragment:
   - community.general.attributes
@@ -266,14 +265,14 @@ options:
 
   opsworks:
     description:
-      - The elastigroup OpsWorks integration configration.;
+      - The elastigroup OpsWorks integration configuration.;
         Expects the following key -
         layer_id (String)
     type: dict
 
   persistence:
     description:
-      - The Stateful elastigroup configration.;
+      - The Stateful elastigroup configuration.;
         Accepts the following keys -
         should_persist_root_device (Boolean),
         should_persist_block_devices (Boolean),

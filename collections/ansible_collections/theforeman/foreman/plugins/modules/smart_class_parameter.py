@@ -34,10 +34,14 @@ options:
     description: Name of the puppetclass that own the parameter
     required: true
     type: str
+    aliases:
+      - puppetclass
   parameter:
     description: Name of the parameter
     required: true
     type: str
+    aliases:
+      - smart_class_parameter
   description:
     description: Description of the Smart Class Parameter
     type: str
@@ -205,8 +209,8 @@ class ForemanSmartClassParameterModule(ForemanEntityAnsibleModule):
 def main():
     module = ForemanSmartClassParameterModule(
         argument_spec=dict(
-            puppetclass_name=dict(required=True),
-            parameter=dict(required=True),
+            puppetclass_name=dict(required=True, aliases=['puppetclass']),
+            parameter=dict(required=True, aliases=['smart_class_parameter']),
             state=dict(default='present', choices=['present_with_defaults', 'present']),
         ),
         foreman_spec=dict(
@@ -252,7 +256,7 @@ def main():
         module.set_entity('entity', entity)
         # When override is set to false, foreman API don't accept parameter_type and all 'override options' have to be set to false if present
         if not module_params.get('override', False):
-            module_params['parameter_type'] = ''
+            module_params['parameter_type'] = None
             for override_option in ['merge_default', 'merge_overrides', 'avoid_duplicates']:
                 if override_option in entity and entity[override_option]:
                     module_params[override_option] = False

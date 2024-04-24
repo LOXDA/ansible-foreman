@@ -83,8 +83,10 @@ DOCUMENTATION = """
         token:
             required: False
             description:
-              - NetBox API token to be able to read against NetBox.
-              - This may not be required depending on the NetBox setup.
+                - NetBox API token to be able to read against NetBox.
+                - This may not be required depending on the NetBox setup.
+                - You can provide a "type" and "value" for a token if your NetBox deployment is using a more advanced authentication like OAUTH.
+                - If you do not provide a "type" and "value" parameter, the HTTP authorization header will be set to "Token", which is the NetBox default
             env:
                 # in order of precedence
                 - name: NETBOX_TOKEN
@@ -169,6 +171,7 @@ DOCUMENTATION = """
                 - status
                 - time_zone
                 - utc_offset
+                - facility
             default: []
         group_names_raw:
             description: Will not add the group_by choice name to the group names
@@ -336,6 +339,14 @@ device_query_filters:
 # - "time_zone_utc_minus_7"
 # - "time_zone_utc_plus_1"
 # - "time_zone_utc_plus_10"
+
+# Example of using a token type
+
+plugin: netbox.netbox.nb_inventory
+api_endpoint: http://localhost:8000
+token:
+  type: Bearer
+  value: test123456
 """
 
 import json
@@ -443,7 +454,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 )
 
             try:
-                results = json.loads(raw_data)
+                results = self.loader.load(raw_data, json_only=True)
             except ValueError:
                 raise AnsibleError("Incorrect JSON payload: %s" % raw_data)
 
@@ -533,6 +544,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             "asset_tag": self.extract_asset_tag,
             "time_zone": self.extract_site_time_zone,
             "utc_offset": self.extract_site_utc_offset,
+            "facility": self.extract_site_facility,
             self._pluralize_group_by("site"): self.extract_site,
             self._pluralize_group_by("tenant"): self.extract_tenant,
             self._pluralize_group_by("tag"): self.extract_tags,
@@ -750,6 +762,12 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
     def extract_site_utc_offset(self, host):
         try:
             return self.sites_utc_offset_lookup[host["site"]["id"]]
+        except Exception:
+            return
+
+    def extract_site_facility(self, host):
+        try:
+            return self.sites_facility_lookup[host["site"]["id"]]
         except Exception:
             return
 
@@ -1051,6 +1069,17 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         # Dictionary of site id to utc_offset name (if group by utc_offset is used)
         if "utc_offset" in self.group_by:
             self.sites_utc_offset_lookup = dict(map(get_utc_offset_for_site, sites))
+
+        def get_facility_for_site(site):
+            # Will fail if site does not have a facility defined in NetBox
+            try:
+                return (site["id"], site["facility"])
+            except Exception:
+                return (site["id"], None)
+
+        # Dictionary of site id to facility (if group by facility is used)
+        if "facility" in self.group_by:
+            self.sites_facility_lookup = dict(map(get_facility_for_site, sites))
 
     # Note: depends on the result of refresh_sites_lookup for self.sites_with_prefixes
     def refresh_prefixes(self):
@@ -1481,31 +1510,33 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
     def fetch_api_docs(self):
         try:
-            status = self._fetch_information(self.api_endpoint + "/api/status")
-            netbox_api_version = ".".join(status["netbox-version"].split(".")[:2])
-        except Exception:
-            netbox_api_version = 0
-
-        tmp_dir = os.path.split(DEFAULT_LOCAL_TMP)[0]
-        tmp_file = os.path.join(tmp_dir, "netbox_api_dump.json")
-
-        try:
+            tmp_dir = os.path.split(DEFAULT_LOCAL_TMP)[0]
+            tmp_file = os.path.join(tmp_dir, "netbox_api_dump.json")
             with open(tmp_file) as file:
-                openapi = json.load(file)
+                cache = json.load(file)
+            cached_api_version = ".".join(cache["info"]["version"].split(".")[:2])
         except Exception:
-            openapi = {}
+            cached_api_version = None
+            cache = None
 
-        cached_api_version = openapi.get("info", {}).get("version")
+        status = self._fetch_information(self.api_endpoint + "/api/status")
+        netbox_api_version = ".".join(status["netbox-version"].split(".")[:2])
 
-        if netbox_api_version != cached_api_version:
-            if version.parse(netbox_api_version) >= version.parse("3.5.0"):
-                endpoint_url = self.api_endpoint + "/api/schema/?format=json"
-            else:
-                endpoint_url = self.api_endpoint + "/api/docs/?format=openapi"
+        if version.parse(netbox_api_version) >= version.parse("3.5.0"):
+            endpoint_url = self.api_endpoint + "/api/schema/?format=json"
+        else:
+            endpoint_url = self.api_endpoint + "/api/docs/?format=openapi"
 
+        if cache and cached_api_version == netbox_api_version:
+            openapi = cache
+        else:
             openapi = self._fetch_information(endpoint_url)
-            with open(tmp_file, "w") as file:
-                json.dump(openapi, file)
+
+            try:
+                with open(tmp_file, "w") as file:
+                    json.dump(openapi, file)
+            except Exception:
+                pass
 
         self.api_version = version.parse(netbox_api_version)
 
@@ -1975,11 +2006,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                     host=hostname,
                 )
 
-    def parse(self, inventory, loader, path, cache=True):
-        super(InventoryModule, self).parse(inventory, loader, path)
-        self._read_config_data(path=path)
-        self.use_cache = cache
-
+    def _set_authorization(self):
         # NetBox access
         if version.parse(ansible_version) < version.parse("2.11"):
             token = self.get_option("token")
@@ -1988,6 +2015,19 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             token = self.templar.template(
                 self.get_option("token"), fail_on_undefined=False
             )
+        if token:
+            # check if token is new format
+            if isinstance(token, dict):
+                self.headers.update(
+                    {"Authorization": f"{token['type'].capitalize()} {token['value']}"}
+                )
+            else:
+                self.headers.update({"Authorization": "Token %s" % token})
+
+    def parse(self, inventory, loader, path, cache=True):
+        super(InventoryModule, self).parse(inventory, loader, path)
+        self._read_config_data(path=path)
+        self.use_cache = cache
 
         # Handle extra "/" from api_endpoint configuration and trim if necessary, see PR#49943
         self.api_endpoint = self.get_option("api_endpoint").strip("/")
@@ -2013,8 +2053,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         self.cert = self.get_option("cert")
         self.key = self.get_option("key")
         self.ca_path = self.get_option("ca_path")
-        if token:
-            self.headers.update({"Authorization": "Token %s" % token})
+
+        self._set_authorization()
 
         # Filter and group_by options
         self.group_by = self.get_option("group_by")

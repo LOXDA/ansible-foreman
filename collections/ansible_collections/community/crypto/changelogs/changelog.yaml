@@ -56,7 +56,7 @@ releases:
       - openssl_certificate - Add option for changing which ACME directory to use
         with acme-tiny. Set the default ACME directory to Let's Encrypt instead of
         using acme-tiny's default. (acme-tiny also uses Let's Encrypt at the time
-        being, so no action should be neccessary.)
+        being, so no action should be necessary.)
       - openssl_certificate - Change the required version of acme-tiny to >= 4.0.0
       - openssl_certificate - allow to provide content of some input files via the
         ``csr_content``, ``privatekey_content``, ``ownca_privatekey_content`` and
@@ -247,8 +247,8 @@ releases:
       minor_changes:
       - openssh_cert - add module parameter ``use_agent`` to enable using signing
         keys stored in ssh-agent (https://github.com/ansible-collections/community.crypto/issues/116).
-      - openssl_csr - refactor module to allow code re-use by openssl_csr_pipe (https://github.com/ansible-collections/community.crypto/pull/123).
-      - openssl_privatekey - refactor module to allow code re-use by openssl_privatekey_pipe
+      - openssl_csr - refactor module to allow code reuse by openssl_csr_pipe (https://github.com/ansible-collections/community.crypto/pull/123).
+      - openssl_privatekey - refactor module to allow code reuse by openssl_privatekey_pipe
         (https://github.com/ansible-collections/community.crypto/pull/119).
       - openssl_privatekey - the elliptic curve ``secp192r1`` now triggers a security
         warning. Elliptic curves of at least 224 bits should be used for new keys;
@@ -258,7 +258,7 @@ releases:
         anymore. If no CSR is provided, the module behaves as if a minimal CSR which
         only contains the public key has been provided (https://github.com/ansible-collections/community.crypto/issues/32,
         https://github.com/ansible-collections/community.crypto/pull/129).
-      - x509_certificate - refactor module to allow code re-use by x509_certificate_pipe
+      - x509_certificate - refactor module to allow code reuse by x509_certificate_pipe
         (https://github.com/ansible-collections/community.crypto/pull/135).
       release_summary: 'Contains new modules ``openssl_privatekey_pipe``, ``openssl_csr_pipe``
         and ``x509_certificate_pipe`` which allow to create or update private keys,
@@ -419,7 +419,7 @@ releases:
         https://github.com/ansible-collections/community.crypto/pull/150).
       - openssl_csr_info - now returns ``public_key_type`` and ``public_key_data``
         (https://github.com/ansible-collections/community.crypto/pull/233).
-      - openssl_csr_info - refactor module to allow code re-use for diff mode (https://github.com/ansible-collections/community.crypto/pull/204).
+      - openssl_csr_info - refactor module to allow code reuse for diff mode (https://github.com/ansible-collections/community.crypto/pull/204).
       - openssl_csr_pipe - add diff mode (https://github.com/ansible-collections/community.crypto/issues/38,
         https://github.com/ansible-collections/community.crypto/pull/150).
       - openssl_pkcs12 - added option ``select_crypto_backend`` and a ``cryptography``
@@ -427,7 +427,7 @@ releases:
         ``iter_size`` and ``maciter_size`` options (https://github.com/ansible-collections/community.crypto/pull/234).
       - openssl_privatekey - add diff mode (https://github.com/ansible-collections/community.crypto/issues/38,
         https://github.com/ansible-collections/community.crypto/pull/150).
-      - openssl_privatekey_info - refactor module to allow code re-use for diff mode
+      - openssl_privatekey_info - refactor module to allow code reuse for diff mode
         (https://github.com/ansible-collections/community.crypto/pull/205).
       - openssl_privatekey_pipe - add diff mode (https://github.com/ansible-collections/community.crypto/issues/38,
         https://github.com/ansible-collections/community.crypto/pull/150).
@@ -437,7 +437,7 @@ releases:
         https://github.com/ansible-collections/community.crypto/pull/150).
       - x509_certificate_info - now returns ``public_key_type`` and ``public_key_data``
         (https://github.com/ansible-collections/community.crypto/pull/233).
-      - x509_certificate_info - refactor module to allow code re-use for diff mode
+      - x509_certificate_info - refactor module to allow code reuse for diff mode
         (https://github.com/ansible-collections/community.crypto/pull/206).
       - x509_certificate_pipe - add diff mode (https://github.com/ansible-collections/community.crypto/issues/38,
         https://github.com/ansible-collections/community.crypto/pull/150).
@@ -445,7 +445,7 @@ releases:
         https://github.com/ansible-collections/community.crypto/pull/150).
       - x509_crl_info - add ``list_revoked_certificates`` option to avoid enumerating
         all revoked certificates (https://github.com/ansible-collections/community.crypto/pull/232).
-      - x509_crl_info - refactor module to allow code re-use for diff mode (https://github.com/ansible-collections/community.crypto/pull/203).
+      - x509_crl_info - refactor module to allow code reuse for diff mode (https://github.com/ansible-collections/community.crypto/pull/203).
       release_summary: Regular feature and bugfix release.
     fragments:
     - 1.7.0.yml
@@ -897,6 +897,188 @@ releases:
     - 628-pem-detection.yml
     - semantic-markup.yml
     release_date: '2023-06-27'
+  2.15.0:
+    changes:
+      bugfixes:
+      - openssh_cert, openssh_keypair - the modules ignored return codes of ``ssh``
+        and ``ssh-keygen`` in some cases (https://github.com/ansible-collections/community.crypto/issues/645,
+        https://github.com/ansible-collections/community.crypto/pull/646).
+      - openssh_keypair - fix comment updating for OpenSSH before 6.5 (https://github.com/ansible-collections/community.crypto/pull/646).
+      deprecated_features:
+      - get_certificate - the default ``false`` of the ``asn1_base64`` option is deprecated
+        and will change to ``true`` in community.crypto 3.0.0 (https://github.com/ansible-collections/community.crypto/pull/600).
+      minor_changes:
+      - openssh_keypair - fail when comment cannot be updated (https://github.com/ansible-collections/community.crypto/pull/646).
+      release_summary: Bugfix and feature release.
+    fragments:
+    - 2.15.0.yml
+    - 600-get_certificate-asn1_base64.yml
+    - 646-openssh-rc.yml
+    plugins:
+      filter:
+      - description: Retrieve a GPG fingerprint from a GPG public or private key
+        name: gpg_fingerprint
+        namespace: null
+      lookup:
+      - description: Retrieve a GPG fingerprint from a GPG public or private key file
+        name: gpg_fingerprint
+        namespace: null
+    release_date: '2023-08-12'
+  2.15.1:
+    changes:
+      bugfixes:
+      - acme_* modules - correctly handle error documents without ``type`` (https://github.com/ansible-collections/community.crypto/issues/651,
+        https://github.com/ansible-collections/community.crypto/pull/652).
+      release_summary: Bugfix release.
+    fragments:
+    - 2.15.1.yml
+    - 652-problem-type.yml
+    release_date: '2023-08-22'
+  2.16.0:
+    changes:
+      bugfixes:
+      - openssl_pkcs12 - modify autodetect to not detect pyOpenSSL >= 23.3.0, which
+        removed PKCS#12 support (https://github.com/ansible-collections/community.crypto/pull/666).
+      minor_changes:
+      - luks_devices - add new options ``keyslot``, ``new_keyslot``, and ``remove_keyslot``
+        to allow adding/removing keys to/from specific keyslots (https://github.com/ansible-collections/community.crypto/pull/664).
+      release_summary: Bugfix release.
+    fragments:
+    - 2.16.0.yml
+    - 664-luks_device-keyslot.yml
+    - pkcs12.yml
+    release_date: '2023-10-29'
+  2.16.1:
+    changes:
+      bugfixes:
+      - acme_* modules - also retry requests in case of socket errors, bad status
+        lines, and unknown connection errors; improve error messages in these cases
+        (https://github.com/ansible-collections/community.crypto/issues/680).
+      release_summary: Bugfix release.
+    fragments:
+    - 2.16.1.yml
+    - 680-acme-retry.yml
+    release_date: '2023-12-04'
+  2.16.2:
+    changes:
+      bugfixes:
+      - acme_* modules - directly react on bad return data for account creation/retrieval/updating
+        requests (https://github.com/ansible-collections/community.crypto/pull/682).
+      - acme_* modules - fix improved error reporting in case of socket errors, bad
+        status lines, and unknown connection errors (https://github.com/ansible-collections/community.crypto/pull/684).
+      - acme_* modules - increase number of retries from 5 to 10 to increase stability
+        with unstable ACME endpoints (https://github.com/ansible-collections/community.crypto/pull/685).
+      - acme_* modules - make account registration handling more flexible to accept
+        404 instead of 400 send by DigiCert's ACME endpoint when an account does not
+        exist (https://github.com/ansible-collections/community.crypto/pull/681).
+      release_summary: Bugfix release.
+    fragments:
+    - 2.16.2.yml
+    - 681-acme-account.yml
+    - 682-acme-errors.yml
+    - 684-info-code.yml
+    - 685-acme-retry.yml
+    release_date: '2023-12-08'
+  2.17.0:
+    changes:
+      minor_changes:
+      - luks_device - add allow discards option (https://github.com/ansible-collections/community.crypto/pull/693).
+      release_summary: Feature release.
+    fragments:
+    - 2.17.0.yml
+    - 693-allow-discards.yaml
+    release_date: '2024-01-21'
+  2.17.1:
+    changes:
+      bugfixes:
+      - openssl_dhparam - was using an internal function instead of the public API
+        to load DH param files when using the ``cryptography`` backend. The internal
+        function was removed in cryptography 42.0.0. The module now uses the public
+        API, which has been available since support for DH params was added to cryptography
+        (https://github.com/ansible-collections/community.crypto/pull/698).
+      - openssl_privatekey_info - ``check_consistency=true`` no longer works for RSA
+        keys with cryptography 42.0.0+ (https://github.com/ansible-collections/community.crypto/pull/701).
+      - openssl_privatekey_info - ``check_consistency=true`` now reports a warning
+        if it cannot determine consistency (https://github.com/ansible-collections/community.crypto/pull/705).
+      release_summary: Bugfix release for compatibility with cryptography 42.0.0.
+    fragments:
+    - 2.17.1.yml
+    - 698-openssl_dhparam-cryptography.yml
+    - 701-private_key_info-consistency.yml
+    - 705-openssl_privatekey_info-consistency.yml
+    release_date: '2024-01-27'
+  2.18.0:
+    changes:
+      bugfixes:
+      - luks_device - fixed module a bug that prevented using ``remove_keyslot`` with
+        the value ``0`` (https://github.com/ansible-collections/community.crypto/pull/710).
+      - luks_device - fixed module falsely outputting ``changed=false`` when trying
+        to add a new slot with a key that is already present in another slot. The
+        module now rejects adding keys that are already present in another slot (https://github.com/ansible-collections/community.crypto/pull/710).
+      - luks_device - fixed testing of LUKS passphrases in when specifying a keyslot
+        for cryptsetup version 2.0.3. The output of this cryptsetup version slightly
+        differs from later versions (https://github.com/ansible-collections/community.crypto/pull/710).
+      deprecated_features:
+      - 'openssl_csr_pipe, openssl_privatekey_pipe, x509_certificate_pipe - the current
+        behavior of check mode is deprecated and will change in community.crypto 3.0.0.
+        The current behavior is similar to the modules without ``_pipe``: if the object
+        needs to be (re-)generated, only the ``changed`` status is set, but the object
+        is not updated. From community.crypto 3.0.0 on, the modules will ignore check
+        mode and always act as if check mode is not active. This behavior can already
+        achieved now by adding ``check_mode: false`` to the task. If you think this
+        breaks your use-case of this module, please `create an issue in the community.crypto
+        repository <https://github.com/ansible-collections/community.crypto/issues/new/choose>`__
+        (https://github.com/ansible-collections/community.crypto/issues/712, https://github.com/ansible-collections/community.crypto/pull/714).'
+      minor_changes:
+      - x509_crl - the new option ``serial_numbers`` allow to configure in which format
+        serial numbers can be provided to ``revoked_certificates[].serial_number``.
+        The default is as integers (``serial_numbers=integer``) for backwards compatibility;
+        setting ``serial_numbers=hex-octets`` allows to specify colon-separated hex
+        octet strings like ``00:11:22:FF`` (https://github.com/ansible-collections/community.crypto/issues/687,
+        https://github.com/ansible-collections/community.crypto/pull/715).
+      release_summary: Bugfix and feature release.
+    fragments:
+    - 2.18.0.yml
+    - 710-luks_device-keyslot-fixes.yml
+    - 714-pipe-check-mode-deprecation.yml
+    - 715-x509_crl-serial.yml
+    plugins:
+      filter:
+      - description: Convert a serial number as a colon-separated list of hex numbers
+          to an integer
+        name: parse_serial
+        namespace: null
+      - description: Convert an integer to a colon-separated list of hex numbers
+        name: to_serial
+        namespace: null
+    release_date: '2024-02-25'
+  2.19.0:
+    changes:
+      bugfixes:
+      - acme_certificate - respect the order of the CNAME and SAN identifiers that
+        are passed on when creating an ACME order (https://github.com/ansible-collections/community.crypto/issues/723,
+        https://github.com/ansible-collections/community.crypto/pull/725).
+      deprecated_features:
+      - acme.backends module utils - from community.crypto on, all implementations
+        of ``CryptoBackend`` must override ``get_ordered_csr_identifiers()``. The
+        current default implementation, which simply sorts the result of ``get_csr_identifiers()``,
+        will then be removed (https://github.com/ansible-collections/community.crypto/pull/725).
+      minor_changes:
+      - When using cryptography >= 42.0.0, use offset-aware ``datetime.datetime``
+        objects (with timezone UTC) instead of offset-naive UTC timestamps (https://github.com/ansible-collections/community.crypto/issues/726,
+        https://github.com/ansible-collections/community.crypto/pull/727).
+      - openssh_cert - avoid UTC functions deprecated in Python 3.12 when using Python
+        3 (https://github.com/ansible-collections/community.crypto/pull/727).
+      release_summary: Bugfix and feature release.
+    fragments:
+    - 2.19.0.yml
+    - 725-acme_certificate-order.yml
+    - 727-cryptography-utc.yml
+    modules:
+    - description: Convert X.509 certificates
+      name: x509_certificate_convert
+      namespace: ''
+    release_date: '2024-04-20'
   2.2.0:
     changes:
       bugfixes:
@@ -986,7 +1168,7 @@ releases:
         be installed by pip by specifying something like ``cryptography >= 37.0.0``
         in your Execution Environment's Python dependencies file (https://github.com/ansible-collections/community.crypto/pull/440).
       - Support automatic conversion for Internalionalized Domain Names (IDNs). When
-        passing general names, for example Subject Altenative Names to ``community.crypto.openssl_csr``,
+        passing general names, for example Subject Alternative Names to ``community.crypto.openssl_csr``,
         these will automatically be converted to IDNA. Conversion will be done per
         label to IDNA2008 if possible, and IDNA2003 if IDNA2008 conversion fails for
         that label. Note that IDNA conversion requires `the Python idna library <https://pypi.org/project/idna/>`_

@@ -52,7 +52,7 @@ options:
         description:
             - A dict of names mapping to time specifications. Every time specified here
               will be checked whether the certificate is valid at this point. See the
-              RV(valid_at) return value for informations on the result.
+              RV(valid_at) return value for information on the result.
             - Time can be specified either as relative time or as absolute timestamp.
             - Time will always be interpreted as UTC.
             - Valid format is C([+-]timespec | ASN.1 TIME) where timespec can be an integer
@@ -77,6 +77,8 @@ seealso:
     - plugin: community.crypto.x509_certificate_info
       plugin_type: filter
       description: A filter variant of this module.
+    - plugin: community.crypto.to_serial
+      plugin_type: filter
 '''
 
 EXAMPLES = r'''
@@ -330,7 +332,10 @@ signature_algorithm:
     type: str
     sample: sha256WithRSAEncryption
 serial_number:
-    description: The certificate's serial number.
+    description:
+        - The certificate's serial number.
+        - This return value is an B(integer). If you need the serial numbers as a colon-separated hex string,
+          such as C(11:22:33), you need to convert it to that form with P(community.crypto.to_serial#filter).
     returned: success
     type: int
     sample: 1234
@@ -374,6 +379,8 @@ authority_cert_serial_number:
     description:
         - The certificate's authority cert serial number.
         - Is V(none) if the C(AuthorityKeyIdentifier) extension is not present.
+        - This return value is an B(integer). If you need the serial numbers as a colon-separated hex string,
+          such as C(11:22:33), you need to convert it to that form with P(community.crypto.to_serial#filter).
     returned: success
     type: int
     sample: 12345
@@ -401,6 +408,10 @@ from ansible_collections.community.crypto.plugins.module_utils.crypto.basic impo
 
 from ansible_collections.community.crypto.plugins.module_utils.crypto.support import (
     get_relative_time_option,
+)
+
+from ansible_collections.community.crypto.plugins.module_utils.crypto.cryptography_support import (
+    CRYPTOGRAPHY_TIMEZONE,
 )
 
 from ansible_collections.community.crypto.plugins.module_utils.crypto.module_backends.certificate_info import (
@@ -444,7 +455,7 @@ def main():
                 module.fail_json(
                     msg='The value for valid_at.{0} must be of type string (got {1})'.format(k, type(v))
                 )
-            valid_at[k] = get_relative_time_option(v, 'valid_at.{0}'.format(k))
+            valid_at[k] = get_relative_time_option(v, 'valid_at.{0}'.format(k), with_timezone=CRYPTOGRAPHY_TIMEZONE)
 
     try:
         result = module_backend.get_info(der_support_enabled=module.params['content'] is None)

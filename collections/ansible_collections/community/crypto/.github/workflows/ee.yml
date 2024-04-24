@@ -46,6 +46,10 @@ jobs:
           - name: ansible-core devel @ RHEL UBI 9
             ansible_core: https://github.com/ansible/ansible/archive/devel.tar.gz
             ansible_runner: ansible-runner
+            other_deps: |2
+                python_interpreter:
+                  package_system: python3.11 python3.11-pip python3.11-wheel python3.11-cryptography
+                  python_path: "/usr/bin/python3.11"
             base_image: docker.io/redhat/ubi9:latest
             pre_base: '"#"'
             # For some reason ansible-builder will not install EPEL dependencies on RHEL
@@ -87,12 +91,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION_NAME }}
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 

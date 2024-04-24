@@ -49,9 +49,11 @@ lint: $(MANIFEST) $(RUNTIME_YML) | tests/test_playbooks/vars/server.yml
 	ansible-lint -v --offline roles/*
 	ansible-playbook --syntax-check tests/test_playbooks/*.yml | grep -v '^$$'
 	flake8 --ignore=E402,W503 --max-line-length=160 plugins/ tests/
-	GALAXY_IMPORTER_CONFIG=tests/galaxy-importer.cfg python -m galaxy_importer.main $(NAMESPACE)-$(NAME)-$(VERSION).tar.gz
 	@echo "Check that there are no changes to $(RUNTIME_YML)"
 	git diff --exit-code $(RUNTIME_YML)
+
+galaxy-importer: $(MANIFEST)
+	GALAXY_IMPORTER_CONFIG=tests/galaxy-importer.cfg python -m galaxy_importer.main $(NAMESPACE)-$(NAME)-$(VERSION).tar.gz
 
 sanity: $(MANIFEST)
 	# Fake a fresh git repo for ansible-test
@@ -88,7 +90,7 @@ clean_%: FORCE $(MANIFEST)
 setup: test-setup
 
 test-setup: | tests/test_playbooks/vars/server.yml
-	pip install --upgrade --force-reinstall 'pip<23.1'
+	pip install --upgrade pip
 	pip install --upgrade -r requirements-dev.txt
 
 tests/test_playbooks/vars/server.yml:

@@ -2,7 +2,7 @@
  "collection_info": {
   "namespace": "netbox",
   "name": "netbox",
-  "version": "3.13.0",
+  "version": "3.17.0",
   "authors": [
    "Mikhail Yohman <mikhail.yohman@gmail.com>",
    "Martin R\u00f8dvand <martin@rodvand.net>"
@@ -27,7 +27,7 @@
   "name": "FILES.json",
   "ftype": "file",
   "chksum_type": "sha256",
-  "chksum_sha256": "e57a22acb7c0aa67ec0127d4393bbe18eb2ed513dc492096618575412708c55d",
+  "chksum_sha256": "371300175f31c9e43c27bb912ef1bfd82d852976cf9a9ca58939810f6a0eb2d9",
   "format": 1
  },
  "format": 1

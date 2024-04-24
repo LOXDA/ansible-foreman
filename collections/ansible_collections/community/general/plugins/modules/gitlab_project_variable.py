@@ -18,7 +18,6 @@ description:
 author:
   - "Markus Bergholz (@markuman)"
 requirements:
-  - python >= 2.7
   - python-gitlab python module
 extends_documentation_fragment:
   - community.general.auth_basic
@@ -51,11 +50,12 @@ options:
     type: bool
   vars:
     description:
-      - When the list element is a simple key-value pair, masked and protected will be set to false.
-      - When the list element is a dict with the keys C(value), C(masked) and C(protected), the user can
-        have full control about whether a value should be masked, protected or both.
+      - When the list element is a simple key-value pair, masked, raw and protected will be set to false.
+      - When the list element is a dict with the keys C(value), C(masked), C(raw) and C(protected), the user can
+        have full control about whether a value should be masked, raw, protected or both.
       - Support for protected values requires GitLab >= 9.3.
       - Support for masked values requires GitLab >= 11.10.
+      - Support for raw values requires GitLab >= 15.7.
       - Support for environment_scope requires GitLab Premium >= 13.11.
       - Support for variable_type requires GitLab >= 11.11.
       - A C(value) must be a string or a number.
@@ -86,19 +86,26 @@ options:
         type: str
       masked:
         description:
-          - Wether variable value is masked or not.
+          - Whether variable value is masked or not.
           - Support for masked values requires GitLab >= 11.10.
         type: bool
         default: false
       protected:
         description:
-          - Wether variable value is protected or not.
+          - Whether variable value is protected or not.
           - Support for protected values requires GitLab >= 9.3.
         type: bool
         default: false
+      raw:
+        description:
+          - Whether variable value is raw or not.
+          - Support for raw values requires GitLab >= 15.7.
+        type: bool
+        default: false
+        version_added: '7.4.0'
       variable_type:
         description:
-          - Wether a variable is an environment variable (V(env_var)) or a file (V(file)).
+          - Whether a variable is an environment variable (V(env_var)) or a file (V(file)).
           - Support for O(variables[].variable_type) requires GitLab >= 11.11.
         type: str
         choices: ["env_var", "file"]
@@ -143,6 +150,38 @@ EXAMPLES = '''
         variable_type: env_var
         environment_scope: '*'
 
+- name: Set or update some CI/CD variables with raw value
+  community.general.gitlab_project_variable:
+    api_url: https://gitlab.com
+    api_token: secret_access_token
+    project: markuman/dotfiles
+    purge: false
+    vars:
+      ACCESS_KEY_ID: abc123
+      SECRET_ACCESS_KEY:
+        value: 3214cbad
+        masked: true
+        protected: true
+        raw: true
+        variable_type: env_var
+        environment_scope: '*'
+
+- name: Set or update some CI/CD variables with expandable value
+  community.general.gitlab_project_variable:
+    api_url: https://gitlab.com
+    api_token: secret_access_token
+    project: markuman/dotfiles
+    purge: false
+    vars:
+      ACCESS_KEY_ID: abc123
+      SECRET_ACCESS_KEY:
+        value: '$MY_OTHER_VARIABLE'
+        masked: true
+        protected: true
+        raw: false
+        variable_type: env_var
+        environment_scope: '*'
+
 - name: Delete one variable
   community.general.gitlab_project_variable:
     api_url: https://gitlab.com
@@ -181,13 +220,13 @@ project_variable:
       sample: ['ACCESS_KEY_ID', 'SECRET_ACCESS_KEY']
 '''
 
-from ansible.module_utils.basic import AnsibleModule, missing_required_lib
+from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.api import basic_auth_argument_spec
 
 
 from ansible_collections.community.general.plugins.module_utils.gitlab import (
-    auth_argument_spec, gitlab_authentication, ensure_gitlab_package, filter_returned_variables, vars_to_variables,
-    HAS_GITLAB_PACKAGE, GITLAB_IMP_ERR
+    auth_argument_spec, gitlab_authentication, filter_returned_variables, vars_to_variables,
+    list_all_kwargs
 )
 
 
@@ -202,14 +241,7 @@ class GitlabProjectVariables(object):
         return self.repo.projects.get(project_name)
 
     def list_all_project_variables(self):
-        page_nb = 1
-        variables = []
-        vars_page = self.project.variables.list(page=page_nb)
-        while len(vars_page) > 0:
-            variables += vars_page
-            page_nb += 1
-            vars_page = self.project.variables.list(page=page_nb)
-        return variables
+        return list(self.project.variables.list(**list_all_kwargs))
 
     def create_variable(self, var_obj):
         if self._module.check_mode:
@@ -220,6 +252,7 @@ class GitlabProjectVariables(object):
             "value": var_obj.get('value'),
             "masked": var_obj.get('masked'),
             "protected": var_obj.get('protected'),
+            "raw": var_obj.get('raw'),
             "variable_type": var_obj.get('variable_type'),
         }
 
@@ -290,6 +323,8 @@ def native_python_main(this_gitlab, purge, requested_variables, state, module):
         item['value'] = str(item.get('value'))
         if item.get('protected') is None:
             item['protected'] = False
+        if item.get('raw') is None:
+            item['raw'] = False
         if item.get('masked') is None:
             item['masked'] = False
         if item.get('environment_scope') is None:
@@ -361,11 +396,14 @@ def main():
         project=dict(type='str', required=True),
         purge=dict(type='bool', required=False, default=False),
         vars=dict(type='dict', required=False, default=dict(), no_log=True),
+        # please mind whenever changing the variables dict to also change module_utils/gitlab.py's
+        # KNOWN dict in filter_returned_variables or bad evil will happen
         variables=dict(type='list', elements='dict', required=False, default=list(), options=dict(
             name=dict(type='str', required=True),
             value=dict(type='str', no_log=True),
             masked=dict(type='bool', default=False),
             protected=dict(type='bool', default=False),
+            raw=dict(type='bool', default=False),
             environment_scope=dict(type='str', default='*'),
             variable_type=dict(type='str', default='env_var', choices=["env_var", "file"]),
         )),
@@ -390,10 +428,9 @@ def main():
         ],
         supports_check_mode=True
     )
-    ensure_gitlab_package(module)
 
-    if not HAS_GITLAB_PACKAGE:
-        module.fail_json(msg=missing_required_lib("python-gitlab"), exception=GITLAB_IMP_ERR)
+    # check prerequisites and connect to gitlab server
+    gitlab_instance = gitlab_authentication(module)
 
     purge = module.params['purge']
     var_list = module.params['vars']
@@ -407,8 +444,6 @@ def main():
     if state == 'present':
         if any(x['value'] is None for x in variables):
             module.fail_json(msg='value parameter is required for all variables in state present')
-
-    gitlab_instance = gitlab_authentication(module)
 
     this_gitlab = GitlabProjectVariables(module=module, gitlab_instance=gitlab_instance)
 

@@ -2,7 +2,7 @@
  "collection_info": {
   "namespace": "community",
   "name": "crypto",
-  "version": "2.14.1",
+  "version": "2.19.0",
   "authors": [
    "Ansible (github.com/ansible)"
   ],
@@ -41,7 +41,7 @@
   "name": "FILES.json",
   "ftype": "file",
   "chksum_type": "sha256",
-  "chksum_sha256": "7bc45de6e13d96cb341a2dc1a68c3d5f6065d233bdfd8014d962727ce99f06cc",
+  "chksum_sha256": "b8a70c677576d6f7bda75b45d97af355a4f371b9269a791bdef8976361b39f75",
   "format": 1
  },
  "format": 1

@@ -623,6 +623,54 @@ releases:
     - 2023-06-26-forgotten-changelogs.yml
     - content_view_filter_deb_support.yml
     release_date: '2023-07-10'
+  3.13.0:
+    changes:
+      bugfixes:
+      - repository - don't fail when removing a content credential from a repository
+        (https://bugzilla.redhat.com/show_bug.cgi?id=2224122)
+      - smart_class_parameter - correctly allow setting ``override`` to ``false``
+        (https://github.com/theforeman/foreman-ansible-modules/issues/1644)
+      minor_changes:
+      - compute_resource - add support for OpenStack
+      - repositories role - allow disabling/removing of repositories by setting the
+        ``state`` parameter
+    fragments:
+    - 1641-openstack.yml
+    - 1644-smart_class_parameter-override_false.yml
+    - bz2224122-repo-org-scope.yml
+    - repositories_role-state_override.yml
+    modules:
+    - description: Wait for a task
+      name: wait_for_task
+      namespace: ''
+    release_date: '2023-08-15'
+  3.14.0:
+    changes:
+      bugfixes:
+      - content_view_publish role - correctly pass ``version`` not ``description``
+        to the module (https://bugzilla.redhat.com/show_bug.cgi?id=2234444)
+    fragments:
+    - bz2234444.yaml
+    modules:
+    - description: Manage Smart Class Parameter Override Values
+      name: smart_class_parameter_override_value
+      namespace: ''
+    release_date: '2023-09-08'
+  3.15.0:
+    changes:
+      bugfixes:
+      - content_view_filter_rule - handle multiple rules for the same package but
+        different architectures and versions correctly (https://bugzilla.redhat.com/show_bug.cgi?id=2189687)
+      minor_changes:
+      - content_view_publish role - allow passing ``async`` and ``poll`` to the module
+        (https://github.com/theforeman/foreman-ansible-modules/pull/1676)
+      - convert2rhel role - install ``convert2rhel`` from ``cdn-public.redhat.com``,
+        dropping the requirement of a custom CA cert
+    fragments:
+    - 1672-convert2rhel-cdn-public.yml
+    - 1676-content_view_version-async-poll.yml
+    - bz2189687-content_view_filter_rule-handle-arch-version.yml
+    release_date: '2023-11-15'
   3.2.0:
     changes:
       bugfixes:
@@ -787,3 +835,24 @@ releases:
       name: hostgroup_info
       namespace: ''
     release_date: '2023-02-20'
+  4.0.0:
+    changes:
+      breaking_changes:
+      - content_view_filter - stop managing rules from this module, ``content_view_filter_rule``
+        should be used for that
+      - inventory plugin - do not default to ``http://localhost:3000`` as the Foreman
+        URL, providing a URL is now mandatory
+      bugfixes:
+      - compute_profile, host - refer to VMware storage pods by name, not id (https://github.com/theforeman/foreman-ansible-modules/issues/1247)
+    fragments:
+    - 1247-reference_storage_pod_name.yml
+    - content_view_filter-drop-rule-management.yml
+    - inventory-no-default-localhost.yml
+    modules:
+    - description: Manage Registration Command
+      name: registration_command
+      namespace: ''
+    - description: Manage Webhooks
+      name: webhook
+      namespace: ''
+    release_date: '2024-01-12'

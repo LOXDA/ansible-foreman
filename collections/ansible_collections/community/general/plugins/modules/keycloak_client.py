@@ -247,6 +247,7 @@ options:
     protocol:
         description:
             - Type of client.
+            - At creation only, default value will be V(openid-connect) if O(protocol) is omitted.
         type: str
         choices: ['openid-connect', 'saml']
 
@@ -716,9 +717,14 @@ end_state:
 '''
 
 from ansible_collections.community.general.plugins.module_utils.identity.keycloak.keycloak import KeycloakAPI, camel, \
-    keycloak_argument_spec, get_token, KeycloakError
+    keycloak_argument_spec, get_token, KeycloakError, is_struct_included
 from ansible.module_utils.basic import AnsibleModule
 import copy
+
+
+PROTOCOL_OPENID_CONNECT = 'openid-connect'
+PROTOCOL_SAML = 'saml'
+CLIENT_META_DATA = ['authorizationServicesEnabled']
 
 
 def normalise_cr(clientrep, remove_ids=False):
@@ -779,7 +785,7 @@ def main():
         consentText=dict(type='str'),
         id=dict(type='str'),
         name=dict(type='str'),
-        protocol=dict(type='str', choices=['openid-connect', 'saml']),
+        protocol=dict(type='str', choices=[PROTOCOL_OPENID_CONNECT, PROTOCOL_SAML]),
         protocolMapper=dict(type='str'),
         config=dict(type='dict'),
     )
@@ -813,7 +819,7 @@ def main():
         authorization_services_enabled=dict(type='bool', aliases=['authorizationServicesEnabled']),
         public_client=dict(type='bool', aliases=['publicClient']),
         frontchannel_logout=dict(type='bool', aliases=['frontchannelLogout']),
-        protocol=dict(type='str', choices=['openid-connect', 'saml']),
+        protocol=dict(type='str', choices=[PROTOCOL_OPENID_CONNECT, PROTOCOL_SAML]),
         attributes=dict(type='dict'),
         full_scope_allowed=dict(type='bool', aliases=['fullScopeAllowed']),
         node_re_registration_timeout=dict(type='int', aliases=['nodeReRegistrationTimeout']),
@@ -911,6 +917,8 @@ def main():
 
         if 'clientId' not in desired_client:
             module.fail_json(msg='client_id needs to be specified when creating a new client')
+        if 'protocol' not in desired_client:
+            desired_client['protocol'] = PROTOCOL_OPENID_CONNECT
 
         if module._diff:
             result['diff'] = dict(before='', after=sanitize_cr(desired_client))
@@ -939,7 +947,7 @@ def main():
                 if module._diff:
                     result['diff'] = dict(before=sanitize_cr(before_norm),
                                           after=sanitize_cr(desired_norm))
-                result['changed'] = (before_norm != desired_norm)
+                result['changed'] = not is_struct_included(desired_norm, before_norm, CLIENT_META_DATA)
 
                 module.exit_json(**result)
 

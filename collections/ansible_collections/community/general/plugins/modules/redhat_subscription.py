@@ -26,9 +26,9 @@ notes:
       C(subscription-manager) itself gets credentials only as arguments of command line
       parameters, which is I(not) secure, as they can be easily stolen by checking the
       process listing on the system. Due to limitations of the D-Bus interface of C(rhsm),
-      the module will I(not) use D-Bus for registation when trying either to register
+      the module will I(not) use D-Bus for registration when trying either to register
       using O(token), or when specifying O(environment), or when the system is old
-      (typically RHEL 6 and older).
+      (typically RHEL 7 older than 7.4, RHEL 6, and older).
     - In order to register a system, subscription-manager requires either a username and password, or an activationkey and an Organization ID.
     - Since 2.5 values for O(server_hostname), O(server_insecure), O(rhsm_baseurl),
       O(server_proxy_hostname), O(server_proxy_port), O(server_proxy_user) and
@@ -123,8 +123,7 @@ options:
         description:
             - Upon successful registration, auto-consume available subscriptions
             - |
-              Added in favor of the deprecated O(autosubscribe) option in
-              Ansible 2.5; please note that O(autosubscribe) will be removed in
+              Please note that the alias O(autosubscribe) will be removed in
               community.general 9.0.0.
         type: bool
         aliases: [autosubscribe]
@@ -415,6 +414,30 @@ class Rhsm(object):
         else:
             return False
 
+    def _has_dbus_interface(self):
+        """
+        Checks whether subscription-manager has a D-Bus interface.
+
+        :returns: bool -- whether subscription-manager has a D-Bus interface.
+        """
+
+        def str2int(s, default=0):
+            try:
+                return int(s)
+            except ValueError:
+                return default
+
+        distro_id = distro.id()
+        distro_version = tuple(str2int(p) for p in distro.version_parts())
+
+        # subscription-manager in any supported Fedora version has the interface.
+        if distro_id == 'fedora':
+            return True
+        # Any other distro: assume it is EL;
+        # the D-Bus interface was added to subscription-manager in RHEL 7.4.
+        return (distro_version[0] == 7 and distro_version[1] >= 4) or \
+            distro_version[0] >= 8
+
     def _can_connect_to_dbus(self):
         """
         Checks whether it is possible to connect to the system D-Bus bus.
@@ -458,7 +481,8 @@ class Rhsm(object):
         # of rhsm, so always use the CLI in that case;
         # also, since the specified environments are names, and the D-Bus APIs
         # require IDs for the environments, use the CLI also in that case
-        if not token and not environment and self._can_connect_to_dbus():
+        if (not token and not environment and self._has_dbus_interface() and
+           self._can_connect_to_dbus()):
             self._register_using_dbus(was_registered, username, password, auto_attach,
                                       activationkey, org_id, consumer_type,
                                       consumer_name, consumer_id,
@@ -572,7 +596,34 @@ class Rhsm(object):
 
         register_opts = {}
         if consumer_type:
-            register_opts['consumer_type'] = consumer_type
+            # The option for the consumer type used to be 'type' in versions
+            # of RHEL before 9 & in RHEL 9 before 9.2, and then it changed to
+            # 'consumer_type'; since the Register*() D-Bus functions reject
+            # unknown options, we have to pass the right option depending on
+            # the version -- funky.
+            def supports_option_consumer_type():
+                # subscription-manager in any supported Fedora version
+                # has the new option.
+                if distro_id == 'fedora':
+                    return True
+                # Check for RHEL 9 >= 9.2, or RHEL >= 10.
+                if distro_id == 'rhel' and \
+                   ((distro_version[0] == 9 and distro_version[1] >= 2) or
+                       distro_version[0] >= 10):
+                    return True
+                # CentOS: since the change was only done in EL 9, then there is
+                # only CentOS Stream for 9, and thus we can assume it has the
+                # latest version of subscription-manager.
+                if distro_id == 'centos' and distro_version[0] >= 9:
+                    return True
+                # Unknown or old distro: assume it does not support
+                # the new option.
+                return False
+
+            consumer_type_key = 'type'
+            if supports_option_consumer_type():
+                consumer_type_key = 'consumer_type'
+            register_opts[consumer_type_key] = consumer_type
         if consumer_name:
             register_opts['name'] = consumer_name
         if consumer_id:

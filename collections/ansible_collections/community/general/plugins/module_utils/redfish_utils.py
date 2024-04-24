@@ -10,6 +10,8 @@ import json
 import os
 import random
 import string
+import gzip
+from io import BytesIO
 from ansible.module_utils.urls import open_url
 from ansible.module_utils.common.text.converters import to_native
 from ansible.module_utils.common.text.converters import to_text
@@ -18,6 +20,8 @@ from ansible.module_utils.six import text_type
 from ansible.module_utils.six.moves import http_client
 from ansible.module_utils.six.moves.urllib.error import URLError, HTTPError
 from ansible.module_utils.six.moves.urllib.parse import urlparse
+from ansible.module_utils.ansible_release import __version__ as ansible_version
+from ansible_collections.community.general.plugins.module_utils.version import LooseVersion
 
 GET_HEADERS = {'accept': 'application/json', 'OData-Version': '4.0'}
 POST_HEADERS = {'content-type': 'application/json', 'accept': 'application/json',
@@ -128,8 +132,10 @@ class RedfishUtils(object):
         return resp
 
     # The following functions are to send GET/POST/PATCH/DELETE requests
-    def get_request(self, uri):
+    def get_request(self, uri, override_headers=None, allow_no_resp=False):
         req_headers = dict(GET_HEADERS)
+        if override_headers:
+            req_headers.update(override_headers)
         username, password, basic_auth = self._auth_params(req_headers)
         try:
             # Service root is an unauthenticated resource; remove credentials
@@ -141,8 +147,19 @@ class RedfishUtils(object):
                             force_basic_auth=basic_auth, validate_certs=False,
                             follow_redirects='all',
                             use_proxy=True, timeout=self.timeout)
-            data = json.loads(to_native(resp.read()))
             headers = dict((k.lower(), v) for (k, v) in resp.info().items())
+            try:
+                if headers.get('content-encoding') == 'gzip' and LooseVersion(ansible_version) < LooseVersion('2.14'):
+                    # Older versions of Ansible do not automatically decompress the data
+                    # Starting in 2.14, open_url will decompress the response data by default
+                    data = json.loads(to_native(gzip.open(BytesIO(resp.read()), 'rt', encoding='utf-8').read()))
+                else:
+                    data = json.loads(to_native(resp.read()))
+            except Exception as e:
+                # No response data; this is okay in certain cases
+                data = None
+                if not allow_no_resp:
+                    raise
         except HTTPError as e:
             msg = self._get_extended_message(e)
             return {'ret': False,
@@ -318,7 +335,7 @@ class RedfishUtils(object):
         found in ansible.module_utils.urls, but it takes files and encodes them
         as Base64 strings, which is not expected by Redfish services.  It also
         adds escaping of certain bytes in the payload, such as inserting '\r'
-        any time it finds a standlone '\n', which corrupts the image payload
+        any time it finds a standalone '\n', which corrupts the image payload
         send to the service.  This implementation is simplified to Redfish's
         usage and doesn't necessarily represent an exhaustive method of
         building multipart requests.
@@ -717,7 +734,8 @@ class RedfishUtils(object):
         properties = ['CacheSummary', 'FirmwareVersion', 'Identifiers',
                       'Location', 'Manufacturer', 'Model', 'Name', 'Id',
                       'PartNumber', 'SerialNumber', 'SpeedGbps', 'Status']
-        key = "StorageControllers"
+        key = "Controllers"
+        deprecated_key = "StorageControllers"
 
         # Find Storage service
         response = self.get_request(self.root_uri + systems_uri)
@@ -745,7 +763,30 @@ class RedfishUtils(object):
                 data = response['data']
 
                 if key in data:
-                    controller_list = data[key]
+                    controllers_uri = data[key][u'@odata.id']
+
+                    response = self.get_request(self.root_uri + controllers_uri)
+                    if response['ret'] is False:
+                        return response
+                    result['ret'] = True
+                    data = response['data']
+
+                    if data[u'Members']:
+                        for controller_member in data[u'Members']:
+                            controller_member_uri = controller_member[u'@odata.id']
+                            response = self.get_request(self.root_uri + controller_member_uri)
+                            if response['ret'] is False:
+                                return response
+                            result['ret'] = True
+                            data = response['data']
+
+                            controller_result = {}
+                            for property in properties:
+                                if property in data:
+                                    controller_result[property] = data[property]
+                            controller_results.append(controller_result)
+                elif deprecated_key in data:
+                    controller_list = data[deprecated_key]
                     for controller in controller_list:
                         controller_result = {}
                         for property in properties:
@@ -767,7 +808,7 @@ class RedfishUtils(object):
         properties = ['BlockSizeBytes', 'CapableSpeedGbs', 'CapacityBytes',
                       'EncryptionAbility', 'EncryptionStatus',
                       'FailurePredicted', 'HotspareType', 'Id', 'Identifiers',
-                      'Manufacturer', 'MediaType', 'Model', 'Name',
+                      'Links', 'Manufacturer', 'MediaType', 'Model', 'Name',
                       'PartNumber', 'PhysicalLocation', 'Protocol', 'Revision',
                       'RotationSpeedRPM', 'SerialNumber', 'Status']
 
@@ -800,7 +841,25 @@ class RedfishUtils(object):
                         return response
                     data = response['data']
                     controller_name = 'Controller 1'
-                    if 'StorageControllers' in data:
+                    if 'Controllers' in data:
+                        controllers_uri = data['Controllers'][u'@odata.id']
+
+                        response = self.get_request(self.root_uri + controllers_uri)
+                        if response['ret'] is False:
+                            return response
+                        result['ret'] = True
+                        cdata = response['data']
+
+                        if cdata[u'Members']:
+                            controller_member_uri = cdata[u'Members'][0][u'@odata.id']
+
+                            response = self.get_request(self.root_uri + controller_member_uri)
+                            if response['ret'] is False:
+                                return response
+                            result['ret'] = True
+                            cdata = response['data']
+                            controller_name = cdata['Name']
+                    elif 'StorageControllers' in data:
                         sc = data['StorageControllers']
                         if sc:
                             if 'Name' in sc[0]:
@@ -819,7 +878,12 @@ class RedfishUtils(object):
                             for property in properties:
                                 if property in data:
                                     if data[property] is not None:
-                                        drive_result[property] = data[property]
+                                        if property == "Links":
+                                            if "Volumes" in data["Links"].keys():
+                                                volumes = [v["@odata.id"] for v in data["Links"]["Volumes"]]
+                                                drive_result["Volumes"] = volumes
+                                        else:
+                                            drive_result[property] = data[property]
                             drive_results.append(drive_result)
                     drives = {'Controller': controller_name,
                               'Drives': drive_results}
@@ -904,15 +968,7 @@ class RedfishUtils(object):
                         return response
                     data = response['data']
                     controller_name = 'Controller %s' % str(idx)
-                    if 'StorageControllers' in data:
-                        sc = data['StorageControllers']
-                        if sc:
-                            if 'Name' in sc[0]:
-                                controller_name = sc[0]['Name']
-                            else:
-                                sc_id = sc[0].get('Id', '1')
-                                controller_name = 'Controller %s' % sc_id
-                    elif 'Controllers' in data:
+                    if 'Controllers' in data:
                         response = self.get_request(self.root_uri + data['Controllers'][u'@odata.id'])
                         if response['ret'] is False:
                             return response
@@ -930,6 +986,14 @@ class RedfishUtils(object):
                                 else:
                                     controller_id = member_data.get('Id', '1')
                                     controller_name = 'Controller %s' % controller_id
+                    elif 'StorageControllers' in data:
+                        sc = data['StorageControllers']
+                        if sc:
+                            if 'Name' in sc[0]:
+                                controller_name = sc[0]['Name']
+                            else:
+                                sc_id = sc[0].get('Id', '1')
+                                controller_name = 'Controller %s' % sc_id
                     volume_results = []
                     volume_list = []
                     if 'Volumes' in data:
@@ -1032,7 +1096,12 @@ class RedfishUtils(object):
         # command should be PowerOn, PowerForceOff, etc.
         if not command.startswith('Power'):
             return {'ret': False, 'msg': 'Invalid Command (%s)' % command}
-        reset_type = command[5:]
+
+        # Commands (except PowerCycle) will be stripped of the 'Power' prefix
+        if command == 'PowerCycle':
+            reset_type = command
+        else:
+            reset_type = command[5:]
 
         # map Reboot to a ResetType that does a reboot
         if reset_type == 'Reboot':
@@ -1499,29 +1568,37 @@ class RedfishUtils(object):
 
     def _software_inventory(self, uri):
         result = {}
-        response = self.get_request(self.root_uri + uri)
-        if response['ret'] is False:
-            return response
-        result['ret'] = True
-        data = response['data']
-
         result['entries'] = []
-        for member in data[u'Members']:
-            uri = self.root_uri + member[u'@odata.id']
-            # Get details for each software or firmware member
-            response = self.get_request(uri)
+
+        while uri:
+            response = self.get_request(self.root_uri + uri)
             if response['ret'] is False:
                 return response
             result['ret'] = True
+
             data = response['data']
-            software = {}
-            # Get these standard properties if present
-            for key in ['Name', 'Id', 'Status', 'Version', 'Updateable',
-                        'SoftwareId', 'LowestSupportedVersion', 'Manufacturer',
-                        'ReleaseDate']:
-                if key in data:
-                    software[key] = data.get(key)
-            result['entries'].append(software)
+            if data.get('Members@odata.nextLink'):
+                uri = data.get('Members@odata.nextLink')
+            else:
+                uri = None
+
+            for member in data[u'Members']:
+                fw_uri = self.root_uri + member[u'@odata.id']
+                # Get details for each software or firmware member
+                response = self.get_request(fw_uri)
+                if response['ret'] is False:
+                    return response
+                result['ret'] = True
+                data = response['data']
+                software = {}
+                # Get these standard properties if present
+                for key in ['Name', 'Id', 'Status', 'Version', 'Updateable',
+                            'SoftwareId', 'LowestSupportedVersion', 'Manufacturer',
+                            'ReleaseDate']:
+                    if key in data:
+                        software[key] = data.get(key)
+                result['entries'].append(software)
+
         return result
 
     def get_firmware_inventory(self):
@@ -1589,7 +1666,10 @@ class RedfishUtils(object):
 
             # Scan the messages to see if next steps are needed
             for message in operation_results['messages']:
-                message_id = message['MessageId']
+                message_id = message.get('MessageId')
+                if message_id is None:
+                    # While this is invalid, treat the lack of a MessageId as "no message"
+                    continue
 
                 if message_id.startswith('Update.1.') and message_id.endswith('.OperationTransitionedToJob'):
                     # Operation rerouted to a job; update the status and handle
@@ -1685,6 +1765,7 @@ class RedfishUtils(object):
         image_file = update_opts.get('update_image_file')
         targets = update_opts.get('update_targets')
         apply_time = update_opts.get('update_apply_time')
+        oem_params = update_opts.get('update_oem_params')
 
         # Ensure the image file is provided
         if not image_file:
@@ -1715,6 +1796,8 @@ class RedfishUtils(object):
             payload["Targets"] = targets
         if apply_time:
             payload["@Redfish.OperationApplyTime"] = apply_time
+        if oem_params:
+            payload["Oem"] = oem_params
         multipart_payload = {
             'UpdateParameters': {'content': json.dumps(payload), 'mime_type': 'application/json'},
             'UpdateFile': {'filename': image_file, 'content': image_payload, 'mime_type': 'application/octet-stream'}
@@ -1738,7 +1821,7 @@ class RedfishUtils(object):
             return {'ret': False, 'msg': 'Must provide a handle tracking the update.'}
 
         # Get the task or job tracking the update
-        response = self.get_request(self.root_uri + update_handle)
+        response = self.get_request(self.root_uri + update_handle, allow_no_resp=True)
         if response['ret'] is False:
             return response
 
@@ -2400,7 +2483,7 @@ class RedfishUtils(object):
         result = {}
         properties = ['Name', 'Id', 'Description', 'FQDN', 'IPv4Addresses', 'IPv6Addresses',
                       'NameServers', 'MACAddress', 'PermanentMACAddress',
-                      'SpeedMbps', 'MTUSize', 'AutoNeg', 'Status']
+                      'SpeedMbps', 'MTUSize', 'AutoNeg', 'Status', 'LinkStatus']
         response = self.get_request(self.root_uri + resource_uri)
         if response['ret'] is False:
             return response
@@ -2832,8 +2915,7 @@ class RedfishUtils(object):
 
         # Get a list of all Chassis and build URIs, then get all PowerSupplies
         # from each Power entry in the Chassis
-        chassis_uri_list = self.chassis_uris
-        for chassis_uri in chassis_uri_list:
+        for chassis_uri in self.chassis_uris:
             response = self.get_request(self.root_uri + chassis_uri)
             if response['ret'] is False:
                 return response
@@ -2880,7 +2962,7 @@ class RedfishUtils(object):
         result = {}
         inventory = {}
         # Get these entries, but does not fail if not found
-        properties = ['Status', 'HostName', 'PowerState', 'Model', 'Manufacturer',
+        properties = ['Status', 'HostName', 'PowerState', 'BootProgress', 'Model', 'Manufacturer',
                       'PartNumber', 'SystemType', 'AssetTag', 'ServiceTag',
                       'SerialNumber', 'SKU', 'BiosVersion', 'MemorySummary',
                       'ProcessorSummary', 'TrustedModules', 'Name', 'Id']
@@ -3289,8 +3371,9 @@ class RedfishUtils(object):
         result = {}
         inventory = {}
         # Get these entries, but does not fail if not found
-        properties = ['FirmwareVersion', 'ManagerType', 'Manufacturer', 'Model',
-                      'PartNumber', 'PowerState', 'SerialNumber', 'Status', 'UUID']
+        properties = ['Id', 'FirmwareVersion', 'ManagerType', 'Manufacturer', 'Model',
+                      'PartNumber', 'PowerState', 'SerialNumber', 'ServiceIdentification',
+                      'Status', 'UUID']
 
         response = self.get_request(self.root_uri + manager_uri)
         if response['ret'] is False:
@@ -3307,6 +3390,35 @@ class RedfishUtils(object):
 
     def get_multi_manager_inventory(self):
         return self.aggregate_managers(self.get_manager_inventory)
+
+    def get_service_identification(self, manager):
+        result = {}
+        if manager is None:
+            if len(self.manager_uris) == 1:
+                manager = self.manager_uris[0].split('/')[-1]
+            elif len(self.manager_uris) > 1:
+                entries = self.get_multi_manager_inventory()['entries']
+                managers = [m[0]['manager_uri'] for m in entries if m[1].get('ServiceIdentification')]
+                if len(managers) == 1:
+                    manager = managers[0].split('/')[-1]
+                else:
+                    self.module.fail_json(msg=[
+                        "Multiple managers with ServiceIdentification were found: %s" % str(managers),
+                        "Please specify by using the 'manager' parameter in your playbook"])
+            elif len(self.manager_uris) == 0:
+                self.module.fail_json(msg="No manager identities were found")
+        response = self.get_request(self.root_uri + '/redfish/v1/Managers/' + manager, override_headers=None)
+        try:
+            result['service_identification'] = response['data']['ServiceIdentification']
+        except Exception as e:
+            self.module.fail_json(msg="Service ID not found for manager %s" % manager)
+        result['ret'] = True
+        return result
+
+    def set_service_identification(self, service_id):
+        data = {"ServiceIdentification": service_id}
+        resp = self.patch_request(self.root_uri + '/redfish/v1/Managers/' + self.resource_id, data, check_pyld=True)
+        return resp
 
     def set_session_service(self, sessions_config):
         if sessions_config is None:
@@ -3372,34 +3484,285 @@ class RedfishUtils(object):
 
         return self.patch_request(self.root_uri + secure_boot_url, body, check_pyld=True)
 
+    def set_secure_boot(self, secure_boot_enable):
+        # This function enable Secure Boot on an OOB controller
+
+        response = self.get_request(self.root_uri + self.systems_uri)
+        if response["ret"] is False:
+            return response
+
+        server_details = response["data"]
+        secure_boot_url = server_details["SecureBoot"]["@odata.id"]
+
+        response = self.get_request(self.root_uri + secure_boot_url)
+        if response["ret"] is False:
+            return response
+
+        body = {}
+        body["SecureBootEnable"] = secure_boot_enable
+
+        return self.patch_request(self.root_uri + secure_boot_url, body, check_pyld=True)
+
     def get_hpe_thermal_config(self):
         result = {}
         key = "Thermal"
         # Go through list
-        for chassis_uri in self.chassis_uri_list:
+        for chassis_uri in self.chassis_uris:
             response = self.get_request(self.root_uri + chassis_uri)
             if response['ret'] is False:
                 return response
             result['ret'] = True
             data = response['data']
-            oem = data.get['Oem']
-            hpe = oem.get['Hpe']
-            thermal_config = hpe.get('ThermalConfiguration')
-        result["current_thermal_config"] = thermal_config
-        return result
+            val = data.get('Oem', {}).get('Hpe', {}).get('ThermalConfiguration')
+            if val is not None:
+                return {"ret": True, "current_thermal_config": val}
+        return {"ret": False}
 
     def get_hpe_fan_percent_min(self):
         result = {}
         key = "Thermal"
         # Go through list
-        for chassis_uri in self.chassis_uri_list:
+        for chassis_uri in self.chassis_uris:
             response = self.get_request(self.root_uri + chassis_uri)
             if response['ret'] is False:
                 return response
-            result['ret'] = True
             data = response['data']
-            oem = data.get['Oem']
-            hpe = oem.get['Hpe']
-            fan_percent_min_config = hpe.get('FanPercentMinimum')
-        result["fan_percent_min"] = fan_percent_min_config
-        return result
+            val = data.get('Oem', {}).get('Hpe', {}).get('FanPercentMinimum')
+            if val is not None:
+                return {"ret": True, "fan_percent_min": val}
+        return {"ret": False}
+
+    def delete_volumes(self, storage_subsystem_id, volume_ids):
+        # Find the Storage resource from the requested ComputerSystem resource
+        response = self.get_request(self.root_uri + self.systems_uri)
+        if response['ret'] is False:
+            return response
+        data = response['data']
+        storage_uri = data.get('Storage', {}).get('@odata.id')
+        if storage_uri is None:
+            return {'ret': False, 'msg': 'Storage resource not found'}
+
+        # Get Storage Collection
+        response = self.get_request(self.root_uri + storage_uri)
+        if response['ret'] is False:
+            return response
+        data = response['data']
+
+        # Collect Storage Subsystems
+        self.storage_subsystems_uris = [i['@odata.id'] for i in response['data'].get('Members', [])]
+        if not self.storage_subsystems_uris:
+            return {
+                'ret': False,
+                'msg': "StorageCollection's Members array is either empty or missing"}
+
+        # Matching Storage Subsystem ID with user input
+        self.storage_subsystem_uri = ""
+        for storage_subsystem_uri in self.storage_subsystems_uris:
+            if storage_subsystem_uri.split("/")[-2] == storage_subsystem_id:
+                self.storage_subsystem_uri = storage_subsystem_uri
+
+        if not self.storage_subsystem_uri:
+            return {
+                'ret': False,
+                'msg': "Provided Storage Subsystem ID %s does not exist on the server" % storage_subsystem_id}
+
+        # Get Volume Collection
+        response = self.get_request(self.root_uri + self.storage_subsystem_uri)
+        if response['ret'] is False:
+            return response
+        data = response['data']
+
+        response = self.get_request(self.root_uri + data['Volumes']['@odata.id'])
+        if response['ret'] is False:
+            return response
+        data = response['data']
+
+        # Collect Volumes
+        self.volume_uris = [i['@odata.id'] for i in response['data'].get('Members', [])]
+        if not self.volume_uris:
+            return {
+                'ret': True, 'changed': False,
+                'msg': "VolumeCollection's Members array is either empty or missing"}
+
+        # Delete each volume
+        for volume in self.volume_uris:
+            if volume.split("/")[-1] in volume_ids:
+                response = self.delete_request(self.root_uri + volume)
+                if response['ret'] is False:
+                    return response
+
+        return {'ret': True, 'changed': True,
+                'msg': "The following volumes were deleted: %s" % str(volume_ids)}
+
+    def create_volume(self, volume_details, storage_subsystem_id):
+        # Find the Storage resource from the requested ComputerSystem resource
+        response = self.get_request(self.root_uri + self.systems_uri)
+        if response['ret'] is False:
+            return response
+        data = response['data']
+        storage_uri = data.get('Storage', {}).get('@odata.id')
+        if storage_uri is None:
+            return {'ret': False, 'msg': 'Storage resource not found'}
+
+        # Get Storage Collection
+        response = self.get_request(self.root_uri + storage_uri)
+        if response['ret'] is False:
+            return response
+        data = response['data']
+
+        # Collect Storage Subsystems
+        self.storage_subsystems_uris = [i['@odata.id'] for i in response['data'].get('Members', [])]
+        if not self.storage_subsystems_uris:
+            return {
+                'ret': False,
+                'msg': "StorageCollection's Members array is either empty or missing"}
+
+        # Matching Storage Subsystem ID with user input
+        self.storage_subsystem_uri = ""
+        for storage_subsystem_uri in self.storage_subsystems_uris:
+            if storage_subsystem_uri.split("/")[-2] == storage_subsystem_id:
+                self.storage_subsystem_uri = storage_subsystem_uri
+
+        if not self.storage_subsystem_uri:
+            return {
+                'ret': False,
+                'msg': "Provided Storage Subsystem ID %s does not exist on the server" % storage_subsystem_id}
+
+        # Validate input parameters
+        required_parameters = ['RAIDType', 'Drives', 'CapacityBytes']
+        allowed_parameters = ['DisplayName', 'InitializeMethod', 'MediaSpanCount',
+                              'Name', 'ReadCachePolicy', 'StripSizeBytes', 'VolumeUsage', 'WriteCachePolicy']
+
+        for parameter in required_parameters:
+            if not volume_details.get(parameter):
+                return {
+                    'ret': False,
+                    'msg': "%s are required parameter to create a volume" % str(required_parameters)}
+
+        # Navigate to the volume uri of the correct storage subsystem
+        response = self.get_request(self.root_uri + self.storage_subsystem_uri)
+        if response['ret'] is False:
+            return response
+        data = response['data']
+
+        # Deleting any volumes of RAIDType None present on the Storage Subsystem
+        response = self.get_request(self.root_uri + data['Volumes']['@odata.id'])
+        if response['ret'] is False:
+            return response
+        volume_data = response['data']
+
+        if "Members" in volume_data:
+            for member in volume_data["Members"]:
+                response = self.get_request(self.root_uri + member['@odata.id'])
+                if response['ret'] is False:
+                    return response
+                member_data = response['data']
+
+                if member_data["RAIDType"] == "None":
+                    response = self.delete_request(self.root_uri + member['@odata.id'])
+                    if response['ret'] is False:
+                        return response
+
+        # Construct payload and issue POST command to create volume
+        volume_details["Links"] = {}
+        volume_details["Links"]["Drives"] = []
+        for drive in volume_details["Drives"]:
+            volume_details["Links"]["Drives"].append({"@odata.id": drive})
+        del volume_details["Drives"]
+        payload = volume_details
+        response = self.post_request(self.root_uri + data['Volumes']['@odata.id'], payload)
+        if response['ret'] is False:
+            return response
+
+        return {'ret': True, 'changed': True,
+                'msg': "Volume Created"}
+
+    def get_bios_registries(self):
+        # Get /redfish/v1
+        response = self.get_request(self.root_uri + self.systems_uri)
+        if not response["ret"]:
+            return response
+
+        server_details = response["data"]
+
+        # Get Registries URI
+        if "Bios" not in server_details:
+            msg = "Getting BIOS URI failed, Key 'Bios' not found in /redfish/v1/Systems/1/ response: %s"
+            return {
+                "ret": False,
+                "msg": msg % str(server_details)
+            }
+
+        bios_uri = server_details["Bios"]["@odata.id"]
+        bios_resp = self.get_request(self.root_uri + bios_uri)
+        if not bios_resp["ret"]:
+            return bios_resp
+
+        bios_data = bios_resp["data"]
+        attribute_registry = bios_data["AttributeRegistry"]
+
+        reg_uri = self.root_uri + self.service_root + "Registries/" + attribute_registry
+        reg_resp = self.get_request(reg_uri)
+        if not reg_resp["ret"]:
+            return reg_resp
+
+        reg_data = reg_resp["data"]
+
+        # Get BIOS attribute registry URI
+        lst = []
+
+        # Get the location URI
+        response = self.check_location_uri(reg_data, reg_uri)
+        if not response["ret"]:
+            return response
+
+        rsp_data, rsp_uri = response["rsp_data"], response["rsp_uri"]
+
+        if "RegistryEntries" not in rsp_data:
+            return {
+                "msg": "'RegistryEntries' not present in %s response, %s" % (rsp_uri, str(rsp_data)),
+                "ret": False
+            }
+
+        return {
+            "bios_registry": rsp_data,
+            "bios_registry_uri": rsp_uri,
+            "ret": True
+        }
+
+    def check_location_uri(self, resp_data, resp_uri):
+        # Get the location URI response
+        # return {"msg": self.creds, "ret": False}
+        vendor = self._get_vendor()['Vendor']
+        rsp_uri = ""
+        for loc in resp_data['Location']:
+            if loc['Language'] == "en":
+                rsp_uri = loc['Uri']
+                if vendor == 'HPE':
+                    # WORKAROUND
+                    # HPE systems with iLO 4 will have BIOS Attribute Registries location URI as a dictionary with key 'extref'
+                    # Hence adding condition to fetch the Uri
+                    if isinstance(loc['Uri'], dict) and "extref" in loc['Uri'].keys():
+                        rsp_uri = loc['Uri']['extref']
+        if not rsp_uri:
+            msg = "Language 'en' not found in BIOS Attribute Registries location, URI: %s, response: %s"
+            return {
+                "ret": False,
+                "msg": msg % (resp_uri, str(resp_data))
+            }
+
+        res = self.get_request(self.root_uri + rsp_uri)
+        if res['ret'] is False:
+            # WORKAROUND
+            # HPE systems with iLO 4 or iLO5 compresses (gzip) for some URIs
+            # Hence adding encoding to the header
+            if vendor == 'HPE':
+                override_headers = {"Accept-Encoding": "gzip"}
+                res = self.get_request(self.root_uri + rsp_uri, override_headers=override_headers)
+        if res['ret']:
+            return {
+                "ret": True,
+                "rsp_data": res["data"],
+                "rsp_uri": rsp_uri
+            }
+        return res

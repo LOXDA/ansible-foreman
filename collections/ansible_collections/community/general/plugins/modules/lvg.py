@@ -42,7 +42,7 @@ options:
     - "The size of the physical extent. O(pesize) must be a power of 2 of at least 1 sector
        (where the sector size is the largest sector size of the PVs currently used in the VG),
        or at least 128KiB."
-    - Since Ansible 2.6, pesize can be optionally suffixed by a UNIT (k/K/m/M/g/G), default unit is megabyte.
+    - O(pesize) can be optionally suffixed by a UNIT (k/K/m/M/g/G), default unit is megabyte.
     type: str
     default: "4"
   pv_options:
@@ -480,7 +480,7 @@ def main():
                         module.fail_json(msg="Failed to remove volume group %s" % (vg), rc=rc, err=err)
                 else:
                     module.fail_json(msg="Refuse to remove non-empty volume group %s without force=true" % (vg))
-        # activate/inactivate existing VG
+        # activate/deactivate existing VG
         elif state == 'active':
             changed = activate_vg(module=module, vg=vg, active=True)
         elif state == 'inactive':

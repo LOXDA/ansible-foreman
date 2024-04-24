@@ -305,9 +305,10 @@ EXAMPLES = r'''
   register: sample_com_challenge
 
 # Alternative first step:
-- name: Create a challenge for sample.com using a account key from hashi vault.
+- name: Create a challenge for sample.com using a account key from Hashi Vault.
   community.crypto.acme_certificate:
-    account_key_content: "{{ lookup('hashi_vault', 'secret=secret/account_private_key:value') }}"
+    account_key_content: >-
+      {{ lookup('community.hashi_vault.hashi_vault', 'secret=secret/account_private_key:value') }}
     csr: /etc/pki/cert/csr/sample.com.csr
     fullchain_dest: /etc/httpd/ssl/sample.com-fullchain.crt
   register: sample_com_challenge
@@ -660,7 +661,7 @@ class ACMECertificateClient(object):
             raise ModuleFailException("CSR %s not found" % (self.csr))
 
         # Extract list of identifiers from CSR
-        self.identifiers = self.client.backend.get_csr_identifiers(csr_filename=self.csr, csr_content=self.csr_content)
+        self.identifiers = self.client.backend.get_ordered_csr_identifiers(csr_filename=self.csr, csr_content=self.csr_content)
 
     def is_first_step(self):
         '''

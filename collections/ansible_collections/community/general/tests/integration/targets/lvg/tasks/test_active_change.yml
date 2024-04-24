@@ -17,6 +17,16 @@
     lv: "{{ item }}"
     size: 2m
 
+- name: Create snapshot volumes of origin logical volumes
+  loop:
+    - lv1
+    - lv2
+  lvol:
+    vg: testvg
+    lv: "{{ item }}"
+    snapshot: "{{ item }}_snap"
+    size: 50%ORIGIN
+
 - name: Collect all lv active status in testvg
   shell: vgs -olv_active --noheadings testvg | xargs -n1
   register: initial_lv_status_result
@@ -25,7 +35,7 @@
   loop: "{{ initial_lv_status_result.stdout_lines }}"
   assert:
     that:
-      - "'active' == '{{ item }}'"
+      - "'active' == item"
 
 - name: Deactivate volume group
   lvg:
@@ -90,7 +100,7 @@
   loop: "{{ activate_lv_status_result.stdout_lines }}"
   assert:
     that:
-      - "'active' == '{{ item }}'"
+      - "'active' == item"
 
 - name: Activate volume group again to verify idempontency
   lvg:
@@ -128,9 +138,9 @@
   loop: "{{ activate_partial_lv_status_result.stdout_lines }}"
   assert:
     that:
-      - "'active' == '{{ item }}'"
+      - "'active' == item"
 
-- name: Deactive volume group in check mode
+- name: Deactivate volume group in check mode
   lvg:
     state: inactive
     vg: testvg
@@ -150,4 +160,4 @@
   loop: "{{ check_mode_deactivate_lv_status_result.stdout_lines }}"
   assert:
     that:
-      - "'active' == '{{ item }}'"
+      - "'active' == item"

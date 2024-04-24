@@ -67,7 +67,6 @@ options:
         description:
             - DNS record will be modified on this O(zone).
             - When omitted DNS will be queried to attempt finding the correct zone.
-            - Starting with Ansible 2.7 this parameter is optional.
         type: str
     record:
         description:
@@ -467,10 +466,8 @@ class RecordManager(object):
         if lookup.rcode() != dns.rcode.NOERROR:
             self.module.fail_json(msg='Failed to lookup TTL of existing matching record.')
 
-        if self.module.params['type'] == 'NS':
-            current_ttl = lookup.answer[0].ttl if lookup.answer else lookup.authority[0].ttl
-        else:
-            current_ttl = lookup.answer[0].ttl
+        current_ttl = lookup.answer[0].ttl if lookup.answer else lookup.authority[0].ttl
+
         return current_ttl != self.module.params['ttl']
 
 

@@ -82,6 +82,37 @@ options:
         required: false
         default: false
         type: bool
+      component_type:
+        description:
+          - The type of the component. Required if component is defined.
+        choices:
+          - dcim.consoleport
+          - dcim.consoleserverport
+          - dcim.frontport
+          - dcim.interface
+          - dcim.poweroutlet
+          - dcim.powerport
+          - dcim.rearport
+        required: false
+        type: str
+        version_added: "3.15.0"
+      component:
+        description:
+          - The associated component
+        required: false
+        type: dict
+        suboptions:
+          name:
+            description:
+              - The name of the component
+            type: str
+            required: False
+          device:
+            description:
+              - The device the component is attached to.
+            type: str
+            required: False
+        version_added: "3.15.0"
       tags:
         description:
           - Any tags that the device may need to be associated with
@@ -94,6 +125,12 @@ options:
         required: false
         type: dict
         version_added: "3.4.0"
+      inventory_item_role:
+        description:
+          - Set the inventory item role
+        required: false
+        type: raw
+        version_added: "3.14.0"
     required: true
 """
 
@@ -124,6 +161,7 @@ EXAMPLES = r"""
           serial: "1234"
           asset_tag: "1234"
           description: "New SFP"
+          inventory_item_role: NIC
         state: present
         
     - name: Create inventory item with parent
@@ -136,6 +174,19 @@ EXAMPLES = r"""
             device: test100
           name: "10G-SFP+"
           device: test100
+        state: present
+
+    - name: Create inventory item with component
+      netbox.netbox.netbox_inventory_item:
+        netbox_url: http://netbox.local
+        netbox_token: thisIsMyToken
+        data:
+          name: "10G-SFP+"
+          device: test100
+          component_type: "dcim.interface"
+          component:
+            name: GigabitEthernet2
+            device: "test100"
         state: present
 
     - name: Delete inventory item within netbox
@@ -191,8 +242,30 @@ def main():
                     asset_tag=dict(required=False, type="str"),
                     description=dict(required=False, type="str"),
                     discovered=dict(required=False, type="bool", default=False),
+                    component_type=dict(
+                        required=False,
+                        choices=[
+                            "dcim.consoleport",
+                            "dcim.consoleserverport",
+                            "dcim.frontport",
+                            "dcim.interface",
+                            "dcim.poweroutlet",
+                            "dcim.powerport",
+                            "dcim.rearport",
+                        ],
+                        type="str",
+                    ),
+                    component=dict(
+                        required=False,
+                        type="dict",
+                        options=dict(
+                            name=dict(required=False, type="str"),
+                            device=dict(required=False, type="str"),
+                        ),
+                    ),
                     tags=dict(required=False, type="list", elements="raw"),
                     custom_fields=dict(required=False, type="dict"),
+                    inventory_item_role=dict(required=False, type="raw"),
                 ),
             ),
         )
@@ -202,9 +275,13 @@ def main():
         ("state", "present", ["device", "name"]),
         ("state", "absent", ["device", "name"]),
     ]
+    required_together = [("component_type", "component")]
 
     module = NetboxAnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True, required_if=required_if
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+        required_if=required_if,
+        required_together=required_together,
     )
 
     netbox_inventory_item = NetboxDcimModule(module, NB_INVENTORY_ITEMS)
