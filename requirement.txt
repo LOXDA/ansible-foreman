@@ -1,4 +1,5 @@
 ansible
 psycopg2 
+dnspython
 # psycopg2 require package libpq-dev for "pg_config"
 ansible-playbook-grapher

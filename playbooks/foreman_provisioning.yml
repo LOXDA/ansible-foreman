@@ -1,6 +1,6 @@
 ---
 
-- hosts: tfm
+- hosts: "{{ groups['tfm_app'][0] }}"
   gather_facts: false
   roles:
     - role: foreman-custom
