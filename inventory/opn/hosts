@@ -1,16 +1,16 @@
 localhost ansible_connection=local
 
 [tfm_app]
-tfm-app.opn.lab 
+tfm-app.opn.lab opn_flavor=m1.large opn_network=lab01
 
 [tfm_db]
-tfm-db.opn.lab 
+tfm-db.opn.lab opn_flavor=m1.medium opn_network=lab02
 
 [tfm_proxy]
-tfm-proxy.opn.lab 
+tfm-proxy.opn.lab opn_flavor=m1.small opn_network=lab11
 
 [tfm_puppet]
-tfm-puppet.opn.lab 
+tfm-puppet.opn.lab opn_flavor=m1.large opn_network=lab02
 
 [tfm:children]
 tfm_app
@@ -22,11 +22,21 @@ tfm_puppet
 ansible_connection=ssh 
 ansible_user=debian 
 ansible_ssh_private_key_file=/root/.ssh/id_rsa
+opn_project=admin
 
 [dns]
 ns1.opn.lab ansible_host=172.16.203.251
 ns2.opn.lab ansible_host=172.16.203.252
 
 [dns:vars]
+ansible_connection=ssh 
+ansible_user=debian 
+ansible_ssh_private_key_file=/root/.ssh/id_rsa
+opn_project=admin
+
+[mon]
+mon1.opn.lab ansible_host=172.16.203.250
+
+[mon:vars]
 ansible_user=root 
 ansible_password=papillon
