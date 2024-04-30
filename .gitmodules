@@ -1,9 +1,6 @@
-[submodule "ansible-role-deploy-git-repos"]
-	path = roles/ansible-role-deploy-git-repos
-	url = https://github.com/gcoop-libre/ansible-role-deploy-git-repos.git
-[submodule "ansible-role-grub"]
-	path = roles/ansible-role-grub
-	url = https://github.com/robertdebock/ansible-role-grub.git
+[submodule "foreman-custom"]
+	path = roles/foreman-custom
+	url = https://github.com/LOXDA/foreman-custom.git
 [submodule "foreman-app"]
 	path = roles/foreman-app
 	url = https://github.com/LOXDA/foreman-app.git
@@ -13,12 +10,15 @@
 [submodule "foreman-db"]
 	path = roles/foreman-db
 	url = https://github.com/LOXDA/foreman-db.git
-[submodule "foreman-custom"]
-	path = roles/foreman-custom
-	url = https://github.com/LOXDA/foreman-custom.git
 [submodule "foreman-puppet"]
 	path = roles/foreman-puppet
 	url = https://github.com/LOXDA/foreman-puppet.git
+[submodule "ansible-role-deploy-git-repos"]
+	path = roles/ansible-role-deploy-git-repos
+	url = https://github.com/gcoop-libre/ansible-role-deploy-git-repos.git
+[submodule "ansible-role-grub"]
+	path = roles/ansible-role-grub
+	url = https://github.com/robertdebock/ansible-role-grub.git
 [submodule "ansible-role-bind"]
 	path = roles/ansible-role-bind
 	url = https://github.com/bertvv/ansible-role-bind.git
