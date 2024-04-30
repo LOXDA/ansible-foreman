@@ -4,34 +4,6 @@
   serial: 1
   gather_facts: false
 
-  module_defaults:
-    group/openstack.cloud.openstack:
-      cloud: opn
-      auth:
-        project_name: "{{ opn_project }}"
-
-    openstack.cloud.server:
-      volume_size: 8
-      key_name: LAB
-      network: "{{ opn_network }}"
-      auto_ip: false
-      security_groups: 
-        - ALLOW_ALL
-      userdata: |
-        #cloud-config
-        hostname: {{ inventory_hostname_short }}
-        fqdn: {{ inventory_hostname }}
-        chpasswd:
-          list: |
-            debian:papillon
-          expire: False
-        packages:
-          - gpg
-        package_upgrade: true
-        manage_etc_hosts: false
-        runcmd:
-          - echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
-
   tasks:
 
     - openstack.cloud.server:
@@ -40,6 +12,30 @@
         flavor: "{{ opn_flavor | d('m1.medium') }}"
         image: "{{ opn_image | d('Debian-11') }}"
         boot_from_volume: false
+        cloud: opn
+        auth:
+          project_name: "{{ opn_project }}"
+        volume_size: 8
+        key_name: LAB
+        network: "{{ opn_network }}"
+        auto_ip: false
+        security_groups: 
+          - ALLOW_ALL
+        userdata: |
+          #cloud-config
+          hostname: {{ inventory_hostname_short }}
+          fqdn: {{ inventory_hostname }}
+          chpasswd:
+            list: |
+              debian:papillon
+            expire: False
+          packages:
+            - gpg
+          package_upgrade: true
+          manage_etc_hosts: false
+          runcmd:
+            - echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
+
       register: instance
       delegate_to: localhost
 
