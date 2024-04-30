@@ -5,7 +5,7 @@
   gather_facts: false
 
   module_defaults:
-    openstack/openstack.cloud:
+    group/openstack.cloud.openstack:
       cloud: opn
       auth:
         project_name: "{{ opn_project }}"
