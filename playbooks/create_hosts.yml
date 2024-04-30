@@ -5,11 +5,12 @@
   gather_facts: false
 
   module_defaults:
-
-    openstack.cloud.server:
+    group/openstack.cloud.openstack:
       cloud: opn
       auth:
         project_name: "{{ opn_project }}"
+
+    openstack.cloud.server:
       volume_size: 8
       key_name: LAB
       network: "{{ opn_network }}"
