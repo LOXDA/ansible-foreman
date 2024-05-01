@@ -4,13 +4,13 @@ localhost ansible_connection=local
 tfm-app.opn.lab opn_flavor=m1.large opn_network=lab01
 
 [tfm_db]
-tfm-db.opn.lab opn_flavor=m1.medium opn_network=lab02
+tfm-db.opn.lab opn_flavor=m1.small opn_network=lab02
 
 [tfm_proxy]
-tfm-proxy.opn.lab opn_flavor=m1.small opn_network=lab11
+tfm-proxy.opn.lab opn_flavor=m1.medium opn_network=lab11
 
 [tfm_puppet]
-tfm-puppet.opn.lab opn_flavor=m1.large opn_network=lab02
+tfm-puppet.opn.lab opn_flavor=m1.medium opn_network=lab02
 
 [tfm:children]
 tfm_app
