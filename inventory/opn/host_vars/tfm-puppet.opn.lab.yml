@@ -10,8 +10,8 @@ grub_options:
     value: never
 
 # install options
-foreman_cmd_options: ['--puppet-server-admin-api-whitelist=localhost --puppet-server-admin-api-whitelist={{ inventory_hostname }} --puppet-server-ca-client-whitelist=localhost --puppet-server-ca-client-whitelist={{ inventory_hostname }}']
-# foreman_cmd_options: []
+# foreman_cmd_options: ['--puppet-server-admin-api-whitelist=localhost --puppet-server-admin-api-whitelist={{ inventory_hostname }} --puppet-server-ca-client-whitelist=localhost --puppet-server-ca-client-whitelist={{ inventory_hostname }}']
+foreman_cmd_options: []
 foreman_plugins: []
 foreman_compute: []
 foreman_proxy_plugins: []
@@ -30,8 +30,8 @@ puppet_server_options:
   foreman-url: "https://{{ groups['tfm_app'][0] }}"
   envs-dir: '/etc/puppetlabs/code/environments'
   ca: 'true'
-  # admin-api-whitelist: "{{ groups['tfm_proxy'][0] }}"
-  # ca-client-whitelist: "{{ groups['tfm_proxy'][0] }}"
+  admin-api-whitelist: "{{ groups['tfm_proxy'][0] }}"
+  ca-client-whitelist: "{{ groups['tfm_proxy'][0] }}"
 
 foreman_proxy_plugin_options: []
 foreman_proxy_options: []
