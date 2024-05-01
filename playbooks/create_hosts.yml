@@ -27,7 +27,7 @@
           expire: False
         packages:
           - gpg
-        package_upgrade: true
+        package_upgrade: false
         manage_etc_hosts: false
         runcmd:
           - echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
@@ -48,6 +48,6 @@
 
     - name: Wait 15 seconds for instance boot
       ansible.builtin.wait_for:
-        timeout: 15
+        timeout: 5
       delegate_to: localhost
       when: instance is changed
