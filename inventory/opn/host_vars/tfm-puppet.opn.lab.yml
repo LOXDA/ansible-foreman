@@ -4,13 +4,7 @@
 foreman_version: '3.10'
 puppet_version: puppet7
 
-grub_timeout: 2
-grub_options:
-  - option: transparent_hugepage
-    value: never
-
 # install options
-# foreman_cmd_options: ['--puppet-server-admin-api-whitelist=localhost --puppet-server-admin-api-whitelist={{ inventory_hostname }} --puppet-server-ca-client-whitelist=localhost --puppet-server-ca-client-whitelist={{ inventory_hostname }}']
 foreman_cmd_options: []
 foreman_plugins: []
 foreman_compute: []
@@ -30,8 +24,6 @@ puppet_server_options:
   foreman-url: "https://{{ groups['tfm_app'][0] }}"
   envs-dir: '/etc/puppetlabs/code/environments'
   ca: 'true'
-  # admin-api-whitelist: "{{ groups['tfm_proxy'][0] }}"
-  # ca-client-whitelist: "{{ groups['tfm_proxy'][0] }}"
   ca-client-allowlist: "{{ groups['tfm_proxy'][0] }}"
   admin-api-allowlist: "{{ groups['tfm_proxy'][0] }}"
 

@@ -4,11 +4,6 @@
 foreman_version: '3.10'
 puppet_version: puppet7
 
-grub_timeout: 2
-grub_options:
-  - option: transparent_hugepage
-    value: never
-
 # install options
 foreman_cmd_options: []
 foreman_plugins: []

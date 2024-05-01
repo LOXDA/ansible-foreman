@@ -6,11 +6,6 @@ puppet_version: puppet7
 postgresql_version: 13
 disable_puppet: false
 
-grub_timeout: 2
-grub_options:
-  - option: transparent_hugepage
-    value: never
-
 vault_foreman_admin_username: admin
 vault_foreman_admin_password: P4p1llon!!
 vault_foreman_db_username: foreman
