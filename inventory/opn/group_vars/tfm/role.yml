@@ -12,8 +12,8 @@ foreman_roles:
 
   - name: Hosts users
     description: Role granting permissions to view hosts.
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions:
@@ -43,8 +43,8 @@ foreman_roles:
 
   - name: Hosts admins
     description: Role granting permissions to manage hosts.
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions:
@@ -62,7 +62,7 @@ foreman_roles:
         - console_hosts
         - forget_status_hosts
         - power_hosts
-        search: hostgroup_title ~ lab
+        search: hostgroup_title ~ OPN
       - permissions:
         - view_params
         search: ""
@@ -92,8 +92,8 @@ foreman_roles:
 
   - name: Hostgroups users
     description: Give user perms to view Hostgroup
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions:
@@ -102,8 +102,8 @@ foreman_roles:
 
   - name: Hostgroups admins
     description: Give admin perms to manage Hostgroup
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions:
@@ -123,8 +123,8 @@ foreman_roles:
 
   - name: Compute resources admins
     description: 
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions: 
@@ -138,8 +138,8 @@ foreman_roles:
 
   - name: Compute resources users vc-dc1
     description: 
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions: 
@@ -154,8 +154,8 @@ foreman_roles:
 
   - name: Compute resources users vc-dc2
     description: 
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions: 
@@ -178,8 +178,8 @@ foreman_roles:
 
   - name: Compute profiles users
     description: 
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions: 
@@ -188,8 +188,8 @@ foreman_roles:
 
   - name: Compute profiles Debian
     description: 
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions: 
@@ -198,8 +198,8 @@ foreman_roles:
 
   - name: Compute profiles Windows
     description: 
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions: 
@@ -264,8 +264,8 @@ foreman_roles:
 
   - name: Access dashboard
     description: Give access to dashboard
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions:
@@ -274,8 +274,8 @@ foreman_roles:
 
   - name: Ansible users
     description: Ansible users role
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions:
@@ -288,8 +288,8 @@ foreman_roles:
 
   - name: Ansible admins
     description: Ansible admins role
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions:
@@ -305,8 +305,8 @@ foreman_roles:
 
   - name: Env production
     description: 
-    locations: LAB
-    organizations: LAB
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions: 
