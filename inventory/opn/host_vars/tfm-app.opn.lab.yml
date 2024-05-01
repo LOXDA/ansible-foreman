@@ -43,7 +43,7 @@ foreman_plugins:
   # - discovery
   # - hooks
   # - rescue
-  - expire-hosts
+  # - expire-hosts
   # - dhcp-browser
   # - netbox
   # - proxmox
