@@ -10,7 +10,7 @@ grub_options:
     value: never
 
 # install options
-# foreman_cmd_options: ['--puppet-server-admin-api-whitelist=localhost --puppet-server-admin-api-whitelist={{ inventory_hostname }} --puppet-server-ca-client-whitelist=localhost --puppet-server-ca-client-whitelist={{ inventory_hostname }}']
+foreman_cmd_options: ['--puppet-server-admin-api-whitelist=localhost --puppet-server-admin-api-whitelist={{ inventory_hostname }} --puppet-server-ca-client-whitelist=localhost --puppet-server-ca-client-whitelist={{ inventory_hostname }}']
 foreman_cmd_options: []
 foreman_plugins: []
 foreman_compute: []
