@@ -10,7 +10,7 @@ grub_options:
     value: never
 
 # install options
-foreman_cmd_options: ['--foreman-proxy-trusted-hosts={{ groups["tfm_app"][0] }} --foreman-proxy-trusted-hosts={{ groups["tfm_puppet"][0] }}']
+foreman_cmd_options: []
 foreman_plugins: []
 foreman_compute: []
 
@@ -65,6 +65,7 @@ foreman_proxy_options:
   manage-puppet-group: 'true'
   register-in-foreman: 'true'
   registered-name: "{{ inventory_hostname }}"
+  trusted-hosts: "{{ groups['tfm_app'][0] }}"
   foreman-base-url: "https://{{ groups['tfm_app'][0] }}"
   templates-listen-on: 'both'
   dhcp: 'true'
