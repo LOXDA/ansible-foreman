@@ -30,8 +30,14 @@ puppet_server_options:
   foreman-url: "https://{{ groups['tfm_app'][0] }}"
   envs-dir: '/etc/puppetlabs/code/environments'
   ca: 'true'
-  admin-api-whitelist: "{{ groups['tfm_proxy'][0] }}"
-  ca-client-whitelist: "{{ groups['tfm_proxy'][0] }}"
+  # admin-api-whitelist: "{{ groups['tfm_proxy'][0] }}"
+  # ca-client-whitelist: "{{ groups['tfm_proxy'][0] }}"
+  ca-client-allowlist: "localhost"
+  ca-client-allowlist: "{{ groups['tfm_puppet'][0] }}"
+  ca-client-allowlist: "{{ groups['tfm_proxy'][0] }}"
+  admin-api-allowlist: "localhost"
+  admin-api-allowlist: "{{ groups['tfm_puppet'][0] }}"
+  admin-api-allowlist: "{{ groups['tfm_proxy'][0] }}"
 
 foreman_proxy_plugin_options: []
 foreman_proxy_options: []
