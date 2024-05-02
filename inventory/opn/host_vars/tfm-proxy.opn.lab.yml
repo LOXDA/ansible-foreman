@@ -48,6 +48,7 @@ foreman_proxy_plugin_options:
   remote-execution-script-ssh-kerberos-auth: 'false'
   remote-execution-script-ssh-keygen: '/usr/bin/ssh-keygen'
   remote-execution-script-ssh-log-level: 'info'
+
   # discovery-tftp-root: '/srv/tftp'
   # discovery-install-images: 'true'
   # discovery-source-url: 'http://mirror.lab.loxda.net/foreman/'
