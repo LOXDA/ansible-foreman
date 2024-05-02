@@ -11,17 +11,17 @@ foreman_compute: []
 
 foreman_proxy_plugins:
   - dynflow
-  - ansible
   - remote-execution-script
-  - salt
+  - ansible
+  # - salt
   # - discovery
 
 # configure options
-foreman_options: {}
-foreman_plugin_options: {}
-foreman_compute_options: {}
-puppet_options: {}
-puppet_server_options: {}
+foreman_options: []
+foreman_plugin_options: []
+foreman_compute_options: []
+puppet_options: []
+puppet_server_options: []
 
 foreman_proxy_plugin_options:
   dynflow-enabled: 'true'
@@ -49,14 +49,23 @@ foreman_proxy_plugin_options:
   remote-execution-script-ssh-kerberos-auth: 'false'
   remote-execution-script-ssh-keygen: '/usr/bin/ssh-keygen'
   remote-execution-script-ssh-log-level: 'info'
+  # salt-listen-on: 'https'
+  # salt-user: 'root'
+  # salt-api: 'true'
+  # salt-api-auth: 'pam'
+  # salt-api-url: 'https://localhost:9191'
+  # salt-api-username: 'saltuser'
+  # salt-api-password: 'saltpassword'
+  # salt-autosign-file: '/etc/salt/autosign.conf'
+  # salt-autosign-key-file: '/var/lib/foreman-proxy/salt/grains/autosign_key'
   # discovery-tftp-root: '/srv/tftp'
   # discovery-install-images: 'true'
   # discovery-source-url: 'http://mirror.lab.loxda.net/foreman/'
   # discovery-listen-on: 'https'
 
 foreman_proxy_options:
-  oauth-consumer-key: "{{oauth_consumer_key|default(omit)}}"
-  oauth-consumer-secret: "{{oauth_consumer_secret|default(omit)}}"
+  oauth-consumer-key: "{{ oauth_consumer_key|default(omit) }}"
+  oauth-consumer-secret: "{{ oauth_consumer_secret|default(omit) }}"
   manage-puppet-group: 'true'
   register-in-foreman: 'true'
   registered-name: "{{ inventory_hostname }}"
@@ -66,7 +75,7 @@ foreman_proxy_options:
   dhcp: 'true'
   dhcp-managed: 'true'
   dhcp-key-name: 'omapikey'
-  dhcp-key-secret: 'Cx5gw+r4IDNQiz4HPaxa0ZdPGc3BhtDz7R1j7NsDhnYNEuZzQQcy+1280dO9CKogXQlh+1JEu5DGanX173MllQ=='
+  dhcp-key-secret: "{{ vault_dhcp-key-secret }}"
   dhcp-omapi-port: '7911'
   dhcp-ping-free-ip: 'true'
   dhcp-option-domain: 'opn.lab'
