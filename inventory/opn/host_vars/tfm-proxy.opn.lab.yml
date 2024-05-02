@@ -71,7 +71,7 @@ foreman_proxy_options:
   registered-name: "{{ inventory_hostname }}"
   registered-proxy-url: "https://{{ inventory_hostname }}:8443"
   trusted-hosts: "{{ groups['tfm_app'][0] }}"
-  foreman-base-url: "https://{{ groups['tfm_app'][0] }}"
+  foreman-base-url: "{{ foreman_url_app }}"
   templates-listen-on: 'both'
   dhcp: 'true'
   dhcp-managed: 'true'

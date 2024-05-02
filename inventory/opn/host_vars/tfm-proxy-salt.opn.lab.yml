@@ -71,10 +71,11 @@ foreman_proxy_options:
   registered-name: "{{ inventory_hostname }}"
   registered-proxy-url: "https://{{ inventory_hostname }}:8443"
   trusted-hosts: "{{ groups['tfm_app'][0] }}"
-  foreman-base-url: "https://{{ groups['tfm_app'][0] }}"
+  foreman-base-url: "{{ foreman_url_app }}"
+  foreman-foreman-url: "{{ foreman_url_app }}"
   # templates-listen-on: 'both'
-  dhcp: 'false'
-  dhcp-managed: 'false'
+  # dhcp: 'true'
+  # dhcp-managed: 'false'
   # dhcp-key-name: 'omapikey'
   # dhcp-key-secret: "{{ vault_dhcp-key-secret }}"
   # dhcp-omapi-port: '7911'
@@ -84,11 +85,11 @@ foreman_proxy_options:
   # dhcp-pxefilename: 'pxelinux.0'
   # dhcp-gateway: '192.168.1.1'
   # dhcp-nameservers: '192.168.83.135'
-  bmc: 'false'
+  # bmc: 'true'
   # bmc-default-provider: 'ipmitool'
   # bmc-listen-on: 'https'
   # bmc-redfish-verify-ssl: 'false'
-  dns: 'false'
+  # dns: 'true'
   # dns-listen-on: 'https'
   # dns-managed: 'false'
   # dns-provider: 'nsupdate'
@@ -96,24 +97,24 @@ foreman_proxy_options:
   # dns-server: '192.168.83.135'
   # dns-ttl: '3600'
   # keyfile: '/etc/bind/rndc.key'
-  logs-listen-on: 'https'
-  log: '/var/log/foreman-proxy/proxy.log'
-  log-buffer: '2000'
-  log-buffer-errors: '1000'
-  log-level: 'INFO'
-  logs: 'false'
+  # logs-listen-on: 'https'
+  # log: '/var/log/foreman-proxy/proxy.log'
+  # log-buffer: '2000'
+  # log-buffer-errors: '1000'
+  # log-level: 'INFO'
+  # logs: 'true'
   puppetca: 'false'
   puppet: 'false'
   # puppet-listen-on: 'https'
   # puppet-url: "https://{{ groups['tfm_puppet'][0] }}:8140"
   # puppet-api-timeout: '30'
-  tftp: 'false'
+  # tftp: 'true'
   # tftp-managed: 'true'
   # tftp-listen-on: 'https'
   # tftp-manage-wget: 'true'
   # tftp-root: '/srv/tftp'
-  templates: 'false'
-  httpboot: 'false'
+  # templates: 'true'
+  # httpboot: 'true'
   http: 'true'
 
 _salt_test: true
