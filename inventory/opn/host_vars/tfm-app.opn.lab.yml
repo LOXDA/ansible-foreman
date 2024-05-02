@@ -29,7 +29,7 @@ foreman_plugins:
   - ansible
   - puppet
   - tasks
-  # - salt
+  - salt
   # - discovery
   # - hooks
   # - rescue
