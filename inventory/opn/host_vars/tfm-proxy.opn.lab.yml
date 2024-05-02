@@ -69,6 +69,7 @@ foreman_proxy_options:
   manage-puppet-group: 'true'
   register-in-foreman: 'true'
   registered-name: "{{ inventory_hostname }}"
+  registered-proxy-url: "https://{{ inventory_hostname }}:8443"
   trusted-hosts: "{{ groups['tfm_app'][0] }}"
   foreman-base-url: "https://{{ groups['tfm_app'][0] }}"
   templates-listen-on: 'both'
