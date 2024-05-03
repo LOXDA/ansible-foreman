@@ -8,10 +8,15 @@ tfm-db.opn.lab opn_flavor=m1.small opn_network=lab02
 
 [tfm_proxy]
 tfm-proxy.opn.lab opn_flavor=m1.medium opn_network=lab11
+
+[tfm_proxy_salt]
 tfm-proxy-salt.opn.lab opn_flavor=m1.medium opn_network=lab11
 
 [tfm_puppet]
 tfm-puppet.opn.lab opn_flavor=m1.medium opn_network=lab02
+
+[tfm_proxy:children]
+tfm_proxy_salt
 
 [tfm:children]
 tfm_app
