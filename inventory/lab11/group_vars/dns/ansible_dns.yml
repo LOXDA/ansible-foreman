@@ -1,0 +1,152 @@
+---
+bind_zones:
+
+  - name: infra.lab
+    create_reverse_zones: true
+    primaries:
+      - 172.16.203.251
+    name_servers:
+      - ns1.infra.lab.
+      - ns2.infra.lab.
+    allow_update:
+      - '172.16.202.29/32'
+    hosts:
+      - name: ns1
+        ip: 172.16.203.251
+      - name: ns2
+        ip: 172.16.203.252
+    networks:
+      - '172.16.203'
+
+  - name: v10.infra.lab
+    create_reverse_zones: true
+    primaries:
+      - 172.16.203.251
+    name_servers:
+      - ns1.infra.lab.
+      - ns2.infra.lab.
+    allow_update:
+      - '172.16.202.29/32'
+    hosts:
+      - name: ns1
+        ip: 172.16.203.251
+      - name: ns2
+        ip: 172.16.203.252
+    networks:
+      - '172.16.210'
+
+  - name: v11.infra.lab
+    create_reverse_zones: true
+    primaries:
+      - 172.16.203.251
+    name_servers:
+      - ns1.infra.lab.
+      - ns2.infra.lab.
+    allow_update:
+      - '172.16.202.29/32'
+    hosts:
+      - name: ns1
+        ip: 172.16.203.251
+      - name: ns2
+        ip: 172.16.203.252
+    networks:
+      - '172.16.211'
+
+  - name: v12.infra.lab
+    create_reverse_zones: true
+    primaries:
+      - 172.16.203.251
+    name_servers:
+      - ns1.infra.lab.
+      - ns2.infra.lab.
+    allow_update:
+      - '172.16.202.29/32'
+    hosts:
+      - name: ns1
+        ip: 172.16.203.251
+      - name: ns2
+        ip: 172.16.203.252
+    networks:
+      - '172.16.212'
+
+  - name: v13.infra.lab
+    create_reverse_zones: true
+    primaries:
+      - 172.16.203.251
+    name_servers:
+      - ns1.infra.lab.
+      - ns2.infra.lab.
+    allow_update:
+      - '172.16.202.29/32'
+    hosts:
+      - name: ns1
+        ip: 172.16.203.251
+      - name: ns2
+        ip: 172.16.203.252
+    networks:
+      - '172.16.213'
+      
+  - name: lab.loxda.net
+    forwarders:
+      - 172.16.202.4
+    networks:
+      - "172.16.202"
+
+bind_acls:
+  - name: allnet
+    match_list:
+      - "172.16.0.0/12"
+      - "192.168.131.0/24"
+      - "192.168.133.0/24"
+  - name: laball
+    match_list:
+      - 172.16.202.0/24
+      - 172.16.203.0/24
+      - 172.16.210.0/24
+      - 172.16.211.0/24
+      - 172.16.212.0/24
+      - 172.16.213.0/24
+
+bind_dns_keys:
+  - name: foreman
+    algorithm: hmac-sha256
+    secret: "tUJGI0Gd5xJokIvxqpo2oA=="
+
+# SOA information
+bind_zone_ttl: "1W"
+bind_zone_time_to_refresh: "1D"
+bind_zone_time_to_retry: "1H"
+bind_zone_time_to_expire: "1W"
+bind_zone_minimum_ttl: "1D"
+
+# File mode for primary zone files (needs to be something like 0660 for dynamic updates)
+bind_zone_file_mode: "0660"
+
+# DNSSEC configuration
+bind_dnssec_enable: false
+bind_dnssec_validation: false
+
+# Determines whether recursion should be allowed. Typically, an authoritative
+# name server should have recursion turned OFF.
+bind_recursion: false
+bind_allow_recursion:
+  - "any"
+
+# List of IPv4 address of the network interface(s) to listen on. Set to "any"
+# to listen on all interfaces
+bind_listen_ipv4:
+  - "any"
+
+# The list of ports to listen on for IPv4 addresses
+bind_listen_ipv4_port:
+  - 53
+
+# List of IPv6 address of the network interface(s) to listen on.
+bind_listen_ipv6:
+  - "::1"
+
+bind_allow_query:
+  - "localhost"
+  - "172.16.0.0/12"
+  - "192.168.131.0/24"
+  - "192.168.133.0/24"

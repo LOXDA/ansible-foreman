@@ -1,0 +1,686 @@
+---
+
+foreman_smart_class_parameter:
+
+###############################################################################
+# apt
+###############################################################################
+
+  - name: "apt"
+    parameter: keyserver
+    parameter_type: string
+    override: true
+    omit: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab
+        value: 'keyserver.ubuntu.com'
+    state: present
+
+  - name: "apt"
+    parameter: key_options
+    parameter_type: string
+    override: true
+    omit: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab
+        value: 'http-proxy=http://172.16.202.253:3128'
+    state: present
+
+###############################################################################
+# postgresql
+###############################################################################
+
+  - name: "postgresql::globals"
+    parameter: version
+    parameter_type: string
+    override: true
+    omit: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/app
+        value: '9.6'
+      - match: hostgroup=lab/foreman/db
+        value: '9.6'
+    state: present
+
+  - name: "postgresql::globals"
+    parameter: bindir
+    parameter_type: string
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/app
+        value: '/usr/pgsql-9.6/bin'
+      - match: hostgroup=lab/foreman/db
+        value: '/usr/pgsql-9.6/bin'
+    state: present
+
+###############################################################################
+# foreman_proxy
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: trusted_hosts
+    parameter_type: array
+    default_value: []
+    omit: true
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: ['tfm-app.lab.loxda.net']
+    state: present
+
+  - name: "foreman_proxy"
+    parameter: register_in_foreman
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: true
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: true
+    state: present
+
+  - name: "foreman_proxy"
+    parameter: registered_proxy_url
+    parameter_type: string
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: 'https://tfm-proxy.lab.loxda.net:8443'
+    state: present
+
+  - name: "foreman_proxy"
+    parameter: foreman_base_url
+    parameter_type: string
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: 'https://tfm-app.lab.loxda.net'
+    state: present
+
+###############################################################################
+# bmc
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: bmc
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+        omit: true
+    state: present
+
+###############################################################################
+# dhcp
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: dhcp
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+        omit: true
+    state: present
+
+###############################################################################
+# dns
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: dns
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+        omit: true
+    state: present
+
+###############################################################################
+# httpboot
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: httpboot
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+        omit: true
+
+    state: present
+
+###############################################################################
+# logs
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: logs
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: true
+    state: present
+
+###############################################################################
+# puppet
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: puppet
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+###############################################################################
+# puppetca
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: puppetca
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: true
+    state: present
+
+  - name: "foreman_proxy"
+    parameter: puppet_url
+    parameter_type: string
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: 'false'
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: 'https://tfm-puppet.loxda.net:8140'
+    state: present
+
+###############################################################################
+# realm
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: realm
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+        omit: true
+    state: present
+
+###############################################################################
+# templates
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: templates
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: true
+    state: present
+
+###############################################################################
+# tftp
+###############################################################################
+
+  - name: "foreman_proxy"
+    parameter: tftp
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: true
+    state: present
+
+  - name: "foreman_proxy"
+    parameter: tftp_managed
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: true
+    state: present
+
+  - name: "foreman_proxy"
+    parameter: tftp_manage_wget
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: true
+    state: present
+
+###############################################################################
+# abrt
+###############################################################################
+
+  - name: "foreman_proxy::plugin::abrt"
+    parameter: enabled
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+###############################################################################
+# acd
+###############################################################################
+
+  - name: "foreman_proxy::plugin::acd"
+    parameter: enabled
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+###############################################################################
+# ansible
+###############################################################################
+
+  - name: "foreman_proxy::plugin::ansible"
+    parameter: enabled
+    parameter_type: boolean
+    default_value: false
+    omit: true
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: true
+    state: present
+
+  - name: "foreman_proxy::plugin::ansible"
+    parameter: host_key_checking
+    parameter_type: boolean
+    default_value: false
+    omit: true
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: false
+    state: present
+
+  - name: "foreman_proxy::plugin::ansible"
+    parameter: roles_path
+    parameter_type: array
+    default_value: []
+    omit: true
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        omit: true
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: ['/etc/ansible/roles', '/usr/share/ansible/roles']
+    state: present
+
+  - name: "foreman_proxy::plugin::ansible"
+    parameter: collections_paths
+    parameter_type: array
+    default_value: []
+    omit: true
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: []
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: ['/etc/ansible/collections', '/usr/share/ansible/collections']
+    state: present
+
+###############################################################################
+# chef
+###############################################################################
+
+  - name: "foreman_proxy::plugin::chef"
+    parameter: enabled
+    parameter_type: string
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: 'false'
+    state: present
+
+###############################################################################
+# container_gateway
+###############################################################################
+
+  - name: "foreman_proxy::plugin::container_gateway"
+    parameter: enabled
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+###############################################################################
+# dynflow
+###############################################################################
+
+  - name: "foreman_proxy::plugin::dynflow"
+    parameter: enabled
+    parameter_type: boolean
+    default_value: false
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: true
+    state: present
+
+  - name: "foreman_proxy::plugin::dynflow"
+    parameter: database_path
+    parameter_type: string
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: '/var/lib/foreman-proxy/dynflow.sqlite3'
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: '/var/lib/foreman-proxy/dynflow.sqlite3'
+    state: present
+
+###############################################################################
+# monitoring
+###############################################################################
+
+  - name: "foreman_proxy::plugin::monitoring"
+    parameter: enabled
+    parameter_type: boolean
+    default_value: false
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+  - name: "foreman_proxy::plugin::monitoring::icinga2"
+    parameter: enabled
+    parameter_type: boolean
+    default_value: false
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+  - name: "foreman_proxy::plugin::monitoring::icingadirector"
+    parameter: enabled
+    parameter_type: string
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: 'false'
+    state: present
+
+###############################################################################
+# omaha
+###############################################################################
+
+  - name: "foreman_proxy::plugin::omaha"
+    parameter: enabled
+    parameter_type: boolean
+    default_value: false
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+###############################################################################
+# openscap
+###############################################################################
+
+  - name: "foreman_proxy::plugin::openscap"
+    parameter: enabled
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+###############################################################################
+# pulp
+###############################################################################
+
+  - name: "foreman_proxy::plugin::pulp"
+    parameter: pulpcore_enabled
+    parameter_type: boolean
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+###############################################################################
+# reports
+###############################################################################
+
+  - name: "foreman_proxy::plugin::reports"
+    parameter: enabled
+    parameter_type: boolean
+    default_value: false
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+      - match: fqdn=tfm-proxy.lab.loxda.net
+        value: true
+    state: present
+
+###############################################################################
+# salt
+###############################################################################
+
+  - name: "foreman_proxy::plugin::salt"
+    parameter: enabled
+    parameter_type: boolean
+    default_value: false
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+
+###############################################################################
+# remote_execution::script
+###############################################################################
+
+  - name: "foreman_proxy::plugin::remote_execution::script"
+    parameter: enabled
+    parameter_type: boolean
+    default_value: false
+    override: true
+    override_value_order:
+      - fqdn
+      - hostgroup
+      - domain
+    override_values:
+      - match: hostgroup=lab/foreman/proxy
+        value: false
+    state: present
+

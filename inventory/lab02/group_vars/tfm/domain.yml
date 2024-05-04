@@ -1,0 +1,10 @@
+---
+
+foreman_domain:
+
+  - name: opn.lab
+    description: domaine opn.lab.
+    organizations:
+      - OPN
+    locations:
+      - OPN

@@ -1,19 +1,19 @@
 localhost ansible_connection=local
 
 [tfm_app]
-tfm-app.opn.lab opn_flavor=m1.large opn_network=flat
+tfm-app.lab01.opn.lab opn_flavor=m1.large opn_network=lab01
 
 [tfm_db]
-tfm-db.opn.lab opn_flavor=m1.small opn_network=flat
+tfm-db.lab01.opn.lab opn_flavor=m1.small opn_network=lab01
 
 [tfm_proxy]
-tfm-proxy.opn.lab opn_flavor=m1.medium opn_network=flat
+tfm-proxy.lab01.opn.lab opn_flavor=m1.medium opn_network=lab01
 
 [tfm_proxy_salt]
-tfm-proxy-salt.opn.lab opn_flavor=m1.medium opn_network=flat
+tfm-proxy-salt.lab01.opn.lab opn_flavor=m1.medium opn_network=lab01
 
 [tfm_puppet]
-tfm-puppet.opn.lab opn_flavor=m1.medium opn_network=flat
+tfm-puppet.lab01.opn.lab opn_flavor=m1.medium opn_network=lab01
 
 [tfm_proxy:children]
 tfm_proxy_salt
@@ -30,8 +30,8 @@ ansible_user=debian
 opn_project=admin
 
 [dns]
-ns1.opn.lab ansible_host=172.16.203.251
-ns2.opn.lab ansible_host=172.16.203.252
+ns1.lab01.opn.lab ansible_host=172.16.203.251
+ns2.lab01.opn.lab ansible_host=172.16.203.252
 
 [dns:vars]
 ansible_connection=ssh 
@@ -40,7 +40,7 @@ ansible_ssh_private_key_file=/root/.ssh/id_rsa
 opn_project=admin
 
 [mon]
-mon1.opn.lab ansible_host=172.16.203.250
+mon1.lab01.opn.lab ansible_host=172.16.203.250
 
 [mon:vars]
 ansible_user=root 

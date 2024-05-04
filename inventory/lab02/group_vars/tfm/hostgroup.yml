@@ -1,0 +1,292 @@
+---
+
+foreman_hostgroup:
+
+###########################################################################################
+# lab
+###########################################################################################
+
+  - name: lab
+    parent: 
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: "http-proxy"
+        parameter_type: string
+        value: "172.16.203.253"
+      - name: "http-proxy-port"
+        parameter_type: string
+        value: "3128"
+      - name: "lang"
+        parameter_type: string
+        value: "fr_FR.UTF8"
+      - name: "time-zone"
+        parameter_type: string
+        value: "Europe/Paris"
+
+###########################################################################################
+# lab/foreman
+###########################################################################################
+
+  - name: foreman
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: app
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: db
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: puppet
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: proxy
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    puppetclasses:
+      - foreman_proxy
+
+  - name: dns
+    parent: lab/foreman
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+###########################################################################################
+# lab/os
+###########################################################################################
+
+  - name: os
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: centos
+    parent: lab/os
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: "bootloader-append"
+        parameter_type: string
+        value: "nofb quiet splash=quiet"
+      - name: "disable-firewall"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-epel"
+        parameter_type: boolean
+        value: "true"
+      - name: "enable-puppetlabs-puppet6-repo"
+        parameter_type: boolean
+        value: "true"
+      - name: "keyboard"
+        parameter_type: string
+        value: "fr"
+      - name: "lang"
+        parameter_type: string
+        value: "fr_FR.UTF-8"
+      - name: "time-zone"
+        parameter_type: string
+        value: "Europe/Paris"
+      - name: "package_upgrade"
+        parameter_type: boolean
+        value: "true"
+      - name: "selinux-mode"
+        parameter_type: string
+        value: "enforcing"
+
+  - name: debian
+    parent: lab/os
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: "additional-packages"
+        parameter_type: string
+        value: "gnupg ccze qemu-guest-agent"
+      - name: "enable-puppetlabs-puppet6-repo"
+        parameter_type: boolean
+        value: "true"
+
+  - name: windows
+    parent: lab/os
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: ansible_become
+        parameter_type: string
+        value: false
+      - name: ansible_become_method
+        parameter_type: string
+        value: runas
+      - name: ansible_become_pass
+        parameter_type: string
+        value: papillon
+      - name: ansible_become_user
+        parameter_type: string
+        value: Administrateur
+      - name: ansible_connection
+        parameter_type: string
+        value: winrm
+      - name: ansible_gather_facts
+        parameter_type: boolean
+        value: false
+      - name: ansible_os_family
+        parameter_type: string
+        value: Windows
+      - name: ansible_user
+        parameter_type: string
+        value: Administrateur
+      - name: ansible_winrm_scheme
+        parameter_type: string
+        value: http
+      - name: ansible_winrm_server_cert_validation
+        parameter_type: string
+        value: ignore
+      - name: ansible_winrm_transport
+        parameter_type: string
+        value: basic
+      - name: foremanDebug
+        parameter_type: string
+        value: false
+      - name: remote_execution_ssh_password
+        parameter_type: string
+        value: papillon
+
+  # - name: esxi
+  #   parent: lab/os
+  #   organizations: 
+  #     - LAB
+  #   locations:
+  #     - LAB
+  #   parameters:
+  #     - name: serialnum
+  #       parameter_type: string
+  #       value: JV425-4H100-VZHH8-Q23NP-3A9PP
+  #   environment: lab
+  #   compute_resource: pve-gsw
+  #   compute_profile: esxi-medium
+  #   architecture: x86_64
+  #   operatingsystem: ESXi-7.0.3-19193900
+  #   medium: ESXi dummy
+  #   ptable: Kickstart default
+  #   pxe_loader: iPXE Chain BIOS
+
+  - name: vcenter
+    parent: lab/os
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+###########################################################################################
+# lab/salt
+###########################################################################################
+
+  - name: salt
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: master
+    parent: lab/salt
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: syndic
+    parent: lab/salt
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+###########################################################################################
+# lab/gitea
+###########################################################################################
+
+  - name: gitea
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+###########################################################################################
+# lab/gitlab
+###########################################################################################
+
+  - name: gitlab
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+###########################################################################################
+# lab/vsphere
+###########################################################################################
+
+  - name: vsphere
+    parent: lab
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: vcenter
+    parent: lab/vsphere
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+
+  - name: esxi
+    parent: lab/vsphere
+    organizations: 
+      - LAB
+    locations:
+      - LAB
+    parameters:
+      - name: serialnum
+        parameter_type: string
+        value: JV425-4H100-VZHH8-Q23NP-3A9PP
+    # compute_resource: pve-gsw
+    # compute_profile: esxi-medium
+    # environment: lab
+    architecture: x86_64
+    operatingsystem: ESXi-6.7.0-15160138
+    medium: ESXi dummy
+    ptable: Kickstart default
+    pxe_loader: iPXE Chain BIOS
