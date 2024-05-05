@@ -47,12 +47,6 @@
       register: sg
       delegate_to: localhost
 
-    - name: Show hostname
-      debug:
-        msg: 
-          - "inventory_hostname_short: {{ inventory_hostname_short }} inventory_hostname: {{ inventory_hostname }}"
-          - "{{ inventory_hostname | replace(inventory_hostname_short + '.','') }}"
-
     - openstack.cloud.server:
         state: present
         name: "{{ inventory_hostname_short }}"
