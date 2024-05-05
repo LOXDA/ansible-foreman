@@ -14,25 +14,44 @@
       volume_size: 8
       key_name: LAB
       network: "{{ opn_network }}"
-      auto_ip: false
-      security_groups: 
-        - ALLOW_ALL
+      auto_ip: "{{ opn_autoip }}"
       userdata: |
         #cloud-config
         hostname: {{ inventory_hostname_short }}
         fqdn: {{ inventory_hostname }}
+        prefer_fqdn_over_hostname: true
         chpasswd:
+          expire: False
           list: |
             debian:papillon
-          expire: False
         packages:
           - gpg
-        package_upgrade: false
+        package_upgrade: true
         manage_etc_hosts: false
         runcmd:
           - echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
-
+          - echo "search {{ inventory_hostname | replace(inventory_hostname_short + '.','') }}" >> /etc/resolvconf/resolv.conf.d/tail
+          - resolvconf -u
   tasks:
+
+    - name: Fetch all projects with a name
+      openstack.cloud.project_info:
+        name: "{{ opn_project }}"
+      register: pg
+      delegate_to: localhost
+
+    - name: Get specific security group
+      openstack.cloud.security_group_info:
+        name: "{{ opn_sg }}"
+        project_id: "{{ pg.projects[0].id }}"
+      register: sg
+      delegate_to: localhost
+
+    - name: Show hostname
+      debug:
+        msg: 
+          - "inventory_hostname_short: {{ inventory_hostname_short }} inventory_hostname: {{ inventory_hostname }}"
+          - "{{ inventory_hostname | replace(inventory_hostname_short + '.','') }}"
 
     - openstack.cloud.server:
         state: present
@@ -40,14 +59,18 @@
         flavor: "{{ opn_flavor | d('m1.medium') }}"
         image: "{{ opn_image | d('Debian-11') }}"
         boot_from_volume: false
+        terminate_volume: true
+        delete_ips: true
+        security_groups: 
+          - "{{ sg.security_groups[0].id }}"
       register: instance
       delegate_to: localhost
 
-    - name: Refresh inventory
-      meta: refresh_inventory
+    # - name: Refresh inventory
+    #   meta: refresh_inventory
 
-    - name: Wait 15 seconds for instance boot
-      ansible.builtin.wait_for:
-        timeout: 5
-      delegate_to: localhost
-      when: instance is changed
+    # - name: Wait 15 seconds for instance boot
+    #   ansible.builtin.wait_for:
+    #     timeout: 15
+    #   delegate_to: localhost
+    #   when: instance is changed
