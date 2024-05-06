@@ -60,11 +60,3 @@
       register: instance
       delegate_to: localhost
 
-    # - name: Refresh inventory
-    #   meta: refresh_inventory
-
-    # - name: Wait 15 seconds for instance boot
-    #   ansible.builtin.wait_for:
-    #     timeout: 15
-    #   delegate_to: localhost
-    #   when: instance is changed

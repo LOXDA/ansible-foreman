@@ -28,15 +28,15 @@ foreman_compute_resources:
 
   - name: opn
     organizations:
-      - OPN
+      - LAB01
     locations:
-      - OPN
+      - LAB01
     provider: Openstack
     provider_params:
       url: "https://192.168.83.135:5000/v3"
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: "admin"
-      domain: "opn.lab"
+      tenant: "lab01"
+      domain: "lab01.opn.lab"
       project_domain_name: "Default"
       project_domain_id: "default"

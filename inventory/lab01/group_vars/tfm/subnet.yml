@@ -2,8 +2,8 @@
 
 foreman_subnets:
 
-  - name: VLAN0001_LAB
-    description: VLAN0001_LAB
+  - name: VLAN0001_LAB01
+    description: VLAN0001_LAB01
     network: 192.168.1.0
     mask: 255.255.255.0
     gateway: 192.168.1.1
@@ -21,11 +21,11 @@ foreman_subnets:
     remote_execution_proxies: "{{ foreman_host_proxy }}"
     mtu: 1500
     domains:
-      - opn.lab
+      - lab01.opn.lab
     locations:
-      - OPN
+      - LAB01
     organizations:
-      - OPN
+      - LAB01
 
   # - name: VLAN0003_LAB
   #   description: VLAN0003_LAB

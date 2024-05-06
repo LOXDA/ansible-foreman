@@ -29,9 +29,9 @@ foreman_installation_medium:
       - Debian 10.0
       - Debian 11.0
     locations:
-      - OPN
+      - LAB01
     organizations:
-      - OPN
+      - LAB01
 
   # - name: ESXi dummy
   #   path: "http://{{ foreman_host_proxy }}:8000/httpboot/esxi"

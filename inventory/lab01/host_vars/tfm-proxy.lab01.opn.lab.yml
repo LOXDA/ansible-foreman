@@ -65,7 +65,7 @@ foreman_proxy_options:
   dhcp-key-secret: 'Cx5gw+r4IDNQiz4HPaxa0ZdPGc3BhtDz7R1j7NsDhnYNEuZzQQcy+1280dO9CKogXQlh+1JEu5DGanX173MllQ=='
   dhcp-omapi-port: '7911'
   dhcp-ping-free-ip: 'true'
-  dhcp-option-domain: 'opn.lab'
+  dhcp-option-domain: "{{ inventory_hostname | replace(inventory_hostname_short + '.','') }}"
   dhcp-ipxe-bootstrap: 'true'
   dhcp-pxefilename: 'pxelinux.0'
   dhcp-gateway: '192.168.1.1'
@@ -78,7 +78,7 @@ foreman_proxy_options:
   dns-listen-on: 'https'
   dns-managed: 'false'
   dns-provider: 'nsupdate'
-  dns-zone: 'opn.lab'
+  dns-zone: "{{ inventory_hostname | replace(inventory_hostname_short + '.','') }}"
   dns-server: '192.168.83.135'
   dns-ttl: '3600'
   keyfile: '/etc/bind/rndc.key'

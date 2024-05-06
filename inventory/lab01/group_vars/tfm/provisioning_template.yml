@@ -9,18 +9,18 @@ foreman_provisioning_template:
     kind: PXELinux
     state: present
     locations:
-      - OPN
+      - LAB01
     organizations:
-      - OPN
+      - LAB01
 
   - name: preseed_kernel_options_fix
     file_name: template_snippet_preseed_kernel_options_fix
     kind: snippet
     state: present
     locations:
-      - OPN
+      - LAB01
     organizations:
-      - OPN
+      - LAB01
 
   # ESXi
 

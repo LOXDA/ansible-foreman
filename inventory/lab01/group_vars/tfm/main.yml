@@ -2,11 +2,6 @@
 puppet_version: 7
 foreman_version: 3.10
 
-vault_foreman_admin_username: admin
-vault_foreman_admin_password: P4p1llon!!
-vault_foreman_db_username: foreman
-vault_foreman_db_password: p4p1llon
-
 foreman_admin_username: "{{ vault_foreman_admin_username }}"
 foreman_admin_password: "{{ vault_foreman_admin_password }}"
 
@@ -16,8 +11,8 @@ foreman_db_name: foreman
 foreman_db_username: "{{ vault_foreman_db_username }}"
 foreman_db_password: "{{ vault_foreman_db_password }}"
 
-initial_organization: OPN
-initial_location: OPN
+initial_organization: LAB01
+initial_location: LAB01
 
 # deploy var
 foreman_lab_host_app: "{{ groups['tfm_app'][0]] }}"
