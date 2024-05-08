@@ -5,7 +5,7 @@ clouds:
       auth_url: https://192.168.83.135:5000
       username: tomm
       password: papillon
-      project_name: "admin"
+      project_name: admin
       project_domain_id: default
       user_domain_id: default
     region_name: RegionOne
