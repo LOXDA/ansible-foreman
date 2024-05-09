@@ -24,8 +24,8 @@
           expire: False
           list: |
             debian:papillon
-        packages:
-          - gpg
+        # packages:
+        #   - gpg
         package_upgrade: false
         manage_etc_hosts: false
         runcmd:
