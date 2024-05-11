@@ -24,7 +24,7 @@
           expire: False
           list: |
             debian:papillon
-        package_upgrade: true
+        package_upgrade: false
         manage_etc_hosts: false
         runcmd:
           - echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
@@ -50,7 +50,7 @@
         name: "{{ inventory_hostname_short }}"
         flavor: "{{ opn_flavor | d('m1.medium') }}"
         image: "{{ opn_image | d('Debian-11') }}"
-        boot_from_volume: false
+        boot_from_volume: true
         terminate_volume: true
         delete_ips: true
         security_groups: 
