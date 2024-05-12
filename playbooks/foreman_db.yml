@@ -2,6 +2,7 @@
 
 - hosts: tfm_db
   gather_facts: true
+  become: true
   roles:
     - role: foreman-db
   tags:

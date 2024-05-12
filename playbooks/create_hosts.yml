@@ -1,6 +1,6 @@
 ---
 
-- hosts: tfm
+- hosts: all,!localhost
   serial: 1
   gather_facts: false
 

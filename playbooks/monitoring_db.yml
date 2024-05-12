@@ -1,0 +1,6 @@
+---
+
+- hosts: monitoring_db
+  become: true
+  roles:
+    - role: geerlingguy.mysql

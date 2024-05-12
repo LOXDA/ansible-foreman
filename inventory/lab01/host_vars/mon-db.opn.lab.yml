@@ -1,0 +1,30 @@
+---
+mysql_innodb_file_format: barracuda
+mysql_innodb_large_prefix: 1
+mysql_innodb_file_per_table: 1
+mysql_packages:
+  - mariadb-client
+  - mariadb-server
+  - python3-mysqldb
+mysql_users:
+  - name: icingaweb
+    host: "%"
+    password: icingaweb
+    priv: "icingaweb.*:ALL"
+  - name: icingadb
+    host: "%"
+    password: icingadb
+    priv: "icingadb.*:ALL"
+  - name: icingadir
+    host: "%"
+    password: icingadir
+    priv: "icingadir.*:ALL"
+  - name: icingaido
+    host: "%"
+    password: icingaido
+    priv: "icingaido.*:ALL"
+mysql_databases:
+  - name: icingadb
+  - name: icingadir
+  - name: icingaido
+  - name: icingaweb

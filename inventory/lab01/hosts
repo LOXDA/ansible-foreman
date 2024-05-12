@@ -1,7 +1,24 @@
 localhost ansible_connection=local
 
+[theforeman:children]
+tfm_app
+
+[tfm:vars]
+ansible_connection=ssh 
+ansible_user=debian 
+opn_autoip=false
+opn_project=lab01
+opn_network=lab01
+opn_sg=ALLOW_ALL
+
+[tfm:children]
+tfm_app
+tfm_db
+tfm_proxy
+tfm_puppet
+
 [tfm_app]
-tfm-app.lab01.opn.lab opn_flavor=m1.large opn_autoip=true
+tfm-app.lab01.opn.lab opn_flavor=m1.large
 
 [tfm_db]
 tfm-db.lab01.opn.lab opn_flavor=m1.small
@@ -18,16 +35,28 @@ tfm-puppet.lab01.opn.lab opn_flavor=m1.medium
 [tfm_proxy:children]
 tfm_proxy_salt
 
-[tfm:children]
-tfm_app
-tfm_db
-tfm_proxy
-tfm_puppet
-
-[tfm:vars]
+[monitoring:vars]
 ansible_connection=ssh 
 ansible_user=debian 
 opn_autoip=false
 opn_project=lab01
 opn_network=lab01
 opn_sg=ALLOW_ALL
+
+[monitoring:children]
+monitoring_db
+monitoring_app
+monitoring_web
+monitoring_agent
+
+[monitoring_db]
+mon-db.lab01.opn.lab opn_flavor=m1.medium
+
+[monitoring_app]
+mon-app.lab01.opn.lab opn_flavor=m1.medium
+
+[monitoring_web]
+mon-web.lab01.opn.lab opn_flavor=m1.medium
+
+[monitoring_agent]
+mon-agent.lab01.opn.lab opn_flavor=m1.medium

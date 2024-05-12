@@ -1,0 +1,50 @@
+---
+
+icingaweb2_db_import_schema: true
+icingaweb2_admin_username: admin
+icingaweb2_admin_password: papillon
+
+icingaweb2_db:
+  type: mysql
+  name: icingaweb
+  host: "{{ groups['monitoring_db'][0] }}"
+  user: icingaweb
+  password: icingaweb
+
+icingaweb2_groups:
+  icingaweb2:
+    backend: db
+    resource: icingaweb2_db
+
+icingaweb2_authentication:
+  icingaweb2:
+    backend: db
+    resource: icingaweb2_db
+
+icingaweb2_resources:
+  icinga_ido:
+    type: db
+    db: mysql
+    host: "{{ groups['monitoring_db'][0] }}"
+    username: icingaido
+    password: icingaido
+    dbname: icingaido
+    use_ssl: 0
+    charset: utf8
+
+icingaweb2_modules:
+  monitoring:
+    enabled: true
+    commandtransports:
+      icinga2_api:
+        transport: api
+        host: "{{ groups['monitoring_app'][0] }}"
+        username: root
+        password: root
+    backends:
+      icinga2_ido_mysql:
+        type: ido
+        resource: icinga_ido
+    config:
+      security:
+        protected_customvars: "*pw*,*pass*,community"

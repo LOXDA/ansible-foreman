@@ -2,6 +2,7 @@
 
 - hosts: tfm_app
   gather_facts: true
+  become: true
   roles:
     - role: foreman-app
   tags:
@@ -11,6 +12,7 @@
 # fetch oauth_consumer_* info
 - hosts: "{{ groups['tfm_app'][0] }}"
   gather_facts: true
+  become: true
   tasks:
     - name: Fetch settings.yaml
       slurp:

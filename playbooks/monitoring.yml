@@ -1,0 +1,126 @@
+---
+
+- hosts: monitoring
+  become: true
+  vars:
+
+    icingadb_database_type: mysql
+    icingadb_database_host: "{{ groups['monitoring_db'][0] }}"
+    icingadb_database_name: icingadb
+    icingadb_database_user: icingadb
+    icingadb_database_password: icingadb
+    icingadb_database_import_schema: true
+    icingadb_redis_host: 127.0.0.1
+    icingadb_redis_port: 6380
+    icingadb_packages:
+      - icingadb
+
+    icinga2_features:
+      - name: icingadb
+        host: 127.0.0.1
+      - name: perfdata
+        host_perfdata_path: "/var/spool/icinga2/perfdata/host-perfdata"
+        service_perfdata_path: "/var/spool/icinga2/perfdata/service-perfdata"
+        host_format_template: "DATATYPE::HOSTPERFDATA"
+        service_format_template: "DATATYPE::SERVICEPERFDATA"
+        rotation_interval: "15s"
+
+    icingaweb2_resources:
+      director_db:
+        type: db
+        db: mysql
+        host: localhost
+        dbname: icingadir
+        username: icingadir
+        password: icingadir
+        use_ssl: 0
+        charset: utf8
+      icinga_db:
+        type: db
+        db: mysql
+        host: localhost
+        dbname: icingadb
+        username: icingadb
+        password: icingadb
+        use_ssl: 0
+        charset: utf8
+
+    icingaweb2_modules:
+      director:
+        enabled: true
+        source: package
+        import_schema: true
+        run_kickstart: true
+        kickstart:
+          config:
+            endpoint: "{{ ansible_fqdn }}"
+            host: 127.0.0.1
+            username: root
+            password: 3b5f05e6290be83e
+        config:
+          db:
+            resource: director_db
+      icingadb:
+        enabled: true
+        source: package
+        commandtransports:
+          instance01:
+            transport: api
+            host: 127.0.0.1
+            username: root
+            password: 3b5f05e6290be83e
+        config:
+          icingadb:
+            resource: icinga_db
+          redis:
+            tls: '0'
+        redis:
+          localhost:
+            host: "127.0.0.1"
+
+    icinga2_objects:
+      "{{ ansible_fqdn }}":
+        - name: "{{ ansible_fqdn }}"
+          type: Endpoint
+          file: "{{ 'conf.d/' + ansible_hostname + '.conf' }}"
+          order: 20
+        - name: "{{ ansible_fqdn }}"
+          type: Zone
+          file: "{{ 'conf.d/' + ansible_hostname + '.conf' }}"
+          order: 20
+          endpoints:
+            - "{{ ansible_fqdn }}"
+          parent: main
+        - name: generic-host
+          type: Host
+          file: zones.d/main/hosts/template.conf
+          check_command: hostalive
+          check_interval: 3m
+          template: true
+        - name: "{{ ansible_fqdn }}"
+          type: Host
+          file: zones.d/main/hosts.conf
+          imports:
+            - generic-host
+          groups:
+            - linux-hosts
+          address: 127.0.0.1
+          vars:
+            os: linux
+
+  pre_tasks:
+    - ansible.builtin.include_role:
+        name: icinga.icinga.repos
+    # Geerlingguy mysql role to configure the databases.
+    - ansible.builtin.include_role:
+        name: geerlingguy.mysql
+    - ansible.builtin.include_role:
+        name: icinga.icinga.icinga2
+    - ansible.builtin.include_role:
+        name: icinga.icinga.icingadb
+    - ansible.builtin.include_role:
+        name: icinga.icinga.icingadb_redis
+
+  post_tasks:
+    - ansible.builtin.include_role:
+        name: icinga.icinga.icingaweb2

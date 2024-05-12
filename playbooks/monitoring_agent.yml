@@ -1,0 +1,7 @@
+---
+
+- hosts: monitoring_agent
+  become: true
+  roles:
+    - icinga.icinga.repos
+    - icinga.icinga.icinga2

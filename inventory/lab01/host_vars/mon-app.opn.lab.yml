@@ -1,0 +1,58 @@
+---
+
+icinga2_constants:  # Set default constants and TicketSalt for the CA
+  TicketSalt: "{{ lookup('ansible.builtin.password', '.icinga-server-ticketsalt') }}"
+  NodeName: "{{ ansible_fqdn }}"
+  ZoneName: main
+
+icinga2_confd: false
+icinga2_purge_features: yes # Ansible will manage all features
+icinga2_config_directories:
+  - zones.d/main/commands
+  - zones.d/main/hosts
+  - zones.d/main/services
+
+icinga2_features:
+  - name: checker
+    state: present
+  - name: mainlog
+    severity: information
+  - name: notification
+    state: present
+  - name: idomysql
+    state: present
+    import_schema: true
+    host: "{{ groups['monitoring_db'][0] }}"
+    user: icingaido
+    password: icingaido
+    database: icingaido
+    cleanup:
+      downtimehistory_age: 48h
+      contactnotifications_age: 31d
+  - name: api
+    force_newcert: false
+    ca_host: none
+    endpoints:
+      - name: "{{ ansible_fqdn }}"
+    zones:
+      - name: main
+        endpoints:
+          - "{{ ansible_fqdn }}"
+
+icinga2_objects:
+  icinga-default:
+    - name: root
+      type: ApiUser
+      file: conf.d/api-users.conf
+      password: root
+      permissions:
+        - '*'
+    - name: "{{ groups['monitoring_agent'][0] }}"
+      type: Endpoint
+      file: "zones.d/main/hosts/{{ groups['monitoring_agent'][0] }}.conf"
+    - name: "{{ groups['monitoring_agent'][0] }}"
+      type: Zone
+      file: "zones.d/main/hosts/{{ groups['monitoring_agent'][0] }}.conf"
+      parent: main
+      endpoints:
+        - "{{ groups['monitoring_agent'][0] }}"

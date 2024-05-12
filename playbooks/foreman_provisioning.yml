@@ -1,6 +1,6 @@
 ---
 
-- hosts: "{{ groups['tfm_app'][0] }}"
+- hosts: localhost
   gather_facts: false
 
   roles:

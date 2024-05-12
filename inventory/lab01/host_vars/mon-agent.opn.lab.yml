@@ -1,0 +1,18 @@
+---
+icinga2_constants:
+  NodeName: "{{ ansible_fqdn }}"
+  ZoneName: main
+
+icinga2_confd: false
+icinga2_purge_features: yes
+icinga2_features:
+  - name: notification
+    state: absent
+  - name: api
+    ca_host: "{{ groups['monitoring_app'][0] }}"    
+    endpoints:
+      - name: NodeName
+    zones:
+      - name: ZoneName
+        endpoints:
+          - NodeName
