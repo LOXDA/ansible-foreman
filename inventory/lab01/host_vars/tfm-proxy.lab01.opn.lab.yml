@@ -13,6 +13,7 @@ foreman_proxy_plugins:
   - dynflow
   - remote-execution-script
   - ansible
+  - monitoring
   # - discovery
 
 plugin_bind: true
@@ -26,6 +27,11 @@ puppet_options: {}
 puppet_server_options: {}
 
 foreman_proxy_plugin_options:
+  monitoring-enabled: 'true'
+  monitoring-listen-on: 'https'
+  monitoring-version: 'latest'
+  monitoring-collect-status: 'true'
+  monitoring-providers: 'icinga2'
   dynflow-enabled: 'true'
   dynflow-console-auth: 'true'
   dynflow-database-path: '/var/lib/foreman-proxy/dynflow.sqlite3'

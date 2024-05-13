@@ -2,6 +2,14 @@
 
 - hosts: monitoring_web
   become: true
+
+  pre_tasks:
+
+    - name: "Install mariadb-client"
+      ansible.builtin.apt: 
+        name: mariadb-client
+        update_cache: yes
+
   roles:
     - icinga.icinga.repos
     - icinga.icinga.icingaweb2

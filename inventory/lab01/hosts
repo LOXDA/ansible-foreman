@@ -1,8 +1,5 @@
 localhost ansible_connection=local
 
-[theforeman:children]
-tfm_app
-
 [tfm:vars]
 ansible_connection=ssh 
 ansible_user=debian 
@@ -45,18 +42,18 @@ opn_sg=ALLOW_ALL
 
 [monitoring:children]
 monitoring_db
-monitoring_app
 monitoring_web
-monitoring_agent
+monitoring_app
+monitoring_sat
 
 [monitoring_db]
-mon-db.lab01.opn.lab opn_flavor=m1.medium
-
-[monitoring_app]
-mon-app.lab01.opn.lab opn_flavor=m1.medium
+mon-db.lab01.opn.lab opn_flavor=m1.medium opn_image=Debian-12
 
 [monitoring_web]
-mon-web.lab01.opn.lab opn_flavor=m1.medium
+mon-web.lab01.opn.lab opn_flavor=m1.medium opn_image=Debian-12
 
-[monitoring_agent]
-mon-agent.lab01.opn.lab opn_flavor=m1.medium
+[monitoring_app]
+mon-app.lab01.opn.lab opn_flavor=m1.medium opn_image=Debian-12
+
+[monitoring_sat]
+mon-sat.lab01.opn.lab opn_flavor=m1.medium opn_image=Debian-12

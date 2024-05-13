@@ -30,6 +30,7 @@ foreman_plugins:
   - puppet
   - tasks
   - salt
+  - monitoring
   # - discovery
   # - hooks
   # - rescue

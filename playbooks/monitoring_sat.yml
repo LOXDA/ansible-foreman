@@ -1,6 +1,6 @@
 ---
 
-- hosts: monitoring_agent
+- hosts: monitoring_sat
   become: true
   roles:
     - icinga.icinga.repos

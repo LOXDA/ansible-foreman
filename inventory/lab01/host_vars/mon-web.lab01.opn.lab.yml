@@ -11,16 +11,6 @@ icingaweb2_db:
   user: icingaweb
   password: icingaweb
 
-icingaweb2_groups:
-  icingaweb2:
-    backend: db
-    resource: icingaweb2_db
-
-icingaweb2_authentication:
-  icingaweb2:
-    backend: db
-    resource: icingaweb2_db
-
 icingaweb2_resources:
   icinga_ido:
     type: db
@@ -40,7 +30,7 @@ icingaweb2_modules:
         transport: api
         host: "{{ groups['monitoring_app'][0] }}"
         username: root
-        password: root
+        password: papillon
     backends:
       icinga2_ido_mysql:
         type: ido

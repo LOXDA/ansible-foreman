@@ -1,0 +1,44 @@
+---
+
+- hosts: tfm_app
+  gather_facts: false
+
+  module_defaults:
+    theforeman.foreman.host:
+      username: "{{ foreman_admin_username }}"
+      password: "{{ foreman_admin_password }}"
+      server_url: "{{ foreman_url_app }}"
+      validate_certs: false
+      enabled: true
+      owner_group: admins
+      organization: LAB01
+      location: LAB01 
+      hostgroup: OPN
+      provision_method: image
+      image: debian11
+      compute_resource: opn
+      compute_attributes:
+        security_groups:
+          - ALLOW_ALL
+        # network: flat
+        # availability_zone: nova
+        # boot_from_volume: false
+        # flavor_name: m1.small
+        # tenant_name: lab01
+
+  tasks:
+
+    - name: "Create a host in foreman on openstack"
+      delegate_to: localhost
+      theforeman.foreman.host:
+        name: "{{ lookup('community.general.random_pet') }}.lab01.opn.lab"
+        interfaces_attributes:
+        - type: "interface"
+          primary: true
+          managed: true
+          execution: true
+          provision: true
+          name: lab01
+          domain: lab01.opn.lab
+          subnet: VLAN0001_LAB01
+        state: present

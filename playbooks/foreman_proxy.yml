@@ -8,20 +8,19 @@
     oauth_consumer_secret: "{{ hostvars[groups['tfm_app'][0]]['oauth_consumer_secret'] }}"
   roles:
     - role: foreman-proxy
-    - role: ansible-role-deploy-git-repos
   tags:
     - tfm
     - proxy
 
-- hosts: tfm_proxy
-  gather_facts: true
-  become: true
-  roles:
-    - role: ansible-role-deploy-git-repos
-  tags:
-    - tfm
-    - proxy
-    - ansible-roles
+# - hosts: tfm_proxy
+#   gather_facts: true
+#   become: true
+#   roles:
+#     - role: ansible-role-deploy-git-repos
+#   tags:
+#     - tfm
+#     - proxy
+#     - ansible-roles
 
 # There is an omapi bug after isc-dhcp-server_4.4.1-2+deb10u1 (Debian 10 Buster) run with --tags tfm,fixdhcp
 - hosts: tfm_proxy

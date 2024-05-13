@@ -1,0 +1,42 @@
+---
+
+icinga2_constants:
+  TicketSalt: "{{ lookup('ansible.builtin.password', '.icinga-server-ticketsalt') }}"
+  NodeName: "{{ ansible_fqdn }}"
+  ZoneName: main
+
+icinga2_confd: true
+icinga2_purge_features: true
+icinga2_config_directories:
+  - zones.d/mon-sat.lab01.opn.lab/hosts/
+  - zones.d/mon-sat.lab01.opn.lab/services/
+
+icinga2_plugins:
+  - plugins
+  # - plugins-contrib
+  # - windows-plugins
+  # - nscp
+
+icinga2_delegate_host: "{{ groups['monitoring_app'][0] }}"
+icinga2_features:
+  - name: checker
+  - name: mainlog
+    severity: information
+  - name: api
+    ca_host: "{{ groups['monitoring_app'][0] }}"
+    ticket_salt: "{{ icinga2_constants.TicketSalt }}"
+    accept_config: true
+    accept_commands: true
+    endpoints:
+      - name: "{{ groups['monitoring_sat'][0] }}"
+      - name: "{{ groups['monitoring_app'][0] }}"
+        host: "{{ groups['monitoring_app'][0] }}"
+        port: 5665
+    zones:
+      - name: "main"
+        endpoints:
+          - "{{ groups['monitoring_app'][0] }}"
+      - name: "{{ groups['monitoring_sat'][0] }}"
+        parent: "main"
+        endpoints:
+          - "{{ groups['monitoring_sat'][0] }}"

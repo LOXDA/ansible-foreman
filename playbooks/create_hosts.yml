@@ -24,7 +24,7 @@
           expire: False
           list: |
             debian:papillon
-        package_upgrade: false
+        package_upgrade: true
         manage_etc_hosts: false
         runcmd:
           - echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4

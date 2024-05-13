@@ -1,0 +1,190 @@
+---
+
+icinga2_constants:
+  TicketSalt: "{{ lookup('ansible.builtin.password', '.icinga-server-ticketsalt') }}"
+  NodeName: "{{ ansible_fqdn }}"
+  ZoneName: main
+
+icinga2_confd: true
+icinga2_purge_features: true
+icinga2_config_directories:
+  - conf.d/
+  - zones.d/main/hosts/
+  - zones.d/main/services/
+  - zones.d/mon-sat.lab01.opn.lab/hosts/
+  - zones.d/mon-sat.lab01.opn.lab/services/
+
+icinga2_plugins:
+  - plugins
+  # - plugins-contrib
+  # - windows-plugins
+  # - nscp
+
+icinga2_features:
+  - name: checker
+  - name: mainlog
+    severity: information
+  - name: idomysql
+    state: present
+    import_schema: true
+    host: "{{ groups['monitoring_db'][0] }}"
+    user: icingaido
+    password: icingaido
+    database: icingaido
+    cleanup:
+      downtimehistory_age: 48h
+      contactnotifications_age: 31d
+  - name: api
+    force_newcert: false
+    ca_host: none
+    endpoints:
+      - name: "{{ groups['monitoring_sat'][0] }}"
+      - name: "{{ groups['monitoring_app'][0] }}"
+        host: "{{ groups['monitoring_app'][0] }}"
+        port: 5665
+    zones:
+      - name: "main"
+        endpoints:
+          - "{{ groups['monitoring_app'][0] }}"
+      - name: "{{ groups['monitoring_sat'][0] }}"
+        parent: "main"
+        endpoints:
+          - "{{ groups['monitoring_sat'][0] }}"
+
+icinga2_objects:
+
+  mon-app.lab01.opn.lab:
+
+    - name: root
+      type: ApiUser
+      file: conf.d/api-users.conf
+      password: papillon
+      permissions:
+        - '*'
+
+    - name: foreman-host
+      type: Host
+      file: zones.d/main/hosts/templates.conf
+      check_command: hostalive
+      check_interval: 1m
+      retry_interval: 30s
+      max_check_attempts: 3
+      template: true
+
+    - name: mon-host
+      type: HostGroup
+      file: zones.d/main/hostgroups.conf
+      display_name: Monitoring
+
+    - name: "{{ groups['monitoring_app'][0] }}"
+      type: Host
+      file: zones.d/main/hosts.conf
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['monitoring_app'][0] ) }}"
+      zone: main
+      groups:
+        - mon-host
+      vars:
+        os: linux
+
+    - name: "{{ groups['monitoring_db'][0] }}"
+      type: Host
+      file: zones.d/main/hosts.conf
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['monitoring_db'][0] ) }}"
+      zone: main
+      groups:
+        - mon-host
+      vars:
+        os: linux
+
+    - name: "{{ groups['monitoring_web'][0] }}"
+      type: Host
+      file: zones.d/main/hosts.conf
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['monitoring_web'][0] ) }}"
+      zone: main
+      groups:
+        - mon-host
+      vars:
+        os: linux
+
+    - name: "{{ groups['monitoring_sat'][0] }}"
+      type: Host
+      file: zones.d/main/hosts.conf
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['monitoring_sat'][0] ) }}"
+      zone: main
+      groups:
+        - mon-host
+      vars:
+        os: linux
+
+    - name: tfm-host
+      type: HostGroup
+      file: zones.d/mon-sat.lab01.opn.lab/hostgroups.conf
+      display_name: TheForeman
+        
+    - name: "{{ groups['tfm_app'][0] }}"
+      type: Host
+      file: zones.d/mon-sat.lab01.opn.lab/hosts.conf
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_app'][0] ) }}"
+      zone: mon-sat.lab01.opn.lab
+      groups:
+        - tfm-host
+      vars:
+        os: linux
+
+    - name: "{{ groups['tfm_db'][0] }}"
+      type: Host
+      file: zones.d/mon-sat.lab01.opn.lab/hosts.conf
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_db'][0] ) }}"
+      zone: mon-sat.lab01.opn.lab
+      groups:
+        - tfm-host
+      vars:
+        os: linux
+
+    - name: "{{ groups['tfm_puppet'][0] }}"
+      type: Host
+      file: zones.d/mon-sat.lab01.opn.lab/hosts.conf
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_puppet'][0] ) }}"
+      zone: mon-sat.lab01.opn.lab
+      groups:
+        - tfm-host
+      vars:
+        os: linux
+
+    - name: "{{ groups['tfm_proxy'][0] }}"
+      type: Host
+      file: zones.d/mon-sat.lab01.opn.lab/hosts.conf
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_proxy'][0] ) }}"
+      zone: mon-sat.lab01.opn.lab
+      groups:
+        - tfm-host
+      vars:
+        os: linux
+
+    - name: "{{ groups['tfm_proxy_salt'][0] }}"
+      type: Host
+      file: zones.d/mon-sat.lab01.opn.lab/hosts.conf
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_proxy_salt'][0] ) }}"
+      zone: mon-sat.lab01.opn.lab
+      groups:
+        - tfm-host
+      vars:
+        os: linux
