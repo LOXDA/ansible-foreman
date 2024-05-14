@@ -4,19 +4,23 @@
   gather_facts: false
 
   module_defaults:
-    theforeman.foreman.host:
+
+    group/theforeman.foreman.foreman:
       username: "{{ foreman_admin_username }}"
       password: "{{ foreman_admin_password }}"
       server_url: "{{ foreman_url_app }}"
       validate_certs: false
+
+    theforeman.foreman.host:
       enabled: true
-      owner_group: admins
+      owner_group: TEST
       organization: LAB01
       location: LAB01 
-      hostgroup: OPN
+      hostgroup: OPN/TEST
       provision_method: image
       image: debian11
       compute_resource: opn
+      root_pass: papillon
       compute_attributes:
         security_groups:
           - ALLOW_ALL

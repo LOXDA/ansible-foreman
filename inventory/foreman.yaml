@@ -1,0 +1,14 @@
+plugin: theforeman.foreman.foreman
+url: https://tfm-app.lab01.opn.lab
+validate_certs: true
+user: admin
+password: P4p1llon!!
+cache: yes
+vars_prefix: ''
+use_extra_vars: false
+use_reports_api: false
+# want_organization: true
+# want_location: true
+# want_host_group: true
+# want_smart_proxies: true
+# want_subnet: true
