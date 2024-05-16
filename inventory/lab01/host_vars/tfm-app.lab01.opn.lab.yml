@@ -45,17 +45,18 @@ foreman_proxy_plugins: []
 foreman_compute:
   - vmware
   - openstack
+  - libvirt
 
 # Options. {}
 foreman_options:
   - foreman-url: 'https://{{ inventory_hostname }}'
   - hsts-enabled: 'false'
   - servername: "{{ inventory_hostname }}"
-  - telemetry-prometheus-enabled: 'true'
+  - telemetry-prometheus-enabled: 'false'
   - rails-cache-store: 'type:redis'
   - dynflow-manage-services: 'true'
   - dynflow-orchestrator-ensure: 'present'
-  - dynflow-worker-concurrency: '5'
+  - dynflow-worker-concurrency: '1'
   - dynflow-worker-instances: '1'
   # - dynflow-redis-url: 'redis://localhost:6379/0'
   - foreman-service-puma-threads-min: '2'

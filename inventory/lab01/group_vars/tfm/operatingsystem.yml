@@ -143,17 +143,17 @@ foreman_operatingsystems:
 ###################################################################################################
 
   - name: Debian
-    description: Debian 10.0
+    description: Debian 10
     release_name: buster
     major: 10
-    minor: 0
+    minor: 
     family: Debian
     password_hash: SHA256
     architectures: x86_64
     media: Debian mirror
-    ptables:
+    ptables: &debian10_ptables
       - Preseed default LVM
-    parameters:
+    parameters: &debian10_parameters
       - name: additional-packages
         value: gnupg ccze qemu-guest-agent
       - name: lang
@@ -178,6 +178,175 @@ foreman_operatingsystems:
         value: full-upgrade
       - name: preseed-update-policy
         value: unattended-upgrades    
+    state: present
+
+  - name: Debian
+    description: Debian 10.0
+    release_name: buster
+    major: 10
+    minor: 0
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.1
+    release_name: buster
+    major: 10
+    minor: 1
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.2
+    release_name: buster
+    major: 10
+    minor: 2
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.3
+    release_name: buster
+    major: 10
+    minor: 3
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.4
+    release_name: buster
+    major: 10
+    minor: 4
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.5
+    release_name: buster
+    major: 10
+    minor: 5
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.6
+    release_name: buster
+    major: 10
+    minor: 6
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.7
+    release_name: buster
+    major: 10
+    minor: 7
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.8
+    release_name: buster
+    major: 10
+    minor: 8
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.9
+    release_name: buster
+    major: 10
+    minor: 9
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.10
+    release_name: buster
+    major: 10
+    minor: 10
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.11
+    release_name: buster
+    major: 10
+    minor: 11
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 10.12
+    release_name: buster
+    major: 10
+    minor: 12
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
     state: present
 
   - name: Debian
@@ -189,36 +358,8 @@ foreman_operatingsystems:
     password_hash: SHA256
     architectures: x86_64
     media: Debian mirror
-    ptables:
-      - Preseed default LVM
-    parameters:
-      - name: pxe-loader
-        parameter_type: string
-        value: PXELinux BIOS
-      - name: additional-packages
-        value: gnupg ccze qemu-guest-agent
-      - name: lang
-        value: fr_FR
-      - name: time-zone
-        value: Europe/Paris
-      - name: enable-puppetlabs-puppet6-repo
-        value: true
-      - name: partitioning-crypto-erase
-        value: false
-      - name: partitioning-crypto-password
-        value: temporarypassword
-      - name: partitioning-crypto-password-weak
-        value: false
-      - name: partitioning-method
-        value: lvm
-      - name: partitioning-recipe
-        value: multi
-      - name: partitioning-vg-name
-        value: vg00
-      - name: preseed-post-install-upgrade
-        value: full-upgrade
-      - name: preseed-update-policy
-        value: unattended-upgrades    
+    ptables: *debian10_ptables
+    parameters: *debian10_parameters
     state: present
 
 ###################################################################################################
@@ -226,17 +367,17 @@ foreman_operatingsystems:
 ###################################################################################################
 
   - name: Debian
-    description: Debian 11.0
+    description: Debian 11
     release_name: bullseye
     major: 11
-    minor: 0
+    minor: 
     family: Debian
     password_hash: SHA256
     architectures: x86_64
     media: Debian mirror
-    ptables:
+    ptables: &debian11_ptables
       - Preseed default LVM
-    parameters:
+    parameters: &debian11_parameters
       - name: pxe-loader
         parameter_type: string
         value: PXELinux BIOS
@@ -267,6 +408,123 @@ foreman_operatingsystems:
     state: present
 
   - name: Debian
+    description: Debian 11.0
+    release_name: bullseye
+    major: 11
+    minor: 0
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 11.1
+    release_name: bullseye
+    major: 11
+    minor: 1
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 11.2
+    release_name: bullseye
+    major: 11
+    minor: 2
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 11.3
+    release_name: bullseye
+    major: 11
+    minor: 3
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 11.4
+    release_name: bullseye
+    major: 11
+    minor: 4
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 11.5
+    release_name: bullseye
+    major: 11
+    minor: 5
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 11.6
+    release_name: bullseye
+    major: 11
+    minor: 6
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 11.7
+    release_name: bullseye
+    major: 11
+    minor: 7
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 11.8
+    release_name: bullseye
+    major: 11
+    minor: 8
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
     description: Debian 11.9
     release_name: bullseye
     major: 11
@@ -275,36 +533,8 @@ foreman_operatingsystems:
     password_hash: SHA256
     architectures: x86_64
     media: Debian mirror
-    ptables:
-      - Preseed default LVM
-    parameters:
-      - name: pxe-loader
-        parameter_type: string
-        value: PXELinux BIOS
-      - name: additional-packages
-        value: gnupg ccze qemu-guest-agent
-      - name: lang
-        value: fr_FR
-      - name: time-zone
-        value: Europe/Paris
-      - name: enable-puppetlabs-puppet6-repo
-        value: true
-      - name: partitioning-crypto-erase
-        value: false
-      - name: partitioning-crypto-password
-        value: temporarypassword
-      - name: partitioning-crypto-password-weak
-        value: false
-      - name: partitioning-method
-        value: lvm
-      - name: partitioning-recipe
-        value: multi
-      - name: partitioning-vg-name
-        value: vg00
-      - name: preseed-post-install-upgrade
-        value: full-upgrade
-      - name: preseed-update-policy
-        value: unattended-upgrades    
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
     state: present
 
 ###################################################################################################

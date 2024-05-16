@@ -1,6 +1,6 @@
 plugin: theforeman.foreman.foreman
 url: https://tfm-app.lab01.opn.lab
-validate_certs: true
+validate_certs: false
 user: admin
 password: P4p1llon!!
 cache: yes
