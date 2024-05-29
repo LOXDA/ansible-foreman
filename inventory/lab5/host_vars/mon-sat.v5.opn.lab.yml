@@ -9,8 +9,8 @@ icinga2_constants:
 icinga2_confd: true
 icinga2_purge_features: true
 icinga2_config_directories:
-  - zones.d/mon-sat.lab01.opn.lab/hosts/
-  - zones.d/mon-sat.lab01.opn.lab/services/
+  - "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/"
+  - "zones.d/{{ groups['monitoring_sat'][0] }}/services/"
 
 icinga2_plugins:
   - plugins

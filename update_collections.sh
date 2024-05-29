@@ -9,7 +9,7 @@ ansible-galaxy collection install community.crypto -p ${collections_path} --forc
 #ansible-galaxy collection install community.vmware -p ${collections_path} --force
 #ansible-galaxy collection install community.windows:1.8.0 -p ${collections_path} --force
 #ansible-galaxy collection install community.mysql:3.1.0 -p ${collections_path} --force
-#ansible-galaxy collection install community.postgresql:2.0.0 -p ${collections_path} --force
+ansible-galaxy collection install community.postgresql:2.0.0 -p ${collections_path} --force
 
 ansible-galaxy collection install theforeman.operations -p ${collections_path} --force
 ansible-galaxy collection install theforeman.foreman -p ${collections_path} --force

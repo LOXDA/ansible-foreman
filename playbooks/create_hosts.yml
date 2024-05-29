@@ -12,7 +12,7 @@
 
     openstack.cloud.server:
       volume_size: 8
-      key_name: LAB
+      key_name: ctrl2
       network: "{{ opn_network }}"
       auto_ip: "{{ opn_autoip }}"
       userdata: |

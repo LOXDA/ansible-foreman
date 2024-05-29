@@ -1,0 +1,59 @@
+localhost ansible_connection=local
+
+[tfm:vars]
+ansible_connection=ssh 
+ansible_user=debian 
+opn_autoip=false
+opn_project=admin
+opn_network=vlan5_adm
+opn_sg=ALLOW_ALL
+
+[tfm:children]
+tfm_app
+tfm_db
+tfm_proxy
+tfm_puppet
+
+[tfm_app]
+tfm-app.v5.opn.lab opn_flavor=m2.large
+
+[tfm_db]
+tfm-db.v5.opn.lab opn_flavor=m2.small
+
+[tfm_proxy]
+tfm-proxy.v5.opn.lab opn_flavor=m2.medium
+
+[tfm_proxy_salt]
+tfm-proxy-salt.v5.opn.lab opn_flavor=m2.medium
+
+[tfm_puppet]
+tfm-puppet.v5.opn.lab opn_flavor=m2.medium
+
+[tfm_proxy:children]
+tfm_proxy_salt
+
+[monitoring:vars]
+ansible_connection=ssh 
+ansible_user=debian 
+opn_autoip=false
+opn_project=admin
+opn_network=vlan5_adm
+opn_sg=ALLOW_ALL
+
+[monitoring:children]
+monitoring_db
+monitoring_web
+monitoring_app
+monitoring_sat
+
+[monitoring_db]
+mon-db.v5.opn.lab opn_flavor=m2.medium opn_image=Debian-12
+
+[monitoring_web]
+mon-web.v5.opn.lab opn_flavor=m2.medium opn_image=Debian-12
+
+[monitoring_app]
+mon-app.v5.opn.lab opn_flavor=m2.medium opn_image=Debian-12
+
+[monitoring_sat]
+mon-sat.v5.opn.lab opn_flavor=m2.medium opn_image=Debian-12
