@@ -38,3 +38,37 @@ icingaweb2_modules:
     config:
       security:
         protected_customvars: "*pw*,*pass*,community"
+
+apache_remove_default_vhost: true
+apache_mods_enabled:
+  - authz_core
+  - rewrite
+apache_vhosts:
+  - servername: "{{ groups['monitoring_web'][0] }}"
+    documentroot: "/usr/share/icingaweb2/public"
+    extra_parameters: |
+      RewriteEngine On
+      <Directory "/usr/share/icingaweb2/public">
+          Options SymLinksIfOwnerMatch
+          AllowOverride None
+          SetEnv ICINGAWEB_LANDING_PAGE "monitoring/list/services?service_hard_state>0&sort=service_last_state_change&dir=desc&modifyFilter=1"
+          SetEnv ICINGAWEB_CONFIGDIR "/etc/icingaweb2"
+          EnableSendfile Off
+          <IfModule mod_authz_core.c>
+              # Apache 2.4
+              SetEnvIf Remote_Addr "X.X.X.X" REMOTE_USER=kiosk
+              <RequireAll>
+                  Require all granted
+              </RequireAll>
+          </IfModule>
+          <IfModule mod_rewrite.c>
+              RewriteEngine on
+              # modified base
+              RewriteBase /
+              RewriteCond %{REQUEST_FILENAME} -s [OR]
+              RewriteCond %{REQUEST_FILENAME} -l [OR]
+              RewriteCond %{REQUEST_FILENAME} -d
+              RewriteRule ^.*$ - [NC,L]
+              RewriteRule ^.*$ index.php [NC,L]
+          </IfModule>
+      </Directory>

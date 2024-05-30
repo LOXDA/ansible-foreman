@@ -1,28 +1,30 @@
 ---
+
 collections:
   - community.general
   - community.postgresql
-  # - community.mysql
-  # - community.crypto
-  - theforeman.operations
+  - community.mysql
+  - community.crypto
+  - devsec.hardening
   - theforeman.foreman
+  - theforeman.operations
   # - theforeman.foreman_scap_client
-
-  # - community.vmware
   - openstack.cloud
+  # - community.vmware
   # - lae.proxmox
-
-  # - devsec.hardening
-
-  # - netbox.netbox
+  - icinga.icinga
   # - community.hashi_vault
-
-  # - cisco.ise:2.2.2
-  # - cisco.aci:2.1.0
-  # - cisco.ios:2.6.0
-  # - cisco.nxos:2.9.0
-  # - cisco.asa:2.1.0
+  # - netbox.netbox
+  # - cisco.ise
+  # - cisco.aci
+  # - cisco.ios
+  # - cisco.nxos
+  # - cisco.asa
   # - f5networks.f5_modules
   # - f5networks.f5_bigip
   # - paloaltonetworks.panos
   # - juniper.device
+
+roles:
+  - geerlingguy.mysql
+  - geerlingguy.apache

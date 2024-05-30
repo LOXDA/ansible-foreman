@@ -1,8 +1,8 @@
 ---
 
 icinga2_constants:
-  # TicketSalt: "{{ lookup('ansible.builtin.password', '.icinga-server-ticketsalt') }}"
-  TicketSalt: "{{ lookup('.icinga-server-ticketsalt') }}"
+  TicketSalt: "{{ lookup('ansible.builtin.password', '.icinga-server-ticketsalt') }}"
+  # TicketSalt: "{{ lookup('.icinga-server-ticketsalt') }}"
   NodeName: "{{ ansible_fqdn }}"
   ZoneName: main
 

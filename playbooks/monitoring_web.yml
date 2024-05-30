@@ -13,3 +13,4 @@
   roles:
     - icinga.icinga.repos
     - icinga.icinga.icingaweb2
+    - geerlingguy.apache
