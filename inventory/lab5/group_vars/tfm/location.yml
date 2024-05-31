@@ -2,15 +2,15 @@
 
 foreman_location:
 
-  - name: LAB01
+  - name: LAB5
     organizations: 
-      - LAB01
+      - LAB5
     parent: 
 
   - name: INFRA
     organizations: 
-      - LAB01
-    parent: LAB01
+      - LAB5
+    parent: LAB5
 
   # - name: DNS
   #   organizations: 
@@ -19,27 +19,10 @@ foreman_location:
 
   - name: FOREMAN
     organizations: 
-      - LAB01
-    parent: LAB01/INFRA
+      - LAB5
+    parent: LAB5/INFRA
 
   # - name: PROXMOX
   #   organizations: 
-  #     - LAB01
+  #     - LAB5
   #   parent: LAB01/INFRA
-
-  # - name: v10
-  #   organizations: 
-  #     - OPN
-  #   parent: LAB
-  # - name: v11
-  #   organizations: 
-  #     - OPN
-  #   parent: LAB
-  # - name: v12
-  #   organizations: 
-  #     - OPN
-  #   parent: LAB
-  # - name: v13
-  #   organizations: 
-  #     - OPN
-  #   parent: LAB

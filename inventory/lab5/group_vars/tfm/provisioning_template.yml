@@ -4,7 +4,7 @@ foreman_provisioning_template:
 
   # Debian
 
-  - name: Preseed default PXELinux FIXED
+  - name: Preseed default PXELinux
     file_name: template_prov_preseed_default_pxelinux_fix
     kind: PXELinux
     state: present

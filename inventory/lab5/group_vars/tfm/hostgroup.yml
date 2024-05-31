@@ -6,12 +6,12 @@ foreman_hostgroup:
 # lab
 ###########################################################################################
 
-  - name: lab
+  - name: lab5
     parent: 
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
     parameters:
       - name: "http-proxy"
         parameter_type: string
@@ -31,66 +31,66 @@ foreman_hostgroup:
 ###########################################################################################
 
   - name: foreman
-    parent: lab
+    parent: lab5
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
   - name: app
-    parent: lab/foreman
+    parent: lab5/foreman
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
   - name: db
-    parent: lab/foreman
+    parent: lab5/foreman
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
   - name: puppet
-    parent: lab/foreman
+    parent: lab5/foreman
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
   - name: proxy
-    parent: lab/foreman
+    parent: lab5/foreman
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
     puppetclasses:
       - foreman_proxy
 
   - name: dns
-    parent: lab/foreman
+    parent: lab5/foreman
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
 ###########################################################################################
 # lab/os
 ###########################################################################################
 
   - name: os
-    parent: lab
+    parent: lab5
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
   - name: centos
-    parent: lab/os
+    parent: lab5/os
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
     parameters:
       - name: "bootloader-append"
         parameter_type: string
@@ -121,11 +121,11 @@ foreman_hostgroup:
         value: "enforcing"
 
   - name: debian
-    parent: lab/os
+    parent: lab5/os
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
     parameters:
       - name: "additional-packages"
         parameter_type: string
@@ -135,11 +135,11 @@ foreman_hostgroup:
         value: "true"
 
   - name: windows
-    parent: lab/os
+    parent: lab5/os
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
     parameters:
       - name: ansible_become
         parameter_type: string
@@ -184,9 +184,9 @@ foreman_hostgroup:
   # - name: esxi
   #   parent: lab/os
   #   organizations: 
-  #     - LAB
+  #     - LAB5
   #   locations:
-  #     - LAB
+  #     - LAB5
   #   parameters:
   #     - name: serialnum
   #       parameter_type: string
@@ -201,83 +201,83 @@ foreman_hostgroup:
   #   pxe_loader: iPXE Chain BIOS
 
   - name: vcenter
-    parent: lab/os
+    parent: lab5/os
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
 ###########################################################################################
 # lab/salt
 ###########################################################################################
 
   - name: salt
-    parent: lab
+    parent: lab5
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
   - name: master
-    parent: lab/salt
+    parent: lab5/salt
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
   - name: syndic
-    parent: lab/salt
+    parent: lab5/salt
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
 ###########################################################################################
 # lab/gitea
 ###########################################################################################
 
   - name: gitea
-    parent: lab
+    parent: lab5
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
 ###########################################################################################
 # lab/gitlab
 ###########################################################################################
 
   - name: gitlab
-    parent: lab
+    parent: lab5
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
 ###########################################################################################
 # lab/vsphere
 ###########################################################################################
 
   - name: vsphere
-    parent: lab
+    parent: lab5
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
   - name: vcenter
-    parent: lab/vsphere
+    parent: lab5/vsphere
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
 
   - name: esxi
-    parent: lab/vsphere
+    parent: lab5/vsphere
     organizations: 
-      - LAB
+      - LAB5
     locations:
-      - LAB
+      - LAB5
     parameters:
       - name: serialnum
         parameter_type: string

@@ -2,9 +2,9 @@
 
 foreman_domain:
 
-  - name: lab01.opn.lab
-    description: domaine lab01.opn.lab.
+  - name: v5.opn.lab
+    description: domaine v5.opn.lab.
     organizations:
-      - LAB01
+      - LAB5
     locations:
-      - LAB01
+      - LAB5
