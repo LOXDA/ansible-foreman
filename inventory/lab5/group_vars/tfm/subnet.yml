@@ -13,10 +13,10 @@ foreman_subnets:
     from_ip: 192.168.5.14
     to_ip: 192.168.5.244
     boot_mode: Static
-    dhcp_proxy: "{{ foreman_host_proxy }}"
-    tftp_proxy: "{{ foreman_host_proxy }}"
-    httpboot_proxy: "{{ foreman_host_proxy }}"
-    template_proxy: "{{ foreman_host_proxy }}"
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
     # discovery_proxy: "{{ foreman_host_proxy }}"
     remote_execution_proxies: "{{ foreman_host_proxy }}"
     mtu: 1500
