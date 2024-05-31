@@ -7,5 +7,4 @@
     - role: foreman-custom
 
   tags:
-    - never
     - provisioning
