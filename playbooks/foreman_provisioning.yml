@@ -1,6 +1,7 @@
 ---
 
-- hosts: tfm_app
+- name: Play foreman_provisioning
+  hosts: tfm_app
   gather_facts: false
 
   roles:

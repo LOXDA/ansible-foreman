@@ -53,7 +53,7 @@ icinga2_features:
 
 icinga2_objects:
 
-  mon-app.lab01.opn.lab:
+  "{{ groups['monitoring_app'][0] }}":
 
     - name: root
       type: ApiUser
@@ -78,7 +78,7 @@ icinga2_objects:
 
     - name: "{{ groups['monitoring_app'][0] }}"
       type: Host
-      file: zones.d/main/hosts.conf
+      file: "zones.d/main/hosts/{{ groups['monitoring_app'][0] }}.conf"
       imports:
         - generic-host
       address: "{{ lookup('community.general.dig', groups['monitoring_app'][0] ) }}"
@@ -90,7 +90,7 @@ icinga2_objects:
 
     - name: "{{ groups['monitoring_db'][0] }}"
       type: Host
-      file: zones.d/main/hosts.conf
+      file: "zones.d/main/hosts/{{ groups['monitoring_db'][0] }}.conf"
       imports:
         - generic-host
       address: "{{ lookup('community.general.dig', groups['monitoring_db'][0] ) }}"
@@ -102,7 +102,7 @@ icinga2_objects:
 
     - name: "{{ groups['monitoring_web'][0] }}"
       type: Host
-      file: zones.d/main/hosts.conf
+      file: "zones.d/main/hosts/{{ groups['monitoring_web'][0] }}.conf"
       imports:
         - generic-host
       address: "{{ lookup('community.general.dig', groups['monitoring_web'][0] ) }}"
@@ -114,7 +114,7 @@ icinga2_objects:
 
     - name: "{{ groups['monitoring_sat'][0] }}"
       type: Host
-      file: zones.d/main/hosts.conf
+      file: "zones.d/main/hosts/{{ groups['monitoring_sat'][0] }}.conf"
       imports:
         - generic-host
       address: "{{ lookup('community.general.dig', groups['monitoring_sat'][0] ) }}"
@@ -131,7 +131,7 @@ icinga2_objects:
         
     - name: "{{ groups['tfm_app'][0] }}"
       type: Host
-      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts.conf"
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_app'][0] }}.conf"
       imports:
         - generic-host
       address: "{{ lookup('community.general.dig', groups['tfm_app'][0] ) }}"
@@ -143,7 +143,7 @@ icinga2_objects:
 
     - name: "{{ groups['tfm_db'][0] }}"
       type: Host
-      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts.conf"
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_db'][0] }}.conf"
       imports:
         - generic-host
       address: "{{ lookup('community.general.dig', groups['tfm_db'][0] ) }}"
@@ -155,7 +155,7 @@ icinga2_objects:
 
     - name: "{{ groups['tfm_puppet'][0] }}"
       type: Host
-      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts.conf"
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_puppet'][0] }}.conf"
       imports:
         - generic-host
       address: "{{ lookup('community.general.dig', groups['tfm_puppet'][0] ) }}"
@@ -167,7 +167,7 @@ icinga2_objects:
 
     - name: "{{ groups['tfm_proxy'][0] }}"
       type: Host
-      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts.conf"
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_proxy'][0] }}.conf"
       imports:
         - generic-host
       address: "{{ lookup('community.general.dig', groups['tfm_proxy'][0] ) }}"
@@ -179,7 +179,7 @@ icinga2_objects:
 
     - name: "{{ groups['tfm_proxy_salt'][0] }}"
       type: Host
-      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts.conf"
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_proxy_salt'][0] }}.conf"
       imports:
         - generic-host
       address: "{{ lookup('community.general.dig', groups['tfm_proxy_salt'][0] ) }}"

@@ -28,9 +28,9 @@ foreman_compute_resources:
 
   - name: opn
     organizations:
-      - LAB01
+      - LAB5
     locations:
-      - LAB01
+      - LAB5
     provider: Openstack
     provider_params:
       url: "https://192.168.133.3:5000/v3"

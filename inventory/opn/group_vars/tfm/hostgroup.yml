@@ -15,7 +15,7 @@ foreman_hostgroup:
     parameters:
       - name: "http-proxy"
         parameter_type: string
-        value: "172.16.203.253"
+        value: "192.168.133.251"
       - name: "http-proxy-port"
         parameter_type: string
         value: "3128"

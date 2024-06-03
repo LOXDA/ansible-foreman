@@ -15,7 +15,7 @@ foreman_hostgroup:
     parameters:
       - name: "http-proxy"
         parameter_type: string
-        value: "172.16.203.253"
+        value: "192.168.133.251"
       - name: "http-proxy-port"
         parameter_type: string
         value: "3128"
@@ -67,12 +67,12 @@ foreman_hostgroup:
     puppetclasses:
       - foreman_proxy
 
-  - name: dns
-    parent: lab5/foreman
-    organizations: 
-      - LAB5
-    locations:
-      - LAB5
+  # - name: dns
+  #   parent: lab5/foreman
+  #   organizations: 
+  #     - LAB5
+  #   locations:
+  #     - LAB5
 
 ###########################################################################################
 # lab/os
@@ -130,56 +130,56 @@ foreman_hostgroup:
       - name: "additional-packages"
         parameter_type: string
         value: "gnupg ccze qemu-guest-agent"
-      - name: "enable-puppetlabs-puppet6-repo"
+      - name: "enable-puppetlabs-puppet7-repo"
         parameter_type: boolean
         value: "true"
 
-  - name: windows
-    parent: lab5/os
-    organizations: 
-      - LAB5
-    locations:
-      - LAB5
-    parameters:
-      - name: ansible_become
-        parameter_type: string
-        value: false
-      - name: ansible_become_method
-        parameter_type: string
-        value: runas
-      - name: ansible_become_pass
-        parameter_type: string
-        value: papillon
-      - name: ansible_become_user
-        parameter_type: string
-        value: Administrateur
-      - name: ansible_connection
-        parameter_type: string
-        value: winrm
-      - name: ansible_gather_facts
-        parameter_type: boolean
-        value: false
-      - name: ansible_os_family
-        parameter_type: string
-        value: Windows
-      - name: ansible_user
-        parameter_type: string
-        value: Administrateur
-      - name: ansible_winrm_scheme
-        parameter_type: string
-        value: http
-      - name: ansible_winrm_server_cert_validation
-        parameter_type: string
-        value: ignore
-      - name: ansible_winrm_transport
-        parameter_type: string
-        value: basic
-      - name: foremanDebug
-        parameter_type: string
-        value: false
-      - name: remote_execution_ssh_password
-        parameter_type: string
-        value: papillon
+  # - name: windows
+  #   parent: lab5/os
+  #   organizations: 
+  #     - LAB5
+  #   locations:
+  #     - LAB5
+  #   parameters:
+  #     - name: ansible_become
+  #       parameter_type: string
+  #       value: false
+  #     - name: ansible_become_method
+  #       parameter_type: string
+  #       value: runas
+  #     - name: ansible_become_pass
+  #       parameter_type: string
+  #       value: papillon
+  #     - name: ansible_become_user
+  #       parameter_type: string
+  #       value: Administrateur
+  #     - name: ansible_connection
+  #       parameter_type: string
+  #       value: winrm
+  #     - name: ansible_gather_facts
+  #       parameter_type: boolean
+  #       value: false
+  #     - name: ansible_os_family
+  #       parameter_type: string
+  #       value: Windows
+  #     - name: ansible_user
+  #       parameter_type: string
+  #       value: Administrateur
+  #     - name: ansible_winrm_scheme
+  #       parameter_type: string
+  #       value: http
+  #     - name: ansible_winrm_server_cert_validation
+  #       parameter_type: string
+  #       value: ignore
+  #     - name: ansible_winrm_transport
+  #       parameter_type: string
+  #       value: basic
+  #     - name: foremanDebug
+  #       parameter_type: string
+  #       value: false
+  #     - name: remote_execution_ssh_password
+  #       parameter_type: string
+  #       value: papillon
 
   # - name: esxi
   #   parent: lab/os
@@ -200,12 +200,12 @@ foreman_hostgroup:
   #   ptable: Kickstart default
   #   pxe_loader: iPXE Chain BIOS
 
-  - name: vcenter
-    parent: lab5/os
-    organizations: 
-      - LAB5
-    locations:
-      - LAB5
+  # - name: vcenter
+  #   parent: lab5/os
+  #   organizations: 
+  #     - LAB5
+  #   locations:
+  #     - LAB5
 
 ###########################################################################################
 # lab/salt
@@ -247,46 +247,46 @@ foreman_hostgroup:
 # lab/gitlab
 ###########################################################################################
 
-  - name: gitlab
-    parent: lab5
-    organizations: 
-      - LAB5
-    locations:
-      - LAB5
+  # - name: gitlab
+  #   parent: lab5
+  #   organizations: 
+  #     - LAB5
+  #   locations:
+  #     - LAB5
 
 ###########################################################################################
 # lab/vsphere
 ###########################################################################################
 
-  - name: vsphere
-    parent: lab5
-    organizations: 
-      - LAB5
-    locations:
-      - LAB5
+  # - name: vsphere
+  #   parent: lab5
+  #   organizations: 
+  #     - LAB5
+  #   locations:
+  #     - LAB5
 
-  - name: vcenter
-    parent: lab5/vsphere
-    organizations: 
-      - LAB5
-    locations:
-      - LAB5
+  # - name: vcenter
+  #   parent: lab5/vsphere
+  #   organizations: 
+  #     - LAB5
+  #   locations:
+  #     - LAB5
 
-  - name: esxi
-    parent: lab5/vsphere
-    organizations: 
-      - LAB5
-    locations:
-      - LAB5
-    parameters:
-      - name: serialnum
-        parameter_type: string
-        value: JV425-4H100-VZHH8-Q23NP-3A9PP
-    # compute_resource: pve-gsw
-    # compute_profile: esxi-medium
-    # environment: lab
-    architecture: x86_64
-    operatingsystem: ESXi-6.7.0-15160138
-    medium: ESXi dummy
-    ptable: Kickstart default
-    pxe_loader: iPXE Chain BIOS
+  # - name: esxi
+  #   parent: lab5/vsphere
+  #   organizations: 
+  #     - LAB5
+  #   locations:
+  #     - LAB5
+  #   parameters:
+  #     - name: serialnum
+  #       parameter_type: string
+  #       value: JV425-4H100-VZHH8-Q23NP-3A9PP
+  #   # compute_resource: pve-gsw
+  #   # compute_profile: esxi-medium
+  #   # environment: lab
+  #   architecture: x86_64
+  #   operatingsystem: ESXi-6.7.0-15160138
+  #   medium: ESXi dummy
+  #   ptable: Kickstart default
+  #   pxe_loader: iPXE Chain BIOS

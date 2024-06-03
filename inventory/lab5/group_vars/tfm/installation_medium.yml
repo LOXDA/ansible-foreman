@@ -8,9 +8,9 @@ foreman_installation_medium:
   #   operatingsystems: 
   #     - CentOS Linux 8.3.2011
   #   locations:
-  #     - OPN
+  #     - LAB5
   #   organizations:
-  #     - OPN
+  #     - LAB5
 
   # - name: CentOS 7 mirror
   #   path: http://mirror.centos.org/centos/$major/os/$arch
@@ -18,9 +18,9 @@ foreman_installation_medium:
   #   operatingsystems: 
   #     - CentOS Linux 7.9.2009
   #   locations:
-  #     - OPN
+  #     - LAB5
   #   organizations:
-  #     - OPN
+  #     - LAB5
 
   - name: Debian mirror
     path: http://ftp.fr.debian.org/debian
@@ -60,9 +60,9 @@ foreman_installation_medium:
       # - Debian 12.4
       # - Debian 12.5
     locations:
-      - LAB01
+      - LAB5
     organizations:
-      - LAB01
+      - LAB5
 
   # - name: ESXi dummy
   #   path: "http://{{ foreman_host_proxy }}:8000/httpboot/esxi"
@@ -74,9 +74,9 @@ foreman_installation_medium:
   #     - ESXi-7.0.3-19193900
   #     - ESXi-8.0.1-21495797
   #   locations:
-  #     - LAB
+  #     - LAB5
   #   organizations:
-  #     - LAB
+  #     - LAB5
 
   # - name: Windows images
   #   path: "http://{{ foreman_host_proxy }}:8000/httpboot/wimimages/$arch/$major"
@@ -86,6 +86,6 @@ foreman_installation_medium:
   #     - WindowsServerStd 2016
   #     - WindowsServerStd 2019
   #   locations:
-  #     - LAB
+  #     - LAB5
   #   organizations:
-  #     - LAB
+  #     - LAB5

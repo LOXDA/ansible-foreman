@@ -1,30 +1,32 @@
 ---
 
 collections:
-  - community.general
-  - community.postgresql
-  - community.mysql
-  - community.crypto
-  - devsec.hardening
-  - theforeman.foreman
-  - theforeman.operations
-  # - theforeman.foreman_scap_client
-  - openstack.cloud
-  # - community.vmware
-  # - lae.proxmox
-  - icinga.icinga
-  # - community.hashi_vault
-  # - netbox.netbox
-  # - cisco.ise
-  # - cisco.aci
-  # - cisco.ios
-  # - cisco.nxos
-  # - cisco.asa
-  # - f5networks.f5_modules
-  # - f5networks.f5_bigip
-  # - paloaltonetworks.panos
-  # - juniper.device
+  - name: community.general
+  - name: community.postgresql
+  - name: community.mysql
+  - name: community.crypto
+  - name: devsec.hardening
+  - name: theforeman.foreman
+  - name: theforeman.operations
+  # - name: theforeman.foreman_scap_client
+  - name: openstack.cloud
+  # - name: community.vmware
+  # - name: lae.proxmox
+  - name: icinga.icinga
+  # - name: community.hashi_vault
+  # - name: netbox.netbox
+  # - name: cisco.ise
+  # - name: cisco.aci
+  # - name: cisco.ios
+  # - name: cisco.nxos
+  # - name: cisco.asa
+  # - name: f5networks.f5_modules
+  # - name: f5networks.f5_bigip
+  # - name: paloaltonetworks.panos
+  # - name: juniper.device
 
 roles:
-  - geerlingguy.mysql
-  - geerlingguy.apache
+  - name: geerlingguy.mysql
+  - name: geerlingguy.apache
+  - name: ansible-role-openldap
+    src: https://github.com/criecm/ansible-role-openldap.git
