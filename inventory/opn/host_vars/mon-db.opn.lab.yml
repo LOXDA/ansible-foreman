@@ -11,28 +11,28 @@ mysql_packages:
 
 mysql_users:
 
-  - name: "{{ vault_icinga2_icingaweb_dbuser }}"
+  - name: "icingaweb"
     host: "%"
-    password: "{{ vault_icinga2_icingaweb_dbpass }}"
-    priv: "{{ vault_icinga2_icingaweb_dbname }}.*:ALL"
+    password: "icingaweb"
+    priv: "icingaweb.*:ALL"
 
-  - name: "{{ vault_icinga2_icingadb_dbuser }}"
+  - name: "icingadb"
     host: "%"
-    password: "{{ vault_icinga2_icingadb_dbpass }}"
-    priv: "{{ vault_icinga2_icingadb_dbname }}.*:ALL"
+    password: "icingadb"
+    priv: "icingadb.*:ALL"
 
-  - name: "{{ vault_icinga2_icingadir_dbuser }}"
+  - name: "icingadir"
     host: "%"
-    password: "{{ vault_icinga2_icingadir_dbpass }}"
-    priv: "{{ vault_icinga2_icingadir_dbname }}.*:ALL"
+    password: "icingadir"
+    priv: "icingadir.*:ALL"
 
-  - name: "{{ vault_icinga2_icingaido_dbuser }}"
+  - name: "icingaido"
     host: "%"
-    password: "{{ vault_icinga2_icingaido_dbpass }}"
-    priv: "{{ vault_icinga2_icingaido_dbname }}.*:ALL"
+    password: "icingaido"
+    priv: "icingaido.*:ALL"
 
 mysql_databases:
-  - name: "{{ vault_icinga2_icingaweb_dbname }}"
-  - name: "{{ vault_icinga2_icingadb_dbname }}"
-  - name: "{{ vault_icinga2_icingadir_dbname }}"
-  - name: "{{ vault_icinga2_icingaido_dbname }}"
+  - name: "icingaweb"
+  - name: "icingadb"
+  - name: "icingadir"
+  - name: "icingaido"
