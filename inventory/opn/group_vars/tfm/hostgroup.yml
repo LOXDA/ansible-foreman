@@ -3,15 +3,15 @@
 foreman_hostgroup:
 
 ###########################################################################################
-# lab
+# opn
 ###########################################################################################
 
-  - name: lab
+  - name: opn
     parent: 
-    organizations: 
-      - LAB
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
     parameters:
       - name: "http-proxy"
         parameter_type: string
@@ -27,70 +27,70 @@ foreman_hostgroup:
         value: "Europe/Paris"
 
 ###########################################################################################
-# lab/foreman
+# opn/foreman
 ###########################################################################################
 
   - name: foreman
-    parent: lab
-    organizations: 
-      - LAB
+    parent: opn
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
 
   - name: app
-    parent: lab/foreman
-    organizations: 
-      - LAB
+    parent: opn/foreman
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
 
   - name: db
-    parent: lab/foreman
-    organizations: 
-      - LAB
+    parent: opn/foreman
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
 
   - name: puppet
-    parent: lab/foreman
-    organizations: 
-      - LAB
+    parent: opn/foreman
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
 
   - name: proxy
-    parent: lab/foreman
-    organizations: 
-      - LAB
+    parent: opn/foreman
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
     puppetclasses:
       - foreman_proxy
 
-  - name: dns
-    parent: lab/foreman
-    organizations: 
-      - LAB
-    locations:
-      - LAB
+  # - name: dns
+  #   parent: opn/foreman
+  #   organizations: 
+  #     - OPN
+  #   locations:
+  #     - OPN
 
 ###########################################################################################
 # lab/os
 ###########################################################################################
 
   - name: os
-    parent: lab
-    organizations: 
-      - LAB
+    parent: opn
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
 
   - name: centos
-    parent: lab/os
-    organizations: 
-      - LAB
+    parent: opn/os
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
     parameters:
       - name: "bootloader-append"
         parameter_type: string
@@ -121,72 +121,72 @@ foreman_hostgroup:
         value: "enforcing"
 
   - name: debian
-    parent: lab/os
-    organizations: 
-      - LAB
+    parent: opn/os
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
     parameters:
       - name: "additional-packages"
         parameter_type: string
         value: "gnupg ccze qemu-guest-agent"
-      - name: "enable-puppetlabs-puppet6-repo"
+      - name: "enable-puppetlabs-puppet7-repo"
         parameter_type: boolean
         value: "true"
 
-  - name: windows
-    parent: lab/os
-    organizations: 
-      - LAB
-    locations:
-      - LAB
-    parameters:
-      - name: ansible_become
-        parameter_type: string
-        value: false
-      - name: ansible_become_method
-        parameter_type: string
-        value: runas
-      - name: ansible_become_pass
-        parameter_type: string
-        value: papillon
-      - name: ansible_become_user
-        parameter_type: string
-        value: Administrateur
-      - name: ansible_connection
-        parameter_type: string
-        value: winrm
-      - name: ansible_gather_facts
-        parameter_type: boolean
-        value: false
-      - name: ansible_os_family
-        parameter_type: string
-        value: Windows
-      - name: ansible_user
-        parameter_type: string
-        value: Administrateur
-      - name: ansible_winrm_scheme
-        parameter_type: string
-        value: http
-      - name: ansible_winrm_server_cert_validation
-        parameter_type: string
-        value: ignore
-      - name: ansible_winrm_transport
-        parameter_type: string
-        value: basic
-      - name: foremanDebug
-        parameter_type: string
-        value: false
-      - name: remote_execution_ssh_password
-        parameter_type: string
-        value: papillon
+  # - name: windows
+  #   parent: opn/os
+  #   organizations: 
+  #     - OPN
+  #   locations:
+  #     - OPN
+  #   parameters:
+  #     - name: ansible_become
+  #       parameter_type: string
+  #       value: false
+  #     - name: ansible_become_method
+  #       parameter_type: string
+  #       value: runas
+  #     - name: ansible_become_pass
+  #       parameter_type: string
+  #       value: papillon
+  #     - name: ansible_become_user
+  #       parameter_type: string
+  #       value: Administrateur
+  #     - name: ansible_connection
+  #       parameter_type: string
+  #       value: winrm
+  #     - name: ansible_gather_facts
+  #       parameter_type: boolean
+  #       value: false
+  #     - name: ansible_os_family
+  #       parameter_type: string
+  #       value: Windows
+  #     - name: ansible_user
+  #       parameter_type: string
+  #       value: Administrateur
+  #     - name: ansible_winrm_scheme
+  #       parameter_type: string
+  #       value: http
+  #     - name: ansible_winrm_server_cert_validation
+  #       parameter_type: string
+  #       value: ignore
+  #     - name: ansible_winrm_transport
+  #       parameter_type: string
+  #       value: basic
+  #     - name: foremanDebug
+  #       parameter_type: string
+  #       value: false
+  #     - name: remote_execution_ssh_password
+  #       parameter_type: string
+  #       value: papillon
 
   # - name: esxi
-  #   parent: lab/os
+  #   parent: opn/os
   #   organizations: 
-  #     - LAB
+  #     - OPN
   #   locations:
-  #     - LAB
+  #     - OPN
   #   parameters:
   #     - name: serialnum
   #       parameter_type: string
@@ -200,93 +200,93 @@ foreman_hostgroup:
   #   ptable: Kickstart default
   #   pxe_loader: iPXE Chain BIOS
 
-  - name: vcenter
-    parent: lab/os
-    organizations: 
-      - LAB
-    locations:
-      - LAB
+  # - name: vcenter
+  #   parent: opn/os
+  #   organizations: 
+  #     - OPN
+  #   locations:
+  #     - OPN
 
 ###########################################################################################
 # lab/salt
 ###########################################################################################
 
   - name: salt
-    parent: lab
-    organizations: 
-      - LAB
+    parent: opn
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
 
   - name: master
-    parent: lab/salt
-    organizations: 
-      - LAB
+    parent: opn/salt
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
 
   - name: syndic
-    parent: lab/salt
-    organizations: 
-      - LAB
+    parent: opn/salt
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
 
 ###########################################################################################
 # lab/gitea
 ###########################################################################################
 
   - name: gitea
-    parent: lab
-    organizations: 
-      - LAB
+    parent: opn
+    organizations:
+      - OPN
     locations:
-      - LAB
+      - OPN
 
 ###########################################################################################
 # lab/gitlab
 ###########################################################################################
 
-  - name: gitlab
-    parent: lab
-    organizations: 
-      - LAB
-    locations:
-      - LAB
+  # - name: gitlab
+  #   parent: opn
+  #   organizations: 
+  #     - OPN
+  #   locations:
+  #     - OPN
 
 ###########################################################################################
 # lab/vsphere
 ###########################################################################################
 
-  - name: vsphere
-    parent: lab
-    organizations: 
-      - LAB
-    locations:
-      - LAB
+  # - name: vsphere
+  #   parent: opn
+  #   organizations: 
+  #     - OPN
+  #   locations:
+  #     - OPN
 
-  - name: vcenter
-    parent: lab/vsphere
-    organizations: 
-      - LAB
-    locations:
-      - LAB
+  # - name: vcenter
+  #   parent: opn/vsphere
+  #   organizations: 
+  #     - OPN
+  #   locations:
+  #     - OPN
 
-  - name: esxi
-    parent: lab/vsphere
-    organizations: 
-      - LAB
-    locations:
-      - LAB
-    parameters:
-      - name: serialnum
-        parameter_type: string
-        value: JV425-4H100-VZHH8-Q23NP-3A9PP
-    # compute_resource: pve-gsw
-    # compute_profile: esxi-medium
-    # environment: lab
-    architecture: x86_64
-    operatingsystem: ESXi-6.7.0-15160138
-    medium: ESXi dummy
-    ptable: Kickstart default
-    pxe_loader: iPXE Chain BIOS
+  # - name: esxi
+  #   parent: opn/vsphere
+  #   organizations: 
+  #     - OPN
+  #   locations:
+  #     - OPN
+  #   parameters:
+  #     - name: serialnum
+  #       parameter_type: string
+  #       value: JV425-4H100-VZHH8-Q23NP-3A9PP
+  #   # compute_resource: pve-gsw
+  #   # compute_profile: esxi-medium
+  #   # environment: lab
+  #   architecture: x86_64
+  #   operatingsystem: ESXi-6.7.0-15160138
+  #   medium: ESXi dummy
+  #   ptable: Kickstart default
+  #   pxe_loader: iPXE Chain BIOS

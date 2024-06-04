@@ -1,26 +1,26 @@
 ---
 
-foreman_provisioning_template:
+foreman_provisioning_template: []
 
   # Debian
 
-  - name: Preseed default PXELinux FIXED
-    file_name: template_prov_preseed_default_pxelinux_fix
-    kind: PXELinux
-    state: present
-    locations:
-      - OPN
-    organizations:
-      - OPN
+  # - name: Preseed default PXELinux
+  #   file_name: template_prov_preseed_default_pxelinux_fix
+  #   kind: PXELinux
+  #   state: present
+  #   locations:
+  #     - LAB5
+  #   organizations:
+  #     - LAB5
 
-  - name: preseed_kernel_options_fix
-    file_name: template_snippet_preseed_kernel_options_fix
-    kind: snippet
-    state: present
-    locations:
-      - OPN
-    organizations:
-      - OPN
+  # - name: preseed_kernel_options_fix
+  #   file_name: template_snippet_preseed_kernel_options_fix
+  #   kind: snippet
+  #   state: present
+  #   locations:
+  #     - LAB5
+  #   organizations:
+  #     - LAB5
 
   # ESXi
 

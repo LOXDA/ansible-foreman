@@ -10,13 +10,13 @@ foreman_compute_image:
   #   architecture: "x86_64"
   #   user_data: true
 
-  # - name: "Debian10"
-  #   image_uuid: "61715b7e-886f-4afc-b54f-55e964c27479"
-  #   image_username: "debian"
-  #   operatingsystem: "Debian 10"
-  #   compute_resource: "opn"
-  #   architecture: "x86_64"
-  #   user_data: true
+  - name: "Debian10"
+    image_uuid: "61715b7e-886f-4afc-b54f-55e964c27479"
+    image_username: "debian"
+    operatingsystem: "Debian 10"
+    compute_resource: "opn"
+    architecture: "x86_64"
+    user_data: true
 
   - name: "Debian11"
     image_uuid: "922f8651-3374-4f02-a64d-f7f27587da47"

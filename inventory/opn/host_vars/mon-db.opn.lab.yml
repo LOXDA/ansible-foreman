@@ -1,0 +1,38 @@
+---
+
+mysql_innodb_file_format: barracuda
+mysql_innodb_large_prefix: 1
+mysql_innodb_file_per_table: 1
+
+mysql_packages:
+  - mariadb-client
+  - mariadb-server
+  - python3-mysqldb
+
+mysql_users:
+
+  - name: "{{ vault_icinga2_icingaweb_dbuser }}"
+    host: "%"
+    password: "{{ vault_icinga2_icingaweb_dbpass }}"
+    priv: "{{ vault_icinga2_icingaweb_dbname }}.*:ALL"
+
+  - name: "{{ vault_icinga2_icingadb_dbuser }}"
+    host: "%"
+    password: "{{ vault_icinga2_icingadb_dbpass }}"
+    priv: "{{ vault_icinga2_icingadb_dbname }}.*:ALL"
+
+  - name: "{{ vault_icinga2_icingadir_dbuser }}"
+    host: "%"
+    password: "{{ vault_icinga2_icingadir_dbpass }}"
+    priv: "{{ vault_icinga2_icingadir_dbname }}.*:ALL"
+
+  - name: "{{ vault_icinga2_icingaido_dbuser }}"
+    host: "%"
+    password: "{{ vault_icinga2_icingaido_dbpass }}"
+    priv: "{{ vault_icinga2_icingaido_dbname }}.*:ALL"
+
+mysql_databases:
+  - name: "{{ vault_icinga2_icingaweb_dbname }}"
+  - name: "{{ vault_icinga2_icingadb_dbname }}"
+  - name: "{{ vault_icinga2_icingadir_dbname }}"
+  - name: "{{ vault_icinga2_icingaido_dbname }}"

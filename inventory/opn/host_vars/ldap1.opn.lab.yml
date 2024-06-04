@@ -3,18 +3,17 @@
 openldap_schemas:
   - core
   - cosine
-  - nis
   - inetorgperson
-  - rfc2739
+  - nis
 openldap_bases:
   rootdn: cn=admin
   suffix: dc=opn,dc=lab
   overlays:
     - dynlist
     - ppolicy
-    - smbk5pwd
   indexes:
     - [ "uid,uidNumber,gidNumber,memberUID", "pres,eq" ]
+  includes: [ slapd.access ]
   # slave:
   #   rid: 675
   #   provider: ldaps://ldap1.opn.lab:636

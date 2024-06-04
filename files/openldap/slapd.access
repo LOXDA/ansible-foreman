@@ -1,0 +1,4 @@
+access to *
+    by self write
+    by anonymous auth
+    by * read

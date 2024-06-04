@@ -102,8 +102,8 @@ foreman_roles:
 
   - name: Hostgroups admins
     description: Give admin perms to manage Hostgroup
-    locations: OPN
-    organizations: OPN
+    locations: LAB5
+    organizations: LAB5
     state: present
     filters: 
       - permissions:
@@ -136,7 +136,7 @@ foreman_roles:
         - destroy_vm_compute_resources
         search: ""
 
-  - name: Compute resources users vc-dc1
+  - name: Compute resources users opn
     description: 
     locations: OPN
     organizations: OPN
@@ -150,23 +150,7 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = vc-dc1
-
-  - name: Compute resources users vc-dc2
-    description: 
-    locations: OPN
-    organizations: OPN
-    state: present
-    filters: 
-      - permissions: 
-        - console_compute_resources_vms
-        - create_compute_resources_vms
-        - destroy_compute_resources_vms
-        - edit_compute_resources_vms
-        - power_compute_resources_vms
-        - view_compute_resources
-        - view_compute_resources_vms
-        search: name = vc-dc2
+        search: name = opn
 
 ###################################################################################################
 #   ___ ___  __  __ ___ _   _ _____ ___    ___ ___  ___  ___ ___ _

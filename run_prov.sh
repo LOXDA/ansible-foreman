@@ -7,7 +7,7 @@ git pull --rebase
 # ansible-playbook -i inventory/lab playbooks/dns.yml
 
 # deploy whole
-ansible-playbook -i inventory/lab playbooks/foreman_deploy.yml --tags tfm,fixdhcp
+ansible-playbook -i inventory/opn playbooks/deploy_foreman.yml --tags tfm,fixdhcp
 
 # deploy individual parts
 # ansible-playbook -i inventory/lab playbooks/foreman_puppet.yml --tags tfm,puppet

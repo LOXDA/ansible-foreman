@@ -25,21 +25,4 @@ foreman_location:
   # - name: PROXMOX
   #   organizations: 
   #     - OPN
-  #   parent: LAB/INFRA
-
-  # - name: v10
-  #   organizations: 
-  #     - OPN
-  #   parent: LAB
-  # - name: v11
-  #   organizations: 
-  #     - OPN
-  #   parent: LAB
-  # - name: v12
-  #   organizations: 
-  #     - OPN
-  #   parent: LAB
-  # - name: v13
-  #   organizations: 
-  #     - OPN
-  #   parent: LAB
+  #   parent: OPN/INFRA

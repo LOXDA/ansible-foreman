@@ -33,7 +33,7 @@ foreman_compute_resources:
       - OPN
     provider: Openstack
     provider_params:
-      url: "https://192.168.3.133:5000/v3"
+      url: "https://192.168.133.3:5000/v3"
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
       tenant: "admin"
