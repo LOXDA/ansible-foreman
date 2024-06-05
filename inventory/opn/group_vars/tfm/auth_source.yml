@@ -1,0 +1,22 @@
+---
+
+foreman_auth_source:
+
+  - name: opn-ldap1
+    host: ldap1.opn.lab
+    port: 389
+    tls: false
+    onthefly_register: true
+    usergroup_sync: true
+    account: ""
+    account_password: ""
+    base_dn: dc=ldap1,dc=opn,dc=lab
+    groups_base: ou=groups,dc=ldap1,dc=opn,dc=lab
+    server_type: posix
+    attr_login: uid
+    attr_firstname: givenName
+    attr_lastname: sn
+    attr_mail: mail
+    ldap_filter: "" # (&(objectclass=posixaccount)(uid=%s))
+    locations: OPN
+    organizations: OPN

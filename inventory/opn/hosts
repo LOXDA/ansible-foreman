@@ -6,12 +6,11 @@ ansible_user=root
 [dns]
 ns1.opn.lab
 
-[ldap:vars]
+[ldapservers:vars]
 ansible_connection=ssh
 ansible_user=root
-[ldap]
+[ldapservers]
 ldap1.opn.lab ansible_host=192.168.133.246
-#ldap2.opn.lab
 
 [sso:vars]
 ansible_connection=ssh

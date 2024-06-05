@@ -1,22 +1,21 @@
 ---
+openldap_server_domain_name: "ldap1.opn.lab"
+openldap_server_ip: "192.168.133.246"
+openldap_server_uri: "ldapi:///"
+openldap_server_rootpw: "{{ vault_openldap_server_rootpw }}"
 
-openldap_schemas:
-  - core
-  - cosine
-  - inetorgperson
-  - nis
-openldap_bases:
-  rootdn: cn=admin
-  suffix: dc=opn,dc=lab
-  overlays:
-    - dynlist
-    - ppolicy
-  indexes:
-    - [ "uid,uidNumber,gidNumber,memberUID", "pres,eq" ]
-  includes: [ slapd.access ]
-  # slave:
-  #   rid: 675
-  #   provider: ldaps://ldap1.opn.lab:636
-  #   binddn: cn=bind,dc=dn
-  #   credentials: bindpw
-  #   bindmethod: simple
+# configure ldap client
+openldap_client_enable: false
+
+# configure server options
+shared_storage: False
+openldap_server_enable_ssl: false
+openldap_server_enable_posixaccounts: true
+openldap_server_enable_sshkeys: true
+openldap_server_enable_autofs: false
+openldap_server_enable_samba: false
+openldap_server_enable_afpd: false
+
+# ldap tree
+ssh_groups: "{{vault_openldap_ou_groups}}"
+ssh_users: "{{vault_openldap_ou_users}}"
