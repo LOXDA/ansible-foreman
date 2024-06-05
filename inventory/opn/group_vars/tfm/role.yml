@@ -102,8 +102,8 @@ foreman_roles:
 
   - name: Hostgroups admins
     description: Give admin perms to manage Hostgroup
-    locations: LAB5
-    organizations: LAB5
+    locations: OPN
+    organizations: OPN
     state: present
     filters: 
       - permissions:

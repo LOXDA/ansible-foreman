@@ -21,5 +21,5 @@ foreman_db_password: "{{ vault_foreman_db_password }}"
 # initial default
 foreman_admin_username: "{{ vault_foreman_admin_username }}"
 foreman_admin_password: "{{ vault_foreman_admin_password }}"
-initial_organization: LAB5
-initial_location: LAB5
+initial_organization: OPN
+initial_location: OPN

@@ -6,19 +6,19 @@ icingaweb2_admin_password: P4p1llon!!
 
 icingaweb2_db:
   type: mysql
-  name: "icingaweb"
+  name: "{{ vault_icinga2_icingaweb_dbname }}"
   host: "{{ groups['monitoring_db'][0] }}"
-  user: "icingaweb"
-  password: "icingaweb"
+  user: "{{ vault_icinga2_icingaweb_dbuser }}"
+  password: "{{ vault_icinga2_icingaweb_dbpass }}"
 
 icingaweb2_resources:
   icinga_ido:
     type: db
     db: mysql
     host: "{{ groups['monitoring_db'][0] }}"
-    username: "icingaido"
-    password: "icingaido"
-    dbname: "icingaido"
+    username: "{{ vault_icinga2_icingaido_dbuser }}"
+    password: "{{ vault_icinga2_icingaido_dbpass }}"
+    dbname: "{{ vault_icinga2_icingaido_dbname }}"
     use_ssl: 0
     charset: utf8
 
@@ -29,8 +29,8 @@ icingaweb2_modules:
       icinga2_api:
         transport: api
         host: "{{ groups['monitoring_app'][0] }}"
-        username: root
-        password: papillon
+        username: "{{ vault_icinga2_api_username }}"
+        password: "{{ vault_icinga2_api_password }}"
     backends:
       icinga2_ido_mysql:
         type: ido

@@ -1,19 +1,15 @@
 #!/bin/bash
 
 git pull --rebase
+git submodule update --remote
 
 # prepare
-# export ANSIBLE_VAULT_PASSWORD_FILE=.vaultpass
-# ansible-playbook -i inventory/lab playbooks/dns.yml
+# ansible-playbook -i inventory/opn playbooks/deploy_dns.yml
+# ansible-playbook -i inventory/opn playbooks/deploy_ldap.yml
 
-# deploy whole
-ansible-playbook -i inventory/opn playbooks/deploy_foreman.yml --tags tfm,fixdhcp
-
-# deploy individual parts
-# ansible-playbook -i inventory/lab playbooks/foreman_puppet.yml --tags tfm,puppet
-# ansible-playbook -i inventory/lab playbooks/foreman_db.yml --tags tfm,db
-# ansible-playbook -i inventory/lab playbooks/foreman_app.yml --tags tfm,app
-# ansible-playbook -i inventory/lab playbooks/foreman_proxy.yml --tags tfm,proxy
+# deploy theforeman
+ansible-playbook -i inventory/opn playbooks/create_hosts.yml --limit tfm
+ansible-playbook -i inventory/opn playbooks/deploy_foreman.yml
 
 # provisioning
-# ansible-playbook -i inventory/lab playbooks/foreman_deploy.yml --tags provisioning
+ansible-playbook -i inventory/opn playbooks/deploy_foreman.yml --tags provisioning
