@@ -40,3 +40,5 @@ icinga2_features:
         parent: "main"
         endpoints:
           - "{{ groups['monitoring_sat'][0] }}"
+
+icinga2_objects: []

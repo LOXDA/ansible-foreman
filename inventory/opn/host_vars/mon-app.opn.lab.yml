@@ -53,136 +53,138 @@ icinga2_features:
 
 icinga2_objects:
 
-  - name: root
-    type: ApiUser
-    file: conf.d/api-users.conf
-    password: papillon
-    permissions:
-      - '*'
+  "mon-app.opn.lab":
 
-  - name: foreman-host
-    type: Host
-    file: zones.d/main/hosts/templates.conf
-    check_command: hostalive
-    check_interval: 1m
-    retry_interval: 30s
-    max_check_attempts: 3
-    template: true
+    - name: root
+      type: ApiUser
+      file: conf.d/api-users.conf
+      password: papillon
+      permissions:
+        - '*'
 
-  - name: mon-host
-    type: HostGroup
-    file: zones.d/main/hostgroups.conf
-    display_name: Monitoring
+    - name: foreman-host
+      type: Host
+      file: zones.d/main/hosts/templates.conf
+      check_command: hostalive
+      check_interval: 1m
+      retry_interval: 30s
+      max_check_attempts: 3
+      template: true
 
-  - name: "{{ groups['monitoring_app'][0] }}"
-    type: Host
-    file: "zones.d/main/hosts/{{ groups['monitoring_app'][0] }}.conf"
-    imports:
-      - generic-host
-    address: "{{ lookup('community.general.dig', groups['monitoring_app'][0] ) }}"
-    zone: main
-    groups:
-      - mon-host
-    vars:
-      os: linux
+    - name: mon-host
+      type: HostGroup
+      file: zones.d/main/hostgroups.conf
+      display_name: Monitoring
 
-  - name: "{{ groups['monitoring_db'][0] }}"
-    type: Host
-    file: "zones.d/main/hosts/{{ groups['monitoring_db'][0] }}.conf"
-    imports:
-      - generic-host
-    address: "{{ lookup('community.general.dig', groups['monitoring_db'][0] ) }}"
-    zone: main
-    groups:
-      - mon-host
-    vars:
-      os: linux
+    # - name: "{{ groups['monitoring_app'][0] }}"
+    #   type: Host
+    #   file: "zones.d/main/hosts/{{ groups['monitoring_app'][0] }}.conf"
+    #   imports:
+    #     - generic-host
+    #   address: "{{ lookup('community.general.dig', groups['monitoring_app'][0] ) }}"
+    #   zone: main
+    #   groups:
+    #     - mon-host
+    #   vars:
+    #     os: linux
 
-  - name: "{{ groups['monitoring_web'][0] }}"
-    type: Host
-    file: "zones.d/main/hosts/{{ groups['monitoring_web'][0] }}.conf"
-    imports:
-      - generic-host
-    address: "{{ lookup('community.general.dig', groups['monitoring_web'][0] ) }}"
-    zone: main
-    groups:
-      - mon-host
-    vars:
-      os: linux
+    - name: "{{ groups['monitoring_db'][0] }}"
+      type: Host
+      file: "zones.d/main/hosts/{{ groups['monitoring_db'][0] }}.conf"
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['monitoring_db'][0] ) }}"
+      zone: main
+      groups:
+        - mon-host
+      vars:
+        os: linux
 
-  - name: "{{ groups['monitoring_sat'][0] }}"
-    type: Host
-    file: "zones.d/main/hosts/{{ groups['monitoring_sat'][0] }}.conf"
-    imports:
-      - generic-host
-    address: "{{ lookup('community.general.dig', groups['monitoring_sat'][0] ) }}"
-    zone: main
-    groups:
-      - mon-host
-    vars:
-      os: linux
+    - name: "{{ groups['monitoring_web'][0] }}"
+      type: Host
+      file: "zones.d/main/hosts/{{ groups['monitoring_web'][0] }}.conf"
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['monitoring_web'][0] ) }}"
+      zone: main
+      groups:
+        - mon-host
+      vars:
+        os: linux
 
-  - name: tfm-host
-    type: HostGroup
-    file: "zones.d/{{ groups['monitoring_sat'][0] }}/hostgroups.conf"
-    display_name: TheForeman
-      
-  - name: "{{ groups['tfm_app'][0] }}"
-    type: Host
-    file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_app'][0] }}.conf"
-    imports:
-      - generic-host
-    address: "{{ lookup('community.general.dig', groups['tfm_app'][0] ) }}"
-    zone: "{{ groups['monitoring_sat'][0] }}"
-    groups:
-      - tfm-host
-    vars:
-      os: linux
+    - name: "{{ groups['monitoring_sat'][0] }}"
+      type: Host
+      file: "zones.d/main/hosts/{{ groups['monitoring_sat'][0] }}.conf"
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['monitoring_sat'][0] ) }}"
+      zone: main
+      groups:
+        - mon-host
+      vars:
+        os: linux
 
-  - name: "{{ groups['tfm_db'][0] }}"
-    type: Host
-    file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_db'][0] }}.conf"
-    imports:
-      - generic-host
-    address: "{{ lookup('community.general.dig', groups['tfm_db'][0] ) }}"
-    zone: "{{ groups['monitoring_sat'][0] }}"
-    groups:
-      - tfm-host
-    vars:
-      os: linux
+    - name: tfm-host
+      type: HostGroup
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hostgroups.conf"
+      display_name: TheForeman
+        
+    - name: "{{ groups['tfm_app'][0] }}"
+      type: Host
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_app'][0] }}.conf"
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_app'][0] ) }}"
+      zone: "{{ groups['monitoring_sat'][0] }}"
+      groups:
+        - tfm-host
+      vars:
+        os: linux
 
-  - name: "{{ groups['tfm_puppet'][0] }}"
-    type: Host
-    file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_puppet'][0] }}.conf"
-    imports:
-      - generic-host
-    address: "{{ lookup('community.general.dig', groups['tfm_puppet'][0] ) }}"
-    zone: "{{ groups['monitoring_sat'][0] }}"
-    groups:
-      - tfm-host
-    vars:
-      os: linux
+    - name: "{{ groups['tfm_db'][0] }}"
+      type: Host
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_db'][0] }}.conf"
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_db'][0] ) }}"
+      zone: "{{ groups['monitoring_sat'][0] }}"
+      groups:
+        - tfm-host
+      vars:
+        os: linux
 
-  - name: "{{ groups['tfm_proxy'][0] }}"
-    type: Host
-    file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_proxy'][0] }}.conf"
-    imports:
-      - generic-host
-    address: "{{ lookup('community.general.dig', groups['tfm_proxy'][0] ) }}"
-    zone: "{{ groups['monitoring_sat'][0] }}"
-    groups:
-      - tfm-host
-    vars:
-      os: linux
+    - name: "{{ groups['tfm_puppet'][0] }}"
+      type: Host
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_puppet'][0] }}.conf"
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_puppet'][0] ) }}"
+      zone: "{{ groups['monitoring_sat'][0] }}"
+      groups:
+        - tfm-host
+      vars:
+        os: linux
 
-  - name: "{{ groups['tfm_proxy_salt'][0] }}"
-    type: Host
-    file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_proxy_salt'][0] }}.conf"
-    imports:
-      - generic-host
-    address: "{{ lookup('community.general.dig', groups['tfm_proxy_salt'][0] ) }}"
-    zone: "{{ groups['monitoring_sat'][0] }}"
-    groups:
-      - tfm-host
-    vars:
-      os: linux
+    - name: "{{ groups['tfm_proxy'][0] }}"
+      type: Host
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_proxy'][0] }}.conf"
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_proxy'][0] ) }}"
+      zone: "{{ groups['monitoring_sat'][0] }}"
+      groups:
+        - tfm-host
+      vars:
+        os: linux
+
+    - name: "{{ groups['tfm_proxy_salt'][0] }}"
+      type: Host
+      file: "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/{{ groups['tfm_proxy_salt'][0] }}.conf"
+      imports:
+        - generic-host
+      address: "{{ lookup('community.general.dig', groups['tfm_proxy_salt'][0] ) }}"
+      zone: "{{ groups['monitoring_sat'][0] }}"
+      groups:
+        - tfm-host
+      vars:
+        os: linux
