@@ -71,6 +71,7 @@ icinga2_objects:
       max_check_attempts: 3
       template: true
 
+    ## HOSTGROUP: Monitoring
     - name: mon-host
       type: HostGroup
       file: zones.d/main/hostgroups.conf
@@ -115,6 +116,9 @@ icinga2_objects:
       vars:
         os: linux
 
+  "mon-sat.opn.lab":
+
+    ## HOSTGROUP: TheForeman
     - name: tfm-host
       type: HostGroup
       file: "zones.d/{{ groups['monitoring_sat'][0] }}/hostgroups.conf"
