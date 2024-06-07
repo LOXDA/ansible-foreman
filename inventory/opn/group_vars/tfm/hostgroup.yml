@@ -13,12 +13,12 @@ foreman_hostgroup:
     locations:
       - OPN
     parameters:
-      - name: "http-proxy"
-        parameter_type: string
-        value: "192.168.133.251"
-      - name: "http-proxy-port"
-        parameter_type: string
-        value: "3128"
+      # - name: "http-proxy"
+      #   parameter_type: string
+      #   value: "192.168.133.251"
+      # - name: "http-proxy-port"
+      #   parameter_type: string
+      #   value: "3128"
       - name: "lang"
         parameter_type: string
         value: "fr_FR.UTF8"

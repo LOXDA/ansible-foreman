@@ -1,0 +1,43 @@
+---
+
+foreman_usergroup:
+
+  - name: admins
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn
+      - Hostgroups admins
+      - Hosts admins
+      - Ansible admins
+
+  - name: sysadm
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn
+      - Hostgroups users
+      - Hosts admins
+      - Ansible admins
+
+foreman_external_usergroup:
+
+  - name: tfm-admin
+    auth_source: opn-ldap1
+    usergroup: admins
+
+  - name: tfm-admsys
+    auth_source: opn-ldap1
+    usergroup: sysadm

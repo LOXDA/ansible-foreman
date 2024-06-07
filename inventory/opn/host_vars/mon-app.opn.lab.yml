@@ -8,9 +8,9 @@ icinga2_constants:
 icinga2_confd: true
 icinga2_purge_features: true
 icinga2_config_directories:
-  - conf.d/
-  - zones.d/main/hosts/
-  - zones.d/main/services/
+  - "conf.d/"
+  - "zones.d/main/hosts/"
+  - "zones.d/main/services/"
   - "zones.d/{{ groups['monitoring_sat'][0] }}/hosts/"
   - "zones.d/{{ groups['monitoring_sat'][0] }}/services/"
 
@@ -115,8 +115,6 @@ icinga2_objects:
         - mon-host
       vars:
         os: linux
-
-  "mon-sat.opn.lab":
 
     ## HOSTGROUP: TheForeman
     - name: tfm-host

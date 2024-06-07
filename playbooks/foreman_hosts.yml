@@ -13,10 +13,10 @@
 
     theforeman.foreman.host:
       enabled: true
-      owner_group: TEST
-      organization: LAB01
-      location: LAB01 
-      hostgroup: OPN/TEST
+      owner_group: sysadm
+      organization: OPN
+      location: OPN
+      hostgroup: opn/test
       provision_method: image
       image: debian11
       compute_resource: opn
