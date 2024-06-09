@@ -35,14 +35,14 @@
     - name: "Create a host in foreman on openstack"
       delegate_to: localhost
       theforeman.foreman.host:
-        name: "{{ lookup('community.general.random_pet') }}.lab01.opn.lab"
+        name: "{{ lookup('community.general.random_pet') }}.opn.lab"
         interfaces_attributes:
         - type: "interface"
           primary: true
           managed: true
           execution: true
           provision: true
-          name: lab01
-          domain: lab01.opn.lab
-          subnet: VLAN0001_LAB01
+          name: vlan5_adm
+          domain: opn.lab
+          subnet: VLAN5_ADM
         state: present

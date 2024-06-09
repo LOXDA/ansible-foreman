@@ -23,7 +23,7 @@ ansible_connection=ssh
 ansible_user=debian
 opn_autoip=false
 opn_project=admin
-opn_network=vlan5
+opn_network=vlan5_adm
 opn_sg=ALLOW_ALL
 
 [tfm:children]
@@ -55,7 +55,7 @@ ansible_connection=ssh
 ansible_user=debian 
 opn_autoip=false
 opn_project=admin
-opn_network=vlan5
+opn_network=vlan5_adm
 opn_sg=ALLOW_ALL
 
 [monitoring:children]
