@@ -1,25 +1,13 @@
-localhost ansible_connection=local
-
-[dns:vars]
-ansible_connection=ssh
-ansible_user=root
 [dns]
 ns1.opn.lab
 
-[ldapservers:vars]
-ansible_connection=ssh
-ansible_user=root
 [ldapservers]
 ldap1.opn.lab ansible_host=192.168.133.246
 
-[sso:vars]
-ansible_connection=ssh
-ansible_user=root
 [sso]
 auth.opn.lab ansible_host=192.168.133.245
 
 [tfm:vars]
-ansible_connection=ssh
 ansible_user=debian
 opn_autoip=false
 opn_project=admin
@@ -33,25 +21,24 @@ tfm_proxy
 tfm_puppet
 
 [tfm_app]
-tfm-app.opn.lab opn_flavor=m2.large
+tfm-app.opn.lab opn_flavor=m2.large opn_image=Debian-11
 
 [tfm_db]
-tfm-db.opn.lab opn_flavor=m2.small
+tfm-db.opn.lab opn_flavor=m2.small opn_image=Debian-11
 
 [tfm_proxy]
-tfm-proxy.opn.lab opn_flavor=m2.medium
+tfm-proxy.opn.lab opn_flavor=m2.medium opn_image=Debian-11
 
 [tfm_proxy_salt]
-tfm-proxy-salt.opn.lab opn_flavor=m2.medium
+tfm-proxy-salt.opn.lab opn_flavor=m2.medium opn_image=Debian-11
 
 [tfm_puppet]
-tfm-puppet.opn.lab opn_flavor=m2.medium
+tfm-puppet.opn.lab opn_flavor=m2.medium opn_image=Debian-11
 
 [tfm_proxy:children]
 tfm_proxy_salt
 
 [monitoring:vars]
-ansible_connection=ssh 
 ansible_user=debian 
 opn_autoip=false
 opn_project=admin
