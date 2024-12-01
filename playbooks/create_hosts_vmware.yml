@@ -1,6 +1,6 @@
 ---
 
-- hosts: tfm_app
+- hosts: all
   gather_facts: false
 
   module_defaults:
@@ -28,29 +28,43 @@
       compute_resource: "{{ computer_resource }}"
       compute_profile: "{{ compute_profile }}"
       compute_attributes:
+        start: 1
         cpus: "{{ vm_cpu_count }}"
+        corespersocket: 1
+        cluster: "{{ cluster }}"
+        path: "/Datacenters/DC/folder/subfolder"
+        guest_id: "{{ guest_id }}"
+        scsi_controller_type: ParaVirtualSCSIController
         memory_mb: "{{ vm_memory }}"
         interfaces_attributes:
           - type: "interface"
-            primary: true
             compute_attributes:
-            name: nic1
-            network: "{{ vm_vlan_name1 }}"
-            interface: "{{ vm_interface1 }}"
-            subnet: "{{ vm_subnet1 }}"
-            ip: "{{ vm_ip1 }}"
-            domain: "{{ domain1 }}"
-            provision: yes
+              name: nic1
+              compute_network: "{{ compute_network1 }}"
+              compute_type: VirtualVmxnet3
+              interface: "{{ vm_interface1 }}"
+              subnet: "{{ vm_subnet1 }}"
+              ip: "{{ vm_ip1 }}"
+              domain: "{{ domain1 }}"
+              primary: true
+              managed: true
+              provision: true
+              execution: true
           - type: "interface"
             primary: true
             compute_attributes:
-            name: nic2
-            network: "{{ vm_vlan_name2 }}"
-            interface: "{{ vm_interface2 }}"
-            subnet: "{{ vm_subnet2 }}"
-            ip: "{{ vm_ip2 }}"
-            domain: "{{ domain2 }}"
-            provision: yes
+              name: nic2
+              compute_network: "{{ compute_network1 }}"
+              compute_type: VirtualVmxnet3
+              network: "{{ vm_vlan_name2 }}"
+              interface: "{{ vm_interface2 }}"
+              subnet: "{{ vm_subnet2 }}"
+              ip: "{{ vm_ip2 }}"
+              domain: "{{ domain2 }}"
+              primary: false
+              managed: false
+              provision: false
+              execution: false
         volumes_attributes:
           0:
             size_gb: 20
@@ -59,7 +73,7 @@
             eager_zero: false
   tasks:
 
-    - name: "Create a host in foreman on openstack"
+    - name: "Create a host in foreman on vmware"
       delegate_to: localhost
       theforeman.foreman.host:
         name: "{{ inventory_hostname }}"
