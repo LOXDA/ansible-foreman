@@ -1,3 +1,4 @@
 .vaultpass
 .venv
 collections
+ansible-navigator.log
