@@ -13,13 +13,14 @@
   #     private: true
 
   vars:
-    username: "bob1"
-    password: "papillon"
     foreman_url_app: https://tfm-app.opn.lab
     compute_profile: debian-small
-    image: Debian12
-    root_pass: papillon
     hostgroup: opn/os/debian
+    root_pass: papillon
+    image: Debian12
+    username: "{{ username | d('bob1') }}"
+    password: "{{ password | d('papillon') }}"
+    compute_resource: "{{ compute_resource | d('opn-test1') }}"
 
   module_defaults:
 
@@ -44,8 +45,8 @@
       pxe_loader: "{{ pxe_loader | d('None') }}"
       ptable: "{{ ptable | d('Preseed default LVM') }}"
       provision_method: "{{ provision_method | d('image') }}"
-      compute_resource: "{{ compute_resource | d('opn-test1')  }}"
-      compute_profile: "{{ compute_profile | d('debian-small')  }}"
+      compute_resource: "{{ compute_resource | d('opn-test1') }}"
+      compute_profile: "{{ compute_profile | d('debian-small') }}"
       compute_attributes:
         availability_zone: nova
         security_groups:
@@ -57,20 +58,61 @@
 
   tasks:
 
-    - name: "Create a host in foreman on openstack"
-      delegate_to: localhost
-      theforeman.foreman.host:
-        username: "bob1"
-        password: "papillon"
-        owner_group: "TEST1"
-        compute_resource: "opn-test1"
-        name: "{{ lookup('community.general.random_pet') }}.opn.lab"
-        state: present
+    - block:
+
+      - name: "Create a host in foreman on openstack"
+        delegate_to: localhost
+        theforeman.foreman.host:
+          username: bob1
+          password: papillon
+          owner_group: TEST1
+          compute_resource: opn-test1
+          name: "{{ lookup('community.general.random_pet') }}.opn.lab"
+          state: present
+
+      - name: "Create a host in foreman on openstack"
+        delegate_to: localhost
+        theforeman.foreman.host:
+          username: bob1
+          password: papillon
+          owner_group: TEST1
+          compute_resource: opn-test1
+          name: "{{ lookup('community.general.random_pet') }}.opn.lab"
+          state: present
+
+        # loop: "{{ range(0,2) | list }}"
+        # loop_control:
+        #   pause: 10
+      ignore_errors: true
+
+    - name: Test2 api
+      ansible.builtin.uri:
+        user: "admin"
+        password: "P4p1llon!!"
+        force_basic_auth: true
+        validate_certs: false
+        url: "{{ foreman_url_app }}/api/compute_resources?search=name%3Dopn-test1"
+        method: GET
+        status_code:
+          - 200
+      until: uri_output.status == 200
+      retries: 24
+      delay: 5
+      register: uri_output
+
+    - name: Display Target Variables
+      ansible.builtin.debug:
+        msg: '{{uri_output.json.results}}'
+  
 
 
-      # loop: "{{ range(0,2) | list }}"
-      # loop_control:
-      #   pause: 10
+
+
+
+
+
+
+
 
     # - name: Test api
     #   ansible.builtin.uri:
@@ -84,8 +126,7 @@
 
     # - name: Display Target Variables
     #   ansible.builtin.debug:
-    #     msg: '{{toto}}'
-
+    #     msg: '{{toto}}'        
 
       # compute_attributes:
       #   start: 1

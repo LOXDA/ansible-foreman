@@ -13,8 +13,9 @@ foreman_proxy_plugins:
   - dynflow
   - salt
 
-plugin_bind: false
 plugin_salt: true
+plugin_bind: false
+plugin_monitoring: false
 
 # configure options
 foreman_options: {}
