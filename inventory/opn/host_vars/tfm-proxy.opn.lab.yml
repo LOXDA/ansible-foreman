@@ -1,7 +1,7 @@
 ---
 
 # defaults file for common
-foreman_version: '3.9'
+foreman_version: '3.12'
 puppet_version: puppet7
 
 # install options
@@ -13,7 +13,12 @@ foreman_proxy_plugins:
   - dynflow
   - remote-execution-script
   - ansible
+  - monitoring
   # - discovery
+
+plugin_salt: false
+plugin_bind: false
+plugin_monitoring: false
 
 # configure options
 foreman_options: {}
@@ -48,6 +53,10 @@ foreman_proxy_plugin_options:
   remote-execution-script-ssh-kerberos-auth: 'false'
   remote-execution-script-ssh-keygen: '/usr/bin/ssh-keygen'
   remote-execution-script-ssh-log-level: 'info'
+  # discovery-tftp-root: '/srv/tftp'
+  # discovery-install-images: 'true'
+  # discovery-source-url: 'http://mirror.lab.loxda.net/foreman/'
+  # discovery-listen-on: 'https'
 
 foreman_proxy_options:
   foreman-base-url: "{{ foreman_url_app }}"
@@ -61,8 +70,7 @@ foreman_proxy_options:
   dhcp: 'false'
   # dhcp-managed: 'true'
   # dhcp-key-name: 'omapikey'
-  # # dhcp-key-secret: "{{ vault_dhcp-key-secret }}"
-  # dhcp-key-secret: 'Cx5gw+r4IDNQiz4HPaxa0ZdPGc3BhtDz7R1j7NsDhnYNEuZzQQcy+1280dO9CKogXQlh+1JEu5DGanX173MllQ=='
+  # dhcp-key-secret: "{{ vault_dhcp-key-secret }}"
   # dhcp-omapi-port: '7911'
   # dhcp-ping-free-ip: 'true'
   # dhcp-option-domain: "{{ inventory_hostname | replace(inventory_hostname_short + '.','') }}"
@@ -103,3 +111,14 @@ foreman_proxy_options:
   http: 'true'
 
 _salt_test: false
+
+monitoring_icinga2:
+  enabled: true
+  server: "{{ groups['monitoring_app'][0] }}"
+  verify_ssl: true
+  api_port: 5665
+  api_user: root
+  api_password: papillon
+  api_cacert: /etc/puppetlabs/puppet/ssl/certs/ca.pem
+  # api_usercert: /etc/foreman-proxy/monitoring/foreman.crt
+  # api_userkey: /etc/foreman-proxy/monitoring/foreman.key

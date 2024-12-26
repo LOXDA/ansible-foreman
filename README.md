@@ -23,6 +23,9 @@ Setup deployement:
 
 Run examples:
 ```
+# clean environment (ONLY IF YOU NEED SOME CLEANUP)
+unset $(set | grep --line-buffered ^ANSIBLE_ | awk -F= '{print $1}')
+
 # prepare
 export ANSIBLE_VAULT_PASSWORD_FILE=.vaultpass
 ansible-playbook -i inventory/lab playbooks/dns.yml

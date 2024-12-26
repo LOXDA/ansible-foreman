@@ -1,5 +1,5 @@
 ---
-foreman_version: '3.9'
+foreman_version: '3.12'
 
 # accès a l'app foreman lab déployée pour provisioning
 foreman_host_app: "{{ groups['tfm_app'][0] }}"

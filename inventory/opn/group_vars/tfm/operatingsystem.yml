@@ -565,6 +565,32 @@ foreman_operatingsystems:
     parameters: *debian11_parameters
     state: present
 
+  - name: Debian
+    description: Debian 11.10
+    release_name: bullseye
+    major: 11
+    minor: 10
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 11.11
+    release_name: bullseye
+    major: 11
+    minor: 11
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian11_ptables
+    parameters: *debian11_parameters
+    state: present
+
                                            #    #####
  #####  ###### #####  #   ##   #    #     ##   #     #
  #    # #      #    # #  #  #  ##   #    # #         #
@@ -684,6 +710,45 @@ foreman_operatingsystems:
     release_name: bookworm
     major: 12
     minor: 5
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian12_ptables
+    parameters: *debian12_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 12.6
+    release_name: bookworm
+    major: 12
+    minor: 6
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian12_ptables
+    parameters: *debian12_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 12.7
+    release_name: bookworm
+    major: 12
+    minor: 7
+    family: Debian
+    password_hash: SHA256
+    architectures: x86_64
+    media: Debian mirror
+    ptables: *debian12_ptables
+    parameters: *debian12_parameters
+    state: present
+
+  - name: Debian
+    description: Debian 12.8
+    release_name: bookworm
+    major: 12
+    minor: 8
     family: Debian
     password_hash: SHA256
     architectures: x86_64

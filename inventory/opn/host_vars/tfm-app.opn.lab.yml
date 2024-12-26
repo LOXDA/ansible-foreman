@@ -1,7 +1,7 @@
 ---
 
 # defaults file for common
-foreman_version: '3.9'
+foreman_version: '3.12'
 puppet_version: puppet7
 postgresql_version: 13
 disable_puppet: false

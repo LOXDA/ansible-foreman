@@ -2,19 +2,11 @@
 
 foreman_compute_image:
 
-  # - name: "Debian9"
-  #   image_uuid: "774e783c-c412-4737-b042-9d3574d94d93"
-  #   image_username: "debian"
-  #   operatingsystem: "Debian 9"
-  #   compute_resource: "opn"
-  #   architecture: "x86_64"
-  #   user_data: true
-
   - name: "Debian10"
     image_uuid: "61715b7e-886f-4afc-b54f-55e964c27479"
     image_username: "debian"
     operatingsystem: "Debian 10"
-    compute_resource: "opn"
+    compute_resource: "opn-admin"
     architecture: "x86_64"
     user_data: true
 
@@ -22,14 +14,78 @@ foreman_compute_image:
     image_uuid: "922f8651-3374-4f02-a64d-f7f27587da47"
     image_username: "debian"
     operatingsystem: "Debian 11"
-    compute_resource: "opn"
+    compute_resource: "opn-admin"
     architecture: "x86_64"
     user_data: true
 
-  # - name: "Debian12"
-  #   image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
-  #   image_username: "debian"
-  #   operatingsystem: "Debian 12"
-  #   compute_resource: "opn"
-  #   architecture: "x86_64"
-  #   user_data: true
+  - name: "Debian12"
+    image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
+    image_username: "debian"
+    operatingsystem: "Debian 12"
+    compute_resource: "opn-admin"
+    architecture: "x86_64"
+    user_data: true
+
+  - name: "Debian12"
+    image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
+    image_username: "debian"
+    operatingsystem: "Debian 12"
+    compute_resource: "opn-test1"
+    architecture: "x86_64"
+    user_data: true
+
+  - name: "Debian12"
+    image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
+    image_username: "debian"
+    operatingsystem: "Debian 12"
+    compute_resource: "opn-test2"
+    architecture: "x86_64"
+    user_data: true
+
+  - name: "Debian12"
+    image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
+    image_username: "debian"
+    operatingsystem: "Debian 12"
+    compute_resource: "opn-test3"
+    architecture: "x86_64"
+    user_data: true
+
+  - name: "Debian12"
+    image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
+    image_username: "debian"
+    operatingsystem: "Debian 12"
+    compute_resource: "opn-test4"
+    architecture: "x86_64"
+    user_data: true
+
+  - name: "Debian12"
+    image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
+    image_username: "debian"
+    operatingsystem: "Debian 12"
+    compute_resource: "opn-test5"
+    architecture: "x86_64"
+    user_data: true
+
+  - name: "Debian12"
+    image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
+    image_username: "debian"
+    operatingsystem: "Debian 12"
+    compute_resource: "opn-test6"
+    architecture: "x86_64"
+    user_data: true
+
+  - name: "Debian12"
+    image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
+    image_username: "debian"
+    operatingsystem: "Debian 12"
+    compute_resource: "opn-test7"
+    architecture: "x86_64"
+    user_data: true
+
+  - name: "Debian12"
+    image_uuid: "d0479e26-e4af-4964-99fb-4dbdde87a43f"
+    image_username: "debian"
+    operatingsystem: "Debian 12"
+    compute_resource: "opn-test8"
+    architecture: "x86_64"
+    user_data: true

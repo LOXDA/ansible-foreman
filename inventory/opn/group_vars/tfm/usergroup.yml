@@ -8,11 +8,12 @@ foreman_usergroup:
       - Access dashboard
       - Env production
       - Locations users
+      - Organization users
       - Usergroups users
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn
+      - Compute resources users opn-admin
       - Hostgroups admins
       - Hosts admins
       - Ansible admins
@@ -23,11 +24,140 @@ foreman_usergroup:
       - Access dashboard
       - Env production
       - Locations users
+      - Organization users
       - Usergroups users
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn
+      - Compute resources users opn-admin
+      - Hostgroups users
+      - Hosts admins
+      - Ansible admins
+
+  - name: TEST1
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Organization users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn-test1
+      - Hostgroups users
+      - Hosts admins
+      - Ansible admins
+
+  - name: TEST2
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Organization users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn-test2
+      - Hostgroups users
+      - Hosts admins
+      - Ansible admins
+
+  - name: TEST3
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Organization users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn-test3
+      - Hostgroups users
+      - Hosts admins
+      - Ansible admins
+
+  - name: TEST4
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Organization users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn-test4
+      - Hostgroups users
+      - Hosts admins
+      - Ansible admins
+
+  - name: TEST5
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Organization users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn-test5
+      - Hostgroups users
+      - Hosts admins
+      - Ansible admins
+
+  - name: TEST6
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Organization users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn-test6
+      - Hostgroups users
+      - Hosts admins
+      - Ansible admins
+
+  - name: TEST7
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Organization users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn-test7
+      - Hostgroups users
+      - Hosts admins
+      - Ansible admins
+
+  - name: TEST8
+    admin: false
+    roles:
+      - Access dashboard
+      - Env production
+      - Locations users
+      - Organization users
+      - Usergroups users
+      - Smart proxies users
+      - Compute images users
+      - Compute profiles users
+      - Compute resources users opn-test8
       - Hostgroups users
       - Hosts admins
       - Ansible admins
@@ -41,3 +171,28 @@ foreman_external_usergroup:
   - name: tfm-admsys
     auth_source: opn-ldap1
     usergroup: sysadm
+
+  - name: tfm-test1
+    auth_source: opn-ldap1
+    usergroup: TEST1
+  - name: tfm-test2
+    auth_source: opn-ldap1
+    usergroup: TEST2
+  - name: tfm-test3
+    auth_source: opn-ldap1
+    usergroup: TEST3
+  - name: tfm-test4
+    auth_source: opn-ldap1
+    usergroup: TEST4
+  - name: tfm-test5
+    auth_source: opn-ldap1
+    usergroup: TEST5
+  - name: tfm-test6
+    auth_source: opn-ldap1
+    usergroup: TEST6
+  - name: tfm-test7
+    auth_source: opn-ldap1
+    usergroup: TEST7
+  - name: tfm-test8
+    auth_source: opn-ldap1
+    usergroup: TEST8

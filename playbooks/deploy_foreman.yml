@@ -5,7 +5,7 @@
 - import_playbook: foreman_app.yml
 - import_playbook: foreman_proxy.yml
 - import_playbook: foreman_provisioning.yml
-
+    
 # maintain
 # apt: ruby-foreman-maintain
 # foreman-maintain maintenance-mode start

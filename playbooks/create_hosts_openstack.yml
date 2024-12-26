@@ -1,63 +1,133 @@
 ---
 
-- hosts: all,!localhost
+- hosts: localhost
   serial: 1
   gather_facts: false
 
-  module_defaults:
-    group/openstack.cloud.openstack:
-      cloud: opn
-      auth:
-        project_name: "{{ opn_project }}"
+  # vars_prompt:
+  #   - name: username
+  #     prompt: 'Foreman username:'
+  #     private: false
+  #   - name: password
+  #     prompt: 'password:'
+  #     private: true
 
-    openstack.cloud.server:
-      volume_size: 8
-      key_name: ctrl2
-      network: "{{ opn_network }}"
-      auto_ip: "{{ opn_autoip }}"
-      boot_from_volume: false
-      terminate_volume: true
-      delete_ips: true
-      userdata: |
-        #cloud-config
-        hostname: {{ inventory_hostname_short }}
-        fqdn: {{ inventory_hostname }}
-        prefer_fqdn_over_hostname: true
-        chpasswd:
-          expire: False
-          list: |
-            debian:papillon
-        package_upgrade: true
-        manage_etc_hosts: false
-        runcmd:
-          - echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
-          - echo "search {{ inventory_hostname | replace(inventory_hostname_short + '.','') }}" >> /etc/resolvconf/resolv.conf.d/tail
-          - resolvconf -u
+  vars:
+    username: "bob1"
+    password: "papillon"
+    foreman_url_app: https://tfm-app.opn.lab
+    compute_profile: debian-small
+    image: Debian12
+    root_pass: papillon
+    hostgroup: opn/os/debian
+
+  module_defaults:
+
+    group/theforeman.foreman.foreman:
+      username: "{{username}}"
+      password: "{{password}}"
+      server_url: "{{ foreman_url_app }}"
+      validate_certs: false
+
+    theforeman.foreman.host:
+      enabled: true
+      image: "{{ image }}"
+      hostgroup: "{{ hostgroup }}"
+      root_pass: "{{ root_pass }}"
+      environment: "{{ env | d('production')  }}"
+      organization: "{{ organization | d('OPN') }}"
+      location: "{{ location | d('OPN')  }}"
+      owner_group: "{{ owner_group | d('sysadm') }}"
+      operatingsystem: "{{ operatingsystem | d('Debian 12') }}"
+      medium: "{{ medium | d('Debian mirror') }}"
+      architecture: "{{ architecture | d('x86_64') }}"
+      pxe_loader: "{{ pxe_loader | d('None') }}"
+      ptable: "{{ ptable | d('Preseed default LVM') }}"
+      provision_method: "{{ provision_method | d('image') }}"
+      compute_resource: "{{ compute_resource | d('opn-test1')  }}"
+      compute_profile: "{{ compute_profile | d('debian-small')  }}"
+      compute_attributes:
+        availability_zone: nova
+        security_groups:
+          - ALLOW_ALL
+        boot_from_volume: false
+        size_gb: 8
+        nics:
+          - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
   tasks:
 
-    - name: Fetch all projects with a name
-      openstack.cloud.project_info:
-        name: "{{ opn_project }}"
-      register: pg
+    - name: "Create a host in foreman on openstack"
       delegate_to: localhost
-
-    - name: Get specific security group
-      openstack.cloud.security_group_info:
-        name: "{{ opn_sg }}"
-        project_id: "{{ pg.projects[0].id }}"
-      register: sg
-      delegate_to: localhost
-
-    - openstack.cloud.server:
+      theforeman.foreman.host:
+        username: "bob1"
+        password: "papillon"
+        owner_group: "TEST1"
+        compute_resource: "opn-test1"
+        name: "{{ lookup('community.general.random_pet') }}.opn.lab"
         state: present
-        name: "{{ inventory_hostname_short }}"
-        flavor: "{{ opn_flavor | d('m1.medium') }}"
-        image: "{{ opn_image | d('Debian-11') }}"
-        boot_from_volume: false
-        terminate_volume: true
-        delete_ips: true
-        security_groups: 
-          - "{{ sg.security_groups[0].id }}"
-      register: instance
-      delegate_to: localhost
 
+
+      # loop: "{{ range(0,2) | list }}"
+      # loop_control:
+      #   pause: 10
+
+    # - name: Test api
+    #   ansible.builtin.uri:
+    #     user: "admin"
+    #     password: "P4p1llon!!"
+    #     validate_certs: false
+    #     url: "{{ foreman_url_app }}/api/compute_resources/1/compute_attributes"
+    #     method: GET
+    #     force_basic_auth: true
+    #   register: toto
+
+    # - name: Display Target Variables
+    #   ansible.builtin.debug:
+    #     msg: '{{toto}}'
+
+
+      # compute_attributes:
+      #   start: 1
+      #   cpus: "{{ vm_cpu_count }}"
+      #   corespersocket: 1
+      #   cluster: "{{ cluster }}"
+      #   path: "/Datacenters/DC/folder/subfolder"
+      #   guest_id: "{{ guest_id }}"
+      #   scsi_controller_type: ParaVirtualSCSIController
+      #   memory_mb: "{{ vm_memory }}"
+      #   interfaces_attributes:
+      #     - type: "interface"
+      #       compute_attributes:
+      #         name: nic1
+      #         compute_network: "{{ compute_network1 }}"
+      #         compute_type: VirtualVmxnet3
+      #         interface: "{{ vm_interface1 }}"
+      #         subnet: "{{ vm_subnet1 }}"
+      #         ip: "{{ vm_ip1 }}"
+      #         domain: "{{ domain1 }}"
+      #         primary: true
+      #         managed: true
+      #         provision: true
+      #         execution: true
+      #     - type: "interface"
+      #       primary: true
+      #       compute_attributes:
+      #         name: nic2
+      #         compute_network: "{{ compute_network1 }}"
+      #         compute_type: VirtualVmxnet3
+      #         network: "{{ vm_vlan_name2 }}"
+      #         interface: "{{ vm_interface2 }}"
+      #         subnet: "{{ vm_subnet2 }}"
+      #         ip: "{{ vm_ip2 }}"
+      #         domain: "{{ domain2 }}"
+      #         primary: false
+      #         managed: false
+      #         provision: false
+      #         execution: false
+      #   volumes_attributes:
+      #     0:
+      #       size_gb: 20
+      #       datastore: "{{ datastore }}"
+      #       thin: false
+      #       eager_zero: false

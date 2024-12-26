@@ -2,41 +2,137 @@
 
 foreman_compute_resources:
 
-  # - name: vc-dc1
-  #   organizations:
-  #     - LAB
-  #   locations:
-  #     - LAB
-  #   provider: vmware
-  #   provider_params:
-  #     url: vc-dc1.lab.loxda.net
-  #     user: administrator@lab.loxda.net
-  #     password: P4p1llon!!
-  #     datacenter: DC-DC1
-
-  # - name: vc-dc2
-  #   organizations:
-  #     - LAB
-  #   locations:
-  #     - LAB
-  #   provider: vmware
-  #   provider_params:
-  #     url: vc-dc2.lab.loxda.net
-  #     user: administrator@lab.loxda.net
-  #     password: P4p1llon!!
-  #     datacenter: DC-DC2
-
-  - name: opn
+  - name: opn-admin
     organizations:
       - OPN
     locations:
       - OPN
     provider: Openstack
     provider_params:
-      url: "https://192.168.133.3:5000/v3"
+      url: https://192.168.133.3:5000/v3
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: "admin"
-      domain: "opn.lab"
-      project_domain_name: "Default"
-      project_domain_id: "default"
+      tenant: admin
+      domain: opn.lab
+      project_domain_name: Default
+      project_domain_id: default
+
+  - name: opn-test1
+    organizations:
+      - OPN
+    locations:
+      - OPN
+    provider: Openstack
+    provider_params:
+      url: https://192.168.133.3:5000/v3
+      user: admin
+      password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
+      tenant: test1
+      domain: opn.lab
+      project_domain_name: Default
+      project_domain_id: default
+
+  - name: opn-test2
+    organizations:
+      - OPN
+    locations:
+      - OPN
+    provider: Openstack
+    provider_params:
+      url: https://192.168.133.3:5000/v3
+      user: admin
+      password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
+      tenant: test2
+      domain: opn.lab
+      project_domain_name: Default
+      project_domain_id: default
+
+  - name: opn-test3
+    organizations:
+      - OPN
+    locations:
+      - OPN
+    provider: Openstack
+    provider_params:
+      url: https://192.168.133.3:5000/v3
+      user: admin
+      password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
+      tenant: test3
+      domain: opn.lab
+      project_domain_name: Default
+      project_domain_id: default
+
+  - name: opn-test4
+    organizations:
+      - OPN
+    locations:
+      - OPN
+    provider: Openstack
+    provider_params:
+      url: https://192.168.133.3:5000/v3
+      user: admin
+      password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
+      tenant: test4
+      domain: opn.lab
+      project_domain_name: Default
+      project_domain_id: default
+
+  - name: opn-test5
+    organizations:
+      - OPN
+    locations:
+      - OPN
+    provider: Openstack
+    provider_params:
+      url: https://192.168.133.3:5000/v3
+      user: admin
+      password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
+      tenant: test5
+      domain: opn.lab
+      project_domain_name: Default
+      project_domain_id: default
+
+  - name: opn-test6
+    organizations:
+      - OPN
+    locations:
+      - OPN
+    provider: Openstack
+    provider_params:
+      url: https://192.168.133.3:5000/v3
+      user: admin
+      password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
+      tenant: test6
+      domain: opn.lab
+      project_domain_name: Default
+      project_domain_id: default
+
+  - name: opn-test7
+    organizations:
+      - OPN
+    locations:
+      - OPN
+    provider: Openstack
+    provider_params:
+      url: https://192.168.133.3:5000/v3
+      user: admin
+      password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
+      tenant: test7
+      domain: opn.lab
+      project_domain_name: Default
+      project_domain_id: default
+
+  - name: opn-test8
+    organizations:
+      - OPN
+    locations:
+      - OPN
+    provider: Openstack
+    provider_params:
+      url: https://192.168.133.3:5000/v3
+      user: admin
+      password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
+      tenant: test8
+      domain: opn.lab
+      project_domain_name: Default
+      project_domain_id: default

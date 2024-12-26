@@ -84,6 +84,49 @@ foreman_roles:
         - view_subnets
         search: ""
 
+      - name: Hosts admins TEST1
+        description: Role granting permissions to manage hosts.
+        locations: OPN
+        organizations: OPN
+        state: present
+        filters: 
+          - permissions:
+            - view_architectures
+            search: ""
+          - permissions:
+            - view_domains
+            search: ""
+          - permissions:
+            - view_hosts
+            - create_hosts
+            - edit_hosts
+            - destroy_hosts
+            - build_hosts
+            - console_hosts
+            - forget_status_hosts
+            - power_hosts
+            search: hostgroup_title ~ OPN and usergroup = TEST1
+          - permissions:
+            - view_config_reports
+          - permissions:
+            - view_params
+            search: ""
+          - permissions:
+            - view_media
+            search: name ~ "Debian" or name ~ "Windows" or name ~ "ESXi"
+          - permissions:
+            - view_operatingsystems
+            search: name ~ "Debian" or name ~ "Windows" or name ~ "ESXi"
+          - permissions:
+            - view_ptables
+            search: name = "Preseed default LVM" or name = "Windows default partition table" or name = "Kickstart default"
+          - permissions:
+            - view_provisioning_templates
+            search: ""
+          - permissions:
+            - view_subnets
+            search: ""
+    
 ###################################################################################################
 #  _  _  ___  ___ _____ ___ ___  ___  _   _ ___  ___
 # | || |/ _ \/ __|_   _/ __| _ \/ _ \| | | | _ \/ __|
@@ -138,7 +181,7 @@ foreman_roles:
         - destroy_vm_compute_resources
         search: ""
 
-  - name: Compute resources users opn
+  - name: Compute resources users opn-admin
     description: 
     locations: OPN
     organizations: OPN
@@ -152,7 +195,135 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = opn
+        search: name = opn-admin
+
+  - name: Compute resources users opn-test1
+    description: 
+    locations: OPN
+    organizations: OPN
+    state: present
+    filters: 
+      - permissions: 
+        - console_compute_resources_vms
+        - create_compute_resources_vms
+        - destroy_compute_resources_vms
+        - edit_compute_resources_vms
+        - power_compute_resources_vms
+        - view_compute_resources
+        - view_compute_resources_vms
+        search: name = opn-test1
+
+  - name: Compute resources users opn-test2
+    description: 
+    locations: OPN
+    organizations: OPN
+    state: present
+    filters: 
+      - permissions: 
+        - console_compute_resources_vms
+        - create_compute_resources_vms
+        - destroy_compute_resources_vms
+        - edit_compute_resources_vms
+        - power_compute_resources_vms
+        - view_compute_resources
+        - view_compute_resources_vms
+        search: name = opn-test2
+
+  - name: Compute resources users opn-test3
+    description: 
+    locations: OPN
+    organizations: OPN
+    state: present
+    filters: 
+      - permissions: 
+        - console_compute_resources_vms
+        - create_compute_resources_vms
+        - destroy_compute_resources_vms
+        - edit_compute_resources_vms
+        - power_compute_resources_vms
+        - view_compute_resources
+        - view_compute_resources_vms
+        search: name = opn-test3
+
+  - name: Compute resources users opn-test4
+    description: 
+    locations: OPN
+    organizations: OPN
+    state: present
+    filters: 
+      - permissions: 
+        - console_compute_resources_vms
+        - create_compute_resources_vms
+        - destroy_compute_resources_vms
+        - edit_compute_resources_vms
+        - power_compute_resources_vms
+        - view_compute_resources
+        - view_compute_resources_vms
+        search: name = opn-test4
+
+  - name: Compute resources users opn-test5
+    description: 
+    locations: OPN
+    organizations: OPN
+    state: present
+    filters: 
+      - permissions: 
+        - console_compute_resources_vms
+        - create_compute_resources_vms
+        - destroy_compute_resources_vms
+        - edit_compute_resources_vms
+        - power_compute_resources_vms
+        - view_compute_resources
+        - view_compute_resources_vms
+        search: name = opn-test5
+
+  - name: Compute resources users opn-test6
+    description: 
+    locations: OPN
+    organizations: OPN
+    state: present
+    filters: 
+      - permissions: 
+        - console_compute_resources_vms
+        - create_compute_resources_vms
+        - destroy_compute_resources_vms
+        - edit_compute_resources_vms
+        - power_compute_resources_vms
+        - view_compute_resources
+        - view_compute_resources_vms
+        search: name = opn-test6
+
+  - name: Compute resources users opn-test7
+    description: 
+    locations: OPN
+    organizations: OPN
+    state: present
+    filters: 
+      - permissions: 
+        - console_compute_resources_vms
+        - create_compute_resources_vms
+        - destroy_compute_resources_vms
+        - edit_compute_resources_vms
+        - power_compute_resources_vms
+        - view_compute_resources
+        - view_compute_resources_vms
+        search: name = opn-test7
+
+  - name: Compute resources users opn-test8
+    description: 
+    locations: OPN
+    organizations: OPN
+    state: present
+    filters: 
+      - permissions: 
+        - console_compute_resources_vms
+        - create_compute_resources_vms
+        - destroy_compute_resources_vms
+        - edit_compute_resources_vms
+        - power_compute_resources_vms
+        - view_compute_resources
+        - view_compute_resources_vms
+        search: name = opn-test8
 
 ###################################################################################################
 #   ___ ___  __  __ ___ _   _ _____ ___    ___ ___  ___  ___ ___ _
@@ -232,6 +403,14 @@ foreman_roles:
 # |____\___/ \___/_/ \_\_| |___\___/|_|\_|___/
 #
 ###################################################################################################
+
+  - name: Organization users
+    description: 
+    state: present
+    filters: 
+      - permissions: 
+        - view_organizations
+        search: ""
 
   - name: Locations users
     description: 
