@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FOREMAN_URL="https://tfm-app.opn.lab" 
+FOREMAN_URL="https://tfm-app.opn.lab"
 alias foreman.opn='hammer -s $FOREMAN_URL'
 
 # associative array from command output

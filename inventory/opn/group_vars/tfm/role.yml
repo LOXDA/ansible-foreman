@@ -24,7 +24,7 @@ foreman_roles:
         search: ""
       - permissions:
         - view_hosts
-        search: ""
+        search: hostgroup_title ~ OPN
       - permissions:
         - view_media
         search: name ~ "Debian" or name ~ "Windows" or name ~ "ESXi"
@@ -84,49 +84,49 @@ foreman_roles:
         - view_subnets
         search: ""
 
-      - name: Hosts admins TEST1
-        description: Role granting permissions to manage hosts.
-        locations: OPN
-        organizations: OPN
-        state: present
-        filters: 
-          - permissions:
-            - view_architectures
-            search: ""
-          - permissions:
-            - view_domains
-            search: ""
-          - permissions:
-            - view_hosts
-            - create_hosts
-            - edit_hosts
-            - destroy_hosts
-            - build_hosts
-            - console_hosts
-            - forget_status_hosts
-            - power_hosts
-            search: hostgroup_title ~ OPN and usergroup = TEST1
-          - permissions:
-            - view_config_reports
-          - permissions:
-            - view_params
-            search: ""
-          - permissions:
-            - view_media
-            search: name ~ "Debian" or name ~ "Windows" or name ~ "ESXi"
-          - permissions:
-            - view_operatingsystems
-            search: name ~ "Debian" or name ~ "Windows" or name ~ "ESXi"
-          - permissions:
-            - view_ptables
-            search: name = "Preseed default LVM" or name = "Windows default partition table" or name = "Kickstart default"
-          - permissions:
-            - view_provisioning_templates
-            search: ""
-          - permissions:
-            - view_subnets
-            search: ""
-    
+  - name: Hosts admins TEST1
+    description: Role granting permissions to manage hosts.
+    locations: OPN
+    organizations: OPN
+    state: present
+    filters: 
+      - permissions:
+        - view_architectures
+        search: ""
+      - permissions:
+        - view_domains
+        search: ""
+      - permissions:
+        - view_hosts
+        - create_hosts
+        - edit_hosts
+        - destroy_hosts
+        - build_hosts
+        - console_hosts
+        - forget_status_hosts
+        - power_hosts
+        search: hostgroup_title ~ OPN and usergroup = TEST1
+      - permissions:
+        - view_config_reports
+      - permissions:
+        - view_params
+        search: ""
+      - permissions:
+        - view_media
+        search: name ~ "Debian" or name ~ "Windows" or name ~ "ESXi"
+      - permissions:
+        - view_operatingsystems
+        search: name ~ "Debian" or name ~ "Windows" or name ~ "ESXi"
+      - permissions:
+        - view_ptables
+        search: name = "Preseed default LVM" or name = "Windows default partition table" or name = "Kickstart default"
+      - permissions:
+        - view_provisioning_templates
+        search: ""
+      - permissions:
+        - view_subnets
+        search: ""
+
 ###################################################################################################
 #  _  _  ___  ___ _____ ___ ___  ___  _   _ ___  ___
 # | || |/ _ \/ __|_   _/ __| _ \/ _ \| | | | _ \/ __|

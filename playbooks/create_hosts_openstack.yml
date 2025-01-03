@@ -4,40 +4,33 @@
   serial: 1
   gather_facts: false
 
-  # vars_prompt:
-  #   - name: username
-  #     prompt: 'Foreman username:'
-  #     private: false
-  #   - name: password
-  #     prompt: 'password:'
-  #     private: true
-
   vars:
     foreman_url_app: https://tfm-app.opn.lab
+    username: bob1
+    password: papillon
+    compute_resource: opn-test1
     compute_profile: debian-small
-    hostgroup: opn/os/debian
-    root_pass: papillon
     image: Debian12
-    username: "{{ username | d('bob1') }}"
-    password: "{{ password | d('papillon') }}"
-    compute_resource: "{{ compute_resource | d('opn-test1') }}"
+    hostgroup: opn/os/debian
+    owner_group: TEST1
+    root_pass: papillon
 
   module_defaults:
 
     group/theforeman.foreman.foreman:
-      username: "{{username}}"
-      password: "{{password}}"
+      username: "{{ username | d('bob1') }}"
+      password: "{{ password | d('papillon') }}"
       server_url: "{{ foreman_url_app }}"
       validate_certs: false
 
     theforeman.foreman.host:
       enabled: true
       image: "{{ image }}"
-      hostgroup: "{{ hostgroup }}"
-      root_pass: "{{ root_pass }}"
-      environment: "{{ env | d('production')  }}"
+      hostgroup: "{{ hostgroup | d('production') }}"
+      root_pass: "{{ root_pass | d('password') }}"
+      environment: "{{ env | d('production') }}"
       organization: "{{ organization | d('OPN') }}"
-      location: "{{ location | d('OPN')  }}"
+      location: "{{ location | d('OPN') }}"
       owner_group: "{{ owner_group | d('sysadm') }}"
       operatingsystem: "{{ operatingsystem | d('Debian 12') }}"
       medium: "{{ medium | d('Debian mirror') }}"
@@ -63,57 +56,43 @@
       - name: "Create a host in foreman on openstack"
         delegate_to: localhost
         theforeman.foreman.host:
-          username: bob1
-          password: papillon
-          owner_group: TEST1
-          compute_resource: opn-test1
           name: "{{ lookup('community.general.random_pet') }}.opn.lab"
           state: present
+        register: host
 
-      - name: "Create a host in foreman on openstack"
-        delegate_to: localhost
-        theforeman.foreman.host:
-          username: bob1
-          password: papillon
-          owner_group: TEST1
-          compute_resource: opn-test1
-          name: "{{ lookup('community.general.random_pet') }}.opn.lab"
-          state: present
+      - name: Display host created
+        ansible.builtin.debug:
+          msg: |
+            Name: {{host.entity.hosts[0].name}}
+            FQDN: fqdn
+            IPaddr: ipaddr
 
-        # loop: "{{ range(0,2) | list }}"
-        # loop_control:
-        #   pause: 10
+            debug: {{host.entity.hosts[0]}}
+
+      # loop: "{{ range(0,2) | list }}"
+      # loop_control:
+      #   pause: 60
       ignore_errors: true
 
-    - name: Test2 api
-      ansible.builtin.uri:
-        user: "admin"
-        password: "P4p1llon!!"
-        force_basic_auth: true
-        validate_certs: false
-        url: "{{ foreman_url_app }}/api/compute_resources?search=name%3Dopn-test1"
-        method: GET
-        status_code:
-          - 200
-      until: uri_output.status == 200
-      retries: 24
-      delay: 5
-      register: uri_output
+    # - name: Test2 api
+    #   ansible.builtin.uri:
+    #     user: "admin"
+    #     password: "P4p1llon!!"
+    #     force_basic_auth: true
+    #     validate_certs: false
+    #     url: "{{ foreman_url_app }}/api/compute_resources?search=name%3Dopn-test1"
+    #     method: GET
+    #     status_code:
+    #       - 200
+    #   until: uri_output.status == 200
+    #   retries: 24
+    #   delay: 5
+    #   register: uri_output
 
-    - name: Display Target Variables
-      ansible.builtin.debug:
-        msg: '{{uri_output.json.results}}'
+    # - name: Display Target Variables
+    #   ansible.builtin.debug:
+    #     msg: '{{uri_output.json.results}}'
   
-
-
-
-
-
-
-
-
-
-
     # - name: Test api
     #   ansible.builtin.uri:
     #     user: "admin"
@@ -127,48 +106,3 @@
     # - name: Display Target Variables
     #   ansible.builtin.debug:
     #     msg: '{{toto}}'        
-
-      # compute_attributes:
-      #   start: 1
-      #   cpus: "{{ vm_cpu_count }}"
-      #   corespersocket: 1
-      #   cluster: "{{ cluster }}"
-      #   path: "/Datacenters/DC/folder/subfolder"
-      #   guest_id: "{{ guest_id }}"
-      #   scsi_controller_type: ParaVirtualSCSIController
-      #   memory_mb: "{{ vm_memory }}"
-      #   interfaces_attributes:
-      #     - type: "interface"
-      #       compute_attributes:
-      #         name: nic1
-      #         compute_network: "{{ compute_network1 }}"
-      #         compute_type: VirtualVmxnet3
-      #         interface: "{{ vm_interface1 }}"
-      #         subnet: "{{ vm_subnet1 }}"
-      #         ip: "{{ vm_ip1 }}"
-      #         domain: "{{ domain1 }}"
-      #         primary: true
-      #         managed: true
-      #         provision: true
-      #         execution: true
-      #     - type: "interface"
-      #       primary: true
-      #       compute_attributes:
-      #         name: nic2
-      #         compute_network: "{{ compute_network1 }}"
-      #         compute_type: VirtualVmxnet3
-      #         network: "{{ vm_vlan_name2 }}"
-      #         interface: "{{ vm_interface2 }}"
-      #         subnet: "{{ vm_subnet2 }}"
-      #         ip: "{{ vm_ip2 }}"
-      #         domain: "{{ domain2 }}"
-      #         primary: false
-      #         managed: false
-      #         provision: false
-      #         execution: false
-      #   volumes_attributes:
-      #     0:
-      #       size_gb: 20
-      #       datastore: "{{ datastore }}"
-      #       thin: false
-      #       eager_zero: false

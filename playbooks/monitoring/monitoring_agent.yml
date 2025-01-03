@@ -1,0 +1,101 @@
+---
+
+- name: install icinga2 agent
+  hosts: all
+  become: true
+
+  vars:
+    # icinga2 agent onto all hosts
+    icinga2_confd: false # Disable example configuration
+    icinga2_purge_features: yes # Ansible will manage all features
+    icinga2_packages: ["icinga2"]
+    icinga2_state: started
+    icinga2_enabled: true
+    icinga2_plugins:
+      - plugins
+      - plugins-contrib
+    icinga2_constants:
+      TicketSalt: "{{ lookup('ansible.builtin.password', '.icinga-server-ticketsalt') }}"
+      NodeName: "{{ ansible_fqdn }}"
+      ZoneName: main
+    icinga2_config_host: "{{ ansible_fqdn }}"
+    icinga2_features:
+      - name: checker
+      - name: mainlog
+        severity: information
+      - name: notification
+        state: absent
+      - name: api
+        ca_host: "{{ groups['monitoring_app'][0] }}"
+        ticket_salt: "{{ icinga2_constants.TicketSalt }}"
+        endpoints:
+          - name: "{{ ansible_fqdn }}"
+            host: "{{ ansible_fqdn }}"
+            port: 5665
+          - name: "{{ groups['monitoring_app'][0] }}"
+            host: "{{ groups['monitoring_app'][0] }}"
+            port: 5665
+        zones:
+          - name: "{{ groups['monitoring_app'][0] }}"
+            endpoints:
+              - "{{ groups['monitoring_app'][0] }}"
+          - name: "{{ ansible_fqdn }}"
+            parent: "{{ groups['monitoring_app'][0] }}"
+            endpoints:
+              - "{{ ansible_fqdn }}"
+    # icinga2_objects:
+    #   "{{ ansible_fqdn }}":
+
+  pre_tasks:
+
+    - name: Install CA Certificates
+      ansible.builtin.apt:
+        name: ca-certificates
+
+    - name: Creating certs file in /usr/local/share/ca-certificates
+      ansible.builtin.copy:
+        dest: "{{ item.name }}"
+        content: "{{ item.filecontent }}"
+        owner: root
+        group: root
+        mode: 0644
+      loop: "{{ vault_ca_certs_files }}"
+
+    - name: Update ca-certificates
+      ansible.builtin.shell: |
+        update-ca-certificates
+
+    - name: Creates directory
+      ansible.builtin.file:
+        path: /var/lib/icinga2/certs
+        state: directory
+        owner: nagios
+        group: nagios
+        mode: 0775
+        recurse: yes
+
+    - name: Copy icinga2CA certs file in /var/lib/icinga2/certs/ca.crt
+      ansible.builtin.copy:
+        remote_src: true
+        src: /usr/local/share/ca-certificates/icinga2CA.crt
+        dest: /var/lib/icinga2/certs/ca.crt
+        owner: nagios
+        group: nagios
+        mode: 0644
+
+  roles:
+    - icinga.icinga.repos
+    - icinga.icinga.icinga2
+
+  post_tasks:
+
+    # - name: Restart service icinga2
+    #   ansible.builtin.service:
+    #     name: icinga2
+    #     state: restarted
+
+# export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+# .venv/bin/ansible-inventory -i inventory/foreman.yaml --graph group
+# .venv/bin/ansible-playbook playbooks/monitoring/monitoring_agent.yml --limit=group
+# .venv/bin/ansible-playbook -i inventory/opn -i inventory/foreman.yaml playbooks/monitoring/monitoring_agent.yml --limit=foreman_opn_os_debian --private-key=~/.ssh/test1 -u debian -b
+# .venv/bin/ansible-playbook -i inventory/opn -i inventory/foreman.yaml playbooks/monitoring/monitoring_agent.yml --limit=foreman_opn_os_debian -u debian -b

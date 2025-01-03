@@ -1,11 +1,15 @@
 ---
 
-- hosts: dns
+- hosts: tfm_puppet
   gather_facts: true
+  become: true
   roles:
-    - role: ansible-role-bind
+    - role: foreman-puppet
+  tags:
+    - tfm
+    - puppet
 
-- hosts: dns
+- hosts: tfm_puppet
   gather_facts: true
   become: true
   roles:

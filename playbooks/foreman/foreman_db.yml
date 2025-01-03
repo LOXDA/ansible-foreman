@@ -1,11 +1,15 @@
 ---
 
-- hosts: dns
+- hosts: tfm_db
   gather_facts: true
+  become: true
   roles:
-    - role: ansible-role-bind
+    - role: foreman-db
+  tags:
+    - tfm
+    - db
 
-- hosts: dns
+- hosts: tfm_db
   gather_facts: true
   become: true
   roles:

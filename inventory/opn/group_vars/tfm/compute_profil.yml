@@ -24,7 +24,8 @@ foreman_compute_profil:
     compute_attributes:
 
       - compute_resource: opn-admin
-        vm_attrs: &vm_attrs_small
+        vm_attrs:
+          tenant_id: admin
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
@@ -32,48 +33,102 @@ foreman_compute_profil:
           size_gb: 8
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
-          tenant_id: admin
 
       - compute_resource: opn-test1
         vm_attrs: 
-          <<: *vm_attrs_small
           tenant_id: "test1"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test2
         vm_attrs: 
-          <<: *vm_attrs_small
           tenant_id: "test2"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test3
         vm_attrs: 
-          <<: *vm_attrs_small
           tenant_id: "test3"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test4
         vm_attrs: 
-          <<: *vm_attrs_small
           tenant_id: "test4"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test5
         vm_attrs: 
-          <<: *vm_attrs_small
           tenant_id: "test5"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test6
         vm_attrs: 
-          <<: *vm_attrs_small
           tenant_id: "test6"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test7
         vm_attrs: 
-          <<: *vm_attrs_small
           tenant_id: "test7"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test8
         vm_attrs: 
-          <<: *vm_attrs_small
           tenant_id: "test8"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
   - name: debian-medium
     compute_attributes:
 
       - compute_resource: opn-admin
-        vm_attrs: &vm_attrs_medium
-          availability_zone: "nova"
+        vm_attrs:
           tenant_id: "admin"
+          availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
           boot_from_volume: false
@@ -83,45 +138,99 @@ foreman_compute_profil:
 
       - compute_resource: opn-test1
         vm_attrs: 
-          <<: *vm_attrs_medium
           tenant_id: "test1"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test2
         vm_attrs: 
-          <<: *vm_attrs_medium
           tenant_id: "test2"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test3
         vm_attrs: 
-          <<: *vm_attrs_medium
           tenant_id: "test3"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test4
         vm_attrs: 
-          <<: *vm_attrs_medium
           tenant_id: "test4"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test5
         vm_attrs: 
-          <<: *vm_attrs_medium
           tenant_id: "test5"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test6
         vm_attrs: 
-          <<: *vm_attrs_medium
           tenant_id: "test6"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test7
         vm_attrs: 
-          <<: *vm_attrs_medium
           tenant_id: "test7"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test8
         vm_attrs: 
-          <<: *vm_attrs_medium
           tenant_id: "test8"
-
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
   - name: debian-large
     compute_attributes:
 
       - compute_resource: opn-admin
-        vm_attrs: &vm_attrs_large
-          availability_zone: "nova"
+        vm_attrs:
           tenant_id: "admin"
+          availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
           boot_from_volume: false
@@ -131,36 +240,86 @@ foreman_compute_profil:
 
       - compute_resource: opn-test1
         vm_attrs: 
-          <<: *vm_attrs_large
           tenant_id: "test1"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test2
         vm_attrs: 
-          <<: *vm_attrs_large
           tenant_id: "test2"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
+
       - compute_resource: opn-test3
         vm_attrs: 
-          <<: *vm_attrs_large
           tenant_id: "test3"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
       - compute_resource: opn-test4
         vm_attrs: 
-          <<: *vm_attrs_large
           tenant_id: "test4"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
       - compute_resource: opn-test5
         vm_attrs: 
-          <<: *vm_attrs_large
           tenant_id: "test5"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
       - compute_resource: opn-test6
         vm_attrs: 
-          <<: *vm_attrs_large
           tenant_id: "test6"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
       - compute_resource: opn-test7
         vm_attrs: 
-          <<: *vm_attrs_large
           tenant_id: "test7"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
       - compute_resource: opn-test8
         vm_attrs: 
-          <<: *vm_attrs_large
           tenant_id: "test8"
+          availability_zone: "nova"
+          image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
+          flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
+          boot_from_volume: false
+          size_gb: 8
+          nics:
+            - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
  #    # # #    # #####   ####  #    #  ####
  #    # # ##   # #    # #    # #    # #

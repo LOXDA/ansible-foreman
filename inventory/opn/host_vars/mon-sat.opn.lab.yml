@@ -25,7 +25,7 @@ icinga2_features:
     accept_config: true
     accept_commands: true
     endpoints:
-      - name: "{{ groups['monitoring_sat'][0] }}"
+      - name: "{{ ansible_fqdn }}"
       - name: "{{ groups['monitoring_app'][0] }}"
         host: "{{ groups['monitoring_app'][0] }}"
         port: 5665
@@ -33,9 +33,9 @@ icinga2_features:
       - name: "main"
         endpoints:
           - "{{ groups['monitoring_app'][0] }}"
-      - name: "{{ groups['monitoring_sat'][0] }}"
+      - name: "{{ ansible_fqdn }}"
         parent: "main"
         endpoints:
-          - "{{ groups['monitoring_sat'][0] }}"
+          - "{{ ansible_fqdn }}"
 
 icinga2_objects: []

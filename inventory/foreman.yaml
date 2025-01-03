@@ -1,6 +1,7 @@
+# export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt somewhere..
 plugin: theforeman.foreman.foreman
 url: https://tfm-app.opn.lab
-validate_certs: false
+# validate_certs: false
 user: admin
 password: P4p1llon!!
 cache: yes
