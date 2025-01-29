@@ -844,30 +844,30 @@ foreman_operatingsystems:
   #       value: Europe/Paris
   #     - name: serialnum
   #       parameter_type: string
-  #       value: JV425-4H100-VZHH8-Q23NP-3A9PP
+  #       value: JJ2WR-25L9P-H71A8-6J20P-C0K3F	
   #   state: present
 
-  # - name: ESXi-7.0.3-19193900
-  #   description: ESXi-7.0.3-19193900
-  #   release_name: ESXi-7.0.3-19193900
-  #   major: 7
-  #   minor: 0.3
-  #   family: Redhat
-  #   password_hash: SHA512
-  #   architectures: x86_64
-  #   media: ESXi dummy
-  #   ptables:
-  #     - Kickstart default
-  #   provisioning_template: ESXi Complex Kickstart
-  #   parameters:
-  #     - name: lang
-  #       value: fr_FR
-  #     - name: time-zone
-  #       value: Europe/Paris
-  #     - name: serialnum
-  #       parameter_type: string
-  #       value: JV425-4H100-VZHH8-Q23NP-3A9PP
-  #   state: present
+  - name: ESXi-7.0.3-21930508
+    description: ESXi-7.0.3-21930508
+    release_name: ESXi-7.0.3-21930508
+    major: 7
+    minor: 0.3
+    family: Redhat
+    password_hash: SHA512
+    architectures: x86_64
+    media: ESXi dummy
+    ptables:
+      - Kickstart default
+    provisioning_template: ESXi Minimal Kickstart
+    parameters:
+      - name: lang
+        value: fr_FR
+      - name: time-zone
+        value: Europe/Paris
+      - name: serialnum
+        parameter_type: string
+        value: JJ2WR-25L9P-H71A8-6J20P-C0K3F
+    state: present
 
                             #####        ###
  ######  ####  #    # #    #     #      #   #
@@ -877,9 +877,9 @@ foreman_operatingsystems:
  #      #    #  #  #  #    #     # ###  #   #
  ######  ####  #    # #     #####  ###   ###
 
-  # - name: ESXi-8.0.1-21495797
-  #   description: ESXi-8.0.1-21495797
-  #   release_name: ESXi-8.0.1-21495797
+  # - name: ESXi-8.0.3-24022510
+  #   description: ESXi-8.0.3-24022510
+  #   release_name: ESXi-8.0.3-24022510
   #   major: 8
   #   minor: 0.1
   #   family: Redhat

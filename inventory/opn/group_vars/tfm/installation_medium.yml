@@ -64,22 +64,24 @@ foreman_installation_medium:
     organizations:
       - OPN
 
-  # - name: ESXi dummy
-  #   path: "http://{{ foreman_host_proxy }}:8000/httpboot/esxi"
-  #   os_family: Redhat
-  #   operatingsystems:
-  #     - ESXi-6.5.0-14320405
-  #     - ESXi-6.7.0-15160138
-  #     - ESXi-7.0.1-16850804
-  #     - ESXi-7.0.3-19193900
-  #     - ESXi-8.0.1-21495797
-  #   organizations: 
-  #     - OPN
-  #   locations:
-  #     - OPN
+  - name: ESXi dummy
+    path: "http://{{ foreman_host_proxy_esxi }}:8000/httpboot/esxi"
+    os_family: Redhat
+    operatingsystems:
+      # - ESXi-6.5.0-14320405
+      # - ESXi-6.7.0-15160138
+      # - ESXi-7.0.1-16850804
+      # - ESXi-7.0.3-19193900
+      # - ESXi-7.0.3-23794027
+      # - ESXi-8.0.1-21495797
+      - ESXi-7.0.3-21930508
+    organizations: 
+      - OPN
+    locations:
+      - OPN
 
   # - name: Windows images
-  #   path: "http://{{ foreman_host_proxy }}:8000/httpboot/wimimages/$arch/$major"
+  #   path: "http://{{ foreman_host_proxy_esxi }}:8000/httpboot/wimimages/$arch/$major"
   #   os_family: Windows
   #   operatingsystems:
   #     - Windows 10

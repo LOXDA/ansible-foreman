@@ -258,30 +258,30 @@ foreman_hostgroup:
 # lab/vsphere
 ###########################################################################################
 
-  # - name: vsphere
-  #   parent: opn
-  #   organizations: 
-  #     - OPN
-  #   locations:
-  #     - OPN
+  - name: vsphere
+    parent: opn
+    organizations: 
+      - OPN
+    locations:
+      - OPN
 
-  # - name: vcenter
-  #   parent: opn/vsphere
-  #   organizations: 
-  #     - OPN
-  #   locations:
-  #     - OPN
+  - name: vcenter
+    parent: opn/vsphere
+    organizations: 
+      - OPN
+    locations:
+      - OPN
 
-  # - name: esxi
-  #   parent: opn/vsphere
-  #   organizations: 
-  #     - OPN
-  #   locations:
-  #     - OPN
-  #   parameters:
-  #     - name: serialnum
-  #       parameter_type: string
-  #       value: JV425-4H100-VZHH8-Q23NP-3A9PP
+  - name: esxi
+    parent: opn/vsphere
+    organizations: 
+      - OPN
+    locations:
+      - OPN
+    parameters:
+      # - name: serialnum
+      #   parameter_type: string
+      #   value: JV425-4H100-VZHH8-Q23NP-3A9PP
   #   # compute_resource: pve-gsw
   #   # compute_profile: esxi-medium
   #   # environment: lab

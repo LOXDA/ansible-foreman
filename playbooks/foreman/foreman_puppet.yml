@@ -6,7 +6,7 @@
   roles:
     - role: foreman-puppet
   tags:
-    - tfm
+    # - tfm
     - puppet
 
 - hosts: tfm_puppet

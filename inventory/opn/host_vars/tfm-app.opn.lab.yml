@@ -37,14 +37,16 @@ foreman_plugins:
   # - expire-hosts
   # - dhcp-browser
   # - netbox
-  # - proxmox
+  - proxmox
   # - snapshot-management
 
 foreman_proxy_plugins: []
 
 foreman_compute:
   - vmware
+  - libvirt
   - openstack
+#  - proxmox
 
 # Options. {}
 foreman_options:

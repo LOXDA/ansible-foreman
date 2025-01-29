@@ -9,9 +9,9 @@ openldap_client_enable: false
 
 # configure server options
 shared_storage: False
-openldap_server_enable_ssl: false
+openldap_server_enable_ssl: true
 openldap_server_enable_posixaccounts: true
-openldap_server_enable_sshkeys: true
+openldap_server_enable_sshkeys: false
 openldap_server_enable_autofs: false
 openldap_server_enable_samba: false
 openldap_server_enable_afpd: false
@@ -19,3 +19,12 @@ openldap_server_enable_afpd: false
 # ldap tree
 ssh_groups: "{{vault_openldap_ou_groups}}"
 ssh_users: "{{vault_openldap_ou_users}}"
+
+# ldap ssl
+ssl_certchain: /var/lib/puppet/ssl/certs/ldap1.opn.lab.pem
+ssl_certpath: '{{openldap_server_app_path}}/{{openldap_server_domain_name}}.crt'
+ssl_privkey: /var/lib/puppet/ssl/private_keys/ldap1.opn.lab.pem
+ssl_keypath: '{{openldap_server_app_path}}/{{openldap_server_domain_name}}.key'
+
+# wget https://raw.githubusercontent.com/jirutka/ssh-ldap-pubkey/refs/heads/master/etc/openssh-lpk.schema -O /etc/ldap/schema/openssh-lpk.schema
+# apt install autofs autofs-ldap

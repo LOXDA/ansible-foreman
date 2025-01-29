@@ -6,7 +6,7 @@
   roles:
     - role: foreman-db
   tags:
-    - tfm
+    # - tfm
     - db
 
 - hosts: tfm_db

@@ -5,7 +5,7 @@ foreman_version: '3.13'
 puppet_version: puppet7
 
 # install options
-foreman_cmd_options: []
+foreman_cmd_options: ['--puppet-server-ca-client-allowlist={{ groups["tfm_proxy"][1] }}','--puppet-server-admin-api-allowlist={{ groups["tfm_proxy"][1] }}']
 foreman_plugins: []
 foreman_compute: []
 foreman_proxy_plugins: []

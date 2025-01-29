@@ -6,7 +6,7 @@
   roles:
     - role: foreman-app
   tags:
-    - tfm
+    # - tfm
     - app
 
 # fetch oauth_consumer_* info
@@ -25,7 +25,7 @@
       set_fact:
         oauth_consumer_secret: "{{ settingsyaml['content'] | b64decode | regex_findall(':oauth_consumer_secret: (.+)') | first }}"
   tags:
-    - tfm
+    # - tfm
     - app
     - oauth
 

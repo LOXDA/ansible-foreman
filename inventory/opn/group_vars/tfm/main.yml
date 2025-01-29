@@ -4,6 +4,7 @@ foreman_version: '3.13'
 # accès a l'app foreman lab déployée pour provisioning
 foreman_host_app: "{{ groups['tfm_app'][0] }}"
 foreman_host_proxy: "{{ groups['tfm_proxy'][0] }}"
+foreman_host_proxy_esxi: "{{ groups['tfm_proxy'][1] }}"
 foreman_host_puppet: "{{ groups['tfm_puppet'][0] }}"
 foreman_host_puppetserver: "{{ groups['tfm_db'][0] }}"
 

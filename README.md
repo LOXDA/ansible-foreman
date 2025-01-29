@@ -12,44 +12,47 @@ One tool to deploy the stack
       |      Physical       |
       +---------------------+
 
-### Ansible repo to provision an instance of theforeman with predefined set of parameters
+### Ansible repo to provision an instance of theforeman with custom set of parameters (deploy & provision)
 
 Setup deployement:
 
-    Using a working python3 environnement, or activate a virtualenv.
-    pip3 install -r ./requirement.txt
-    ansible-galaxy install -r roles/requirements.yml
-    #export ANSIBLE_COLLECTIONS_PATH=./collections
+Using a working python environnement, or activate a virtualenv :
 
-Run examples:
+```
+    pip3 install -r ./requirement.txt
+    export ANSIBLE_COLLECTIONS_PATH=./collections
+    ansible-galaxy collection install -r roles/requirements.yml
+    export ANSIBLE_ROLES_PATH=./roles
+    ansible-galaxy role install -r roles/requirements.yml
+```
+
+Run examples :
 ```
 # clean environment (ONLY IF YOU NEED SOME CLEANUP)
 unset $(set | grep --line-buffered ^ANSIBLE_ | awk -F= '{print $1}')
-
-# prepare
-export ANSIBLE_VAULT_PASSWORD_FILE=.vaultpass
-ansible-playbook -i inventory/lab playbooks/dns.yml
 ```
 ```
 # deploy whole
-ansible-playbook -i inventory/lab playbooks/foreman_deploy.yml --tags tfm,fixdhcp
+ansible-playbook -i inventory/lab playbooks/foreman_deploy.yml
 ```
 ```
-# deploy individual parts
-ansible-playbook -i inventory/lab playbooks/foreman_puppet.yml --tags tfm,puppet
-ansible-playbook -i inventory/lab playbooks/foreman_db.yml --tags tfm,db
-ansible-playbook -i inventory/lab playbooks/foreman_app.yml --tags tfm,app
-ansible-playbook -i inventory/lab playbooks/foreman_proxy.yml --tags tfm,proxy
+# deploy only individual parts
+ansible-playbook -i inventory/lab playbooks/foreman_puppet.yml --tags puppet
+ansible-playbook -i inventory/lab playbooks/foreman_db.yml --tags db
+ansible-playbook -i inventory/lab playbooks/foreman_app.yml --tags app
+ansible-playbook -i inventory/lab playbooks/foreman_proxy.yml --tags proxy,oauth
+
+# +fixdhcp for debian>10 with broken omapi in isc-dhcp packaging
+ansible-playbook -i inventory/lab playbooks/foreman_proxy.yml --tags proxy,oauth,fixdhcp
 ```
 ```
 # provisioning
 ansible-playbook -i inventory/lab playbooks/foreman_deploy.yml --tags provisioning
 ```
 
-Parameters are defined at inventory/group level.
-Be sure to maps your instances to group in inventory
-Rename files in host_vars accordingly.
-Keep your inventory as tidy as possible.
+Parameters are defined at inventory/group level.<br/>
+Be sure to maps your instances to group in inventory files.<br/>
+Rename files in host_vars accordingly.<br/>
 
 Some macro views:
 
