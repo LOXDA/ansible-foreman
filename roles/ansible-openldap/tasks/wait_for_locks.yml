@@ -1,0 +1,50 @@
+---
+- name: wait_for_locks | Test for cloud-init
+  ansible.builtin.shell:
+    cmd: command -v cloud-init || true
+    executable: /bin/bash
+  changed_when: false
+
+- name: wait_for_locks | Print cloud-init check
+  ansible.builtin.debug:
+    msg: "{{ cicheck }}"
+  when:
+    - cicheck.rc is defined
+    - cicheck.rc == "0"
+
+- name: wait_for_locks | Wait or cloud-init to finish
+  community.general.cloud_init_data_facts:
+    filter: status
+  register: ciresult
+  until:
+    - ciresult.cloud_init_data_facts.status.v1.stage is defined
+    - not ciresult.cloud_init_data_facts.status.v1.stage
+  retries: 50
+  delay: 10
+  when:
+    - cicheck.rc is defined
+    - cicheck.rc == "0"
+
+- name: wait_for_locks | Wait for /var/lib/dpkg/lock
+  ansible.builtin.shell:
+    cmd: while fuser /var/lib/dpkg/lock; do echo "locked"; sleep 1; done
+    executable: /bin/bash
+  when:
+    - ansible_os_family == "Debian"
+  changed_when: false
+
+- name: wait_for_locks | Wait for /var/lib/dpkg/lock-frontend
+  ansible.builtin.shell:
+    cmd: while fuser /var/lib/dpkg/lock-frontend; do echo "locked"; sleep 1; done
+    executable: /bin/bash
+  when:
+    - ansible_os_family == "Debian"
+  changed_when: false
+
+- name: wait_for_locks | Wait for /var/lib/rpm/.rpm.lock
+  ansible.builtin.shell:
+    cmd: while fuser /var/lib/rpm/.rpm.lock; do echo "locked"; sleep 1; done
+    executable: /bin/bash
+  when:
+    - ansible_os_family == "RedHat"
+  changed_when: false

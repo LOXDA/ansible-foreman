@@ -1,0 +1,55 @@
+[sssd]
+{% if shared_storage is defined and shared_storage %}
+services = nss, pam, sudo, autofs
+{% else %}
+services = nss, pam, sudo
+{% endif %}
+config_file_version = 2
+domains = default
+
+{% if shared_storage is defined and shared_storage %}
+[autofs]
+{% endif %}
+
+[sudo]
+
+[nss]
+
+[pam]
+offline_credentials_expiration = 60
+
+[domain/default]
+cache_credentials = True
+ldap_search_base = {{ openldap_server_dc }}
+id_provider = ldap
+auth_provider = ldap
+chpass_provider = ldap
+access_provider = ldap
+sudo_provider = ldap
+{% if openldap_server_enable_ssl %}
+ldap_id_use_start_tls = True
+ldap_uri = ldaps://{{ openldap_server_domain_name }}
+ldap_tls_reqcert = demand
+ldap_tls_cacert = {{ ssl_certpath }}
+ldap_tls_cacertdir = {{ ssl_certpath.split('/')[:-1] }}
+{% endif %}
+{% if not openldap_server_enable_ssl %}
+ldap_id_use_start_tls = False
+ldap_uri = ldap://{{ openldap_server_domain_name }}
+{% endif %}
+ldap_default_bind_dn = {{ openldap_server_bind_dn }}
+ldap_default_authtok = {{ openldap_server_rootpw }}
+ldap_search_timeout = 50
+ldap_network_timeout = 60
+ldap_sudo_search_base = {{ admin_ou }}
+ldap_access_order = filter
+ldap_access_filter = (objectClass=posixAccount)
+{% if shared_storage is defined and shared_storage %}
+autofs_provider = ldap
+ldap_autofs_search_base = ou=automount,ou=admin,dc=ldap,dc=home,dc=prettybaked,dc=com
+ldap_autofs_map_object_class = automountMap
+ldap_autofs_entry_object_class = automount
+ldap_autofs_map_name = cn=/-
+ldap_autofs_entry_key = cn
+ldap_autofs_entry_value = automountInformation
+{% endif %}

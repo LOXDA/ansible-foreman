@@ -1,0 +1,121 @@
+---
+- name: Wait for locks
+  ansible.builtin.include_tasks:
+    file: wait_for_locks.yml
+
+- name: Install the openldap client and required Packages for RedHat
+  ansible.builtin.dnf:
+    name: "{{ openldap_client_pkgs }}"
+    state: present
+    update_cache: true
+  notify:
+    - restart_login_services
+
+- name: Install ssh-ldap-pubkey pip package
+  ansible.builtin.include_tasks:
+    file: ssh-ldap-pubkey.yml
+    apply:
+      tags:
+        - openldap-sshd
+  when:
+    - openldap_server_enable_sshkeys | default(true)
+  tags:
+    - openldap-sshd
+
+- name: Copy /etc/ldap.conf for client
+  ansible.builtin.template:
+    src: client_ldap.conf.j2
+    dest: /etc/ldap.conf
+    mode: "0644"
+  notify:
+    - restart_login_services
+    - restart_ns_daemons
+
+- name: Copy /etc/sssd/sssd.conf for client
+  ansible.builtin.template:
+    src: sssd.conf.j2
+    dest: /etc/sssd/sssd.conf
+    owner: root
+    group: root
+    mode: "0600"
+  notify:
+    - restart_login_services
+    - restart_ns_daemons
+    - Restart SSSD
+  when:
+    - ansible_distribution_major_version >= "8"
+
+- name: Copy nsswitch.conf
+  ansible.builtin.template:
+    src: nsswitch.conf.j2
+    dest: /etc/nsswitch.conf
+    mode: "0644"
+  notify:
+    - restart_ns_daemons
+  when:
+    - ansible_distribution_major_version >= "8"
+
+- name: Copy nslcd.conf
+  ansible.builtin.template:
+    src: nslcd.conf.j2
+    dest: /etc/nslcd.conf
+    mode: "0640"
+  notify:
+    - restart_ns_daemons
+    - restart_login_services
+
+- name: Autofs packages
+  ansible.builtin.dnf:
+    name: autofs
+    state: present
+    update_cache: true
+  when:
+    - openldap_server_enable_autofs
+
+- name: Start AutoFS service
+  ansible.builtin.service:
+    name: autofs
+    state: started
+    enabled: true
+  when:
+    - openldap_server_enable_autofs
+
+- name: Start rpcbind service
+  ansible.builtin.service:
+    name: rpcbind
+    state: started
+    enabled: true
+
+- name: Copy autofs supporting file
+  ansible.builtin.template:
+    src: autofs.j2
+    dest: /etc/sysconfig/autofs
+    mode: "0644"
+  notify:
+    - Restart AutoFS
+  when:
+    - openldap_server_enable_autofs
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Run 'authconfig --enableldap --enableldapauth --enablemkhomedir --update'
+  ansible.builtin.command: authconfig --enableldap --enableldapauth --enablemkhomedir --update
+  when:
+    - run_authconfig | default(False)
+    - ansible_distribution_major_version < "8"
+  register: run_authconfig
+  changed_when: run_authconfig is success
+
+- name: Create user home directories
+  ansible.builtin.file:
+    state: directory
+    path: /home/{{ item.key }}
+    owner: "{{ item.value.uid }}"
+    group: "{{ item.value.gid }}"
+    mode: "0755"
+  loop: "{{ ssh_users | default({}) | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when:
+    - not openldap_server_enable_autofs
