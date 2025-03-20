@@ -34,7 +34,7 @@ foreman_usergroup:
       - Hosts admins
       - Ansible admins
 
-  - name: TEST1
+  - name: LAB1
     admin: false
     roles:
       - Access dashboard
@@ -45,12 +45,12 @@ foreman_usergroup:
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn-test1
+      - Compute resources users opn-lab1
       - Hostgroups users
       - Hosts admins
       - Ansible admins
 
-  - name: TEST2
+  - name: LAB2
     admin: false
     roles:
       - Access dashboard
@@ -61,12 +61,12 @@ foreman_usergroup:
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn-test2
+      - Compute resources users opn-lab2
       - Hostgroups users
       - Hosts admins
       - Ansible admins
 
-  - name: TEST3
+  - name: LAB3
     admin: false
     roles:
       - Access dashboard
@@ -77,12 +77,12 @@ foreman_usergroup:
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn-test3
+      - Compute resources users opn-lab3
       - Hostgroups users
       - Hosts admins
       - Ansible admins
 
-  - name: TEST4
+  - name: LAB4
     admin: false
     roles:
       - Access dashboard
@@ -93,12 +93,12 @@ foreman_usergroup:
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn-test4
+      - Compute resources users opn-lab4
       - Hostgroups users
       - Hosts admins
       - Ansible admins
 
-  - name: TEST5
+  - name: LAB5
     admin: false
     roles:
       - Access dashboard
@@ -109,12 +109,12 @@ foreman_usergroup:
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn-test5
+      - Compute resources users opn-lab5
       - Hostgroups users
       - Hosts admins
       - Ansible admins
 
-  - name: TEST6
+  - name: LAB6
     admin: false
     roles:
       - Access dashboard
@@ -125,12 +125,12 @@ foreman_usergroup:
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn-test6
+      - Compute resources users opn-lab6
       - Hostgroups users
       - Hosts admins
       - Ansible admins
 
-  - name: TEST7
+  - name: LAB7
     admin: false
     roles:
       - Access dashboard
@@ -141,12 +141,12 @@ foreman_usergroup:
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn-test7
+      - Compute resources users opn-lab7
       - Hostgroups users
       - Hosts admins
       - Ansible admins
 
-  - name: TEST8
+  - name: LAB8
     admin: false
     roles:
       - Access dashboard
@@ -157,7 +157,7 @@ foreman_usergroup:
       - Smart proxies users
       - Compute images users
       - Compute profiles users
-      - Compute resources users opn-test8
+      - Compute resources users opn-lab8
       - Hostgroups users
       - Hosts admins
       - Ansible admins
@@ -172,27 +172,27 @@ foreman_external_usergroup:
     auth_source: opn-ldap1
     usergroup: sysadm
 
-  - name: tfm-test1
+  - name: tfm-lab1
     auth_source: opn-ldap1
-    usergroup: TEST1
-  - name: tfm-test2
+    usergroup: LAB1
+  - name: tfm-lab2
     auth_source: opn-ldap1
-    usergroup: TEST2
-  - name: tfm-test3
+    usergroup: LAB2
+  - name: tfm-lab3
     auth_source: opn-ldap1
-    usergroup: TEST3
-  - name: tfm-test4
+    usergroup: LAB3
+  - name: tfm-lab4
     auth_source: opn-ldap1
-    usergroup: TEST4
-  - name: tfm-test5
+    usergroup: LAB4
+  - name: tfm-lab5
     auth_source: opn-ldap1
-    usergroup: TEST5
-  - name: tfm-test6
+    usergroup: LAB5
+  - name: tfm-lab6
     auth_source: opn-ldap1
-    usergroup: TEST6
-  - name: tfm-test7
+    usergroup: LAB6
+  - name: tfm-lab7
     auth_source: opn-ldap1
-    usergroup: TEST7
-  - name: tfm-test8
+    usergroup: LAB7
+  - name: tfm-lab8
     auth_source: opn-ldap1
-    usergroup: TEST8
+    usergroup: LAB8

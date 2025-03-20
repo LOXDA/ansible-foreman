@@ -84,7 +84,7 @@ foreman_roles:
         - view_subnets
         search: ""
 
-  - name: Hosts admins TEST1
+  - name: Hosts admins LAB1
     description: Role granting permissions to manage hosts.
     locations: OPN
     organizations: OPN
@@ -105,7 +105,7 @@ foreman_roles:
         - console_hosts
         - forget_status_hosts
         - power_hosts
-        search: hostgroup_title ~ OPN and usergroup = TEST1
+        search: hostgroup_title ~ OPN and usergroup = LAB1
       - permissions:
         - view_config_reports
       - permissions:
@@ -197,7 +197,7 @@ foreman_roles:
         - view_compute_resources_vms
         search: name = opn-admin
 
-  - name: Compute resources users opn-test1
+  - name: Compute resources users opn-lab1
     description: 
     locations: OPN
     organizations: OPN
@@ -211,9 +211,9 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = opn-test1
+        search: name = opn-lab1
 
-  - name: Compute resources users opn-test2
+  - name: Compute resources users opn-lab2
     description: 
     locations: OPN
     organizations: OPN
@@ -227,9 +227,9 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = opn-test2
+        search: name = opn-lab2
 
-  - name: Compute resources users opn-test3
+  - name: Compute resources users opn-lab3
     description: 
     locations: OPN
     organizations: OPN
@@ -243,9 +243,9 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = opn-test3
+        search: name = opn-lab3
 
-  - name: Compute resources users opn-test4
+  - name: Compute resources users opn-lab4
     description: 
     locations: OPN
     organizations: OPN
@@ -259,9 +259,9 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = opn-test4
+        search: name = opn-lab4
 
-  - name: Compute resources users opn-test5
+  - name: Compute resources users opn-lab5
     description: 
     locations: OPN
     organizations: OPN
@@ -275,9 +275,9 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = opn-test5
+        search: name = opn-lab5
 
-  - name: Compute resources users opn-test6
+  - name: Compute resources users opn-lab6
     description: 
     locations: OPN
     organizations: OPN
@@ -291,9 +291,9 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = opn-test6
+        search: name = opn-lab6
 
-  - name: Compute resources users opn-test7
+  - name: Compute resources users opn-lab7
     description: 
     locations: OPN
     organizations: OPN
@@ -307,9 +307,9 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = opn-test7
+        search: name = opn-lab7
 
-  - name: Compute resources users opn-test8
+  - name: Compute resources users opn-lab8
     description: 
     locations: OPN
     organizations: OPN
@@ -323,7 +323,7 @@ foreman_roles:
         - power_compute_resources_vms
         - view_compute_resources
         - view_compute_resources_vms
-        search: name = opn-test8
+        search: name = opn-lab8
 
 ###################################################################################################
 #   ___ ___  __  __ ___ _   _ _____ ___    ___ ___  ___  ___ ___ _

@@ -1,0 +1,7 @@
+---
+- name: Playbook for Guacamole Hosts
+  hosts: guac
+  tasks:
+    - name: Include ansible-guacamole
+      ansible.builtin.include_role:
+        name: ansible-guacamole

@@ -1,0 +1,70 @@
+---
+
+guacamole_version: 1.5.5
+
+guacd_config:
+  install: true
+  daemon:
+    log_level: info
+  server:
+    bind_host: 127.0.0.1
+    bind_port: 4822
+
+guacamole_openid_auth: true
+guacamole_auth_openid_priority: "000-"
+
+# Define OpenID Info
+guacamole_openid:
+  authorization-endpoint: https://sso.opn.lab/realms/master/protocol/openid-connect/auth
+  jwks-endpoint: https://sso.opn.lab/realms/master/protocol/openid-connect/certs
+  issuer: https://sso.opn.lab/realms/master
+  client-id: guac.opn.lab-guacamole-openidc
+  redirect-uri: https://guacamole.loxda.net/
+  username-claim-type: preferred_username
+  groups-claim-type: groups
+  allowed-clock-skew: 500
+
+guacamole_mysql_auth: true
+guacamole_mysql_connector_version: 9.2.0
+
+# Define MySQL DB Info
+guacamole_mysql_db:
+  name: guacamole
+  host: localhost
+  port: 3306
+  username: guacamole
+  password: guacamole
+  auto-create-accounts: true
+
+# RDP settings
+guacamole_rdp_color_depth: 24
+guacamole_rdp_disable_auth: false
+guacamole_rdp_height: 900
+guacamole_rdp_width: 1440
+guacamole_rdp_security: rdp
+guacamole_rdp_ignore_cert: true
+
+guacamole_ldap:
+  servers:
+    - name: ldap1.opn.lab
+      port: 389
+      encryption_method: none
+      max_search_results: 1000
+      search_bind_dn: uid=bind,dc=ldap1,dc=opn,dc=lab
+      search_bind_password: bind
+      user_base_dn: ou=users,dc=ldap1,dc=opn,dc=lab
+      username_attribute: uid
+      member_attribute: member
+      member_attribute-type: uid
+      user_attributes: cn, givenName, sn, mail
+      user_search-filter: (objectClass=posixAccount)
+      config_base_dn: ou=guacamole_connections,dc=ldap1,dc=opn,dc=lab
+      group_base_dn: ou=guacamole_groups,dc=ldap1,dc=opn,dc=lab
+      group_name_attribute: cn
+      group_search_filter: (objectClass=*)
+      dereference_aliases: never
+      follow_referrals: false
+      max_referral_hops: 5
+      operation_timeout: 30
+
+# WX4NM-KYWYW-QJJR4-XV3QB-6VM33

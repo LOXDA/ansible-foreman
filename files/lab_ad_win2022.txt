@@ -1,0 +1,9 @@
+Install-WindowsFeature AD-Domain-Services -IncludeManagementTools -Verbose
+Install-ADDSForest -DomainName ad.lab
+
+Set-ADDefaultDomainPasswordPolicy -Identity ad.lab -ComplexityEnabled $false -PasswordHistoryCount 0
+
+$secpasswd = ConvertTo-SecureString -String "papillon" -AsPlainText -Force
+
+New-ADUser -Name "Bob" -GivenName "Bob" -Surname "Fet" -SamAccountName "bob" -UserPrincipalName "bob@ad.lab" -AccountPassword $secpasswd -Enabled $true
+New-ADUser -Name "Alice" -GivenName "Alice" -Surname "Wonder" -SamAccountName "alice" -UserPrincipalName "alice@ad.lab" -AccountPassword $secpasswd -Enabled $true

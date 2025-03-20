@@ -1,11 +1,20 @@
-[dns]
-ns1.opn.lab
+; [mutu]
+; m0
+
+; [dns]
+; ns1
 
 [ldapservers]
 ldap1.opn.lab ansible_host=192.168.133.246
 
 [sso]
-auth.opn.lab ansible_host=192.168.133.245
+sso.opn.lab ansible_host=192.168.133.245
+
+[guac]
+guac.opn.lab ansible_host=192.168.133.243
+
+[smtp]
+smtp.opn.lab ansible_host=192.168.133.244
 
 [tfm:vars]
 ansible_user=debian

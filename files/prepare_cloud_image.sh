@@ -1,4 +1,4 @@
-# very lazy way of not using user_data to accomplish the same result
+# lazy way of not using user_data to accomplish the same result
 
 .venv/bin/ansible -i inventory/opn -m shell -a 'sudo sed -i -e "s/127.0.0.1 localhost/# 127.0.0.1 localhost/" /etc/hosts' tfm
 .venv/bin/ansible -i inventory/opn -m shell -a 'sudo sed -i -e "s/127.0.1.1/127.0.0.1/" /etc/hosts' tfm

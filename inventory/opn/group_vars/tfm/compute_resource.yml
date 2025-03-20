@@ -17,7 +17,7 @@ foreman_compute_resources:
       project_domain_name: Default
       project_domain_id: default
 
-  - name: opn-test1
+  - name: opn-lab1
     organizations:
       - OPN
     locations:
@@ -27,12 +27,12 @@ foreman_compute_resources:
       url: https://192.168.133.3:5000/v3
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: test1
+      tenant: lab1
       domain: opn.lab
       project_domain_name: Default
       project_domain_id: default
 
-  - name: opn-test2
+  - name: opn-lab2
     organizations:
       - OPN
     locations:
@@ -42,12 +42,12 @@ foreman_compute_resources:
       url: https://192.168.133.3:5000/v3
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: test2
+      tenant: lab2
       domain: opn.lab
       project_domain_name: Default
       project_domain_id: default
 
-  - name: opn-test3
+  - name: opn-lab3
     organizations:
       - OPN
     locations:
@@ -57,12 +57,12 @@ foreman_compute_resources:
       url: https://192.168.133.3:5000/v3
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: test3
+      tenant: lab3
       domain: opn.lab
       project_domain_name: Default
       project_domain_id: default
 
-  - name: opn-test4
+  - name: opn-lab4
     organizations:
       - OPN
     locations:
@@ -72,12 +72,12 @@ foreman_compute_resources:
       url: https://192.168.133.3:5000/v3
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: test4
+      tenant: lab4
       domain: opn.lab
       project_domain_name: Default
       project_domain_id: default
 
-  - name: opn-test5
+  - name: opn-lab5
     organizations:
       - OPN
     locations:
@@ -87,12 +87,12 @@ foreman_compute_resources:
       url: https://192.168.133.3:5000/v3
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: test5
+      tenant: lab5
       domain: opn.lab
       project_domain_name: Default
       project_domain_id: default
 
-  - name: opn-test6
+  - name: opn-lab6
     organizations:
       - OPN
     locations:
@@ -102,12 +102,12 @@ foreman_compute_resources:
       url: https://192.168.133.3:5000/v3
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: test6
+      tenant: lab6
       domain: opn.lab
       project_domain_name: Default
       project_domain_id: default
 
-  - name: opn-test7
+  - name: opn-lab7
     organizations:
       - OPN
     locations:
@@ -117,12 +117,12 @@ foreman_compute_resources:
       url: https://192.168.133.3:5000/v3
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: test7
+      tenant: lab7
       domain: opn.lab
       project_domain_name: Default
       project_domain_id: default
 
-  - name: opn-test8
+  - name: opn-lab8
     organizations:
       - OPN
     locations:
@@ -132,7 +132,7 @@ foreman_compute_resources:
       url: https://192.168.133.3:5000/v3
       user: admin
       password: b0004c7b0217ec419ec562a66bee2b7daf733a2e286c2c
-      tenant: test8
+      tenant: lab8
       domain: opn.lab
       project_domain_name: Default
       project_domain_id: default

@@ -30,7 +30,7 @@ nics=[${network['vlan5_adm']}]"
 # associative array manually
 #declare -A network=([vlan5_adm]=3225e32e-fb3b-4d4b-bf08-40f69e4e6e75 [vlan5]=c34a1b56-9cba-45f4-b013-74d031184623)
 
-# # some bash voodo to show associative array
+# # some bash voodoo to print associative array
 # for ITEM_NAME in "${!hostgroup[@]}"; do
 #     ITEM_VALUE="${hostgroup[$ITEM_NAME]}"
 #     echo "${ITEM_NAME} => ${ITEM_VALUE}"

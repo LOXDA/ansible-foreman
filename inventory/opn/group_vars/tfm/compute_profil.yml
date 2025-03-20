@@ -34,9 +34,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test1
+      - compute_resource: opn-lab1
         vm_attrs: 
-          tenant_id: "test1"
+          tenant_id: "lab1"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
@@ -45,9 +45,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test2
+      - compute_resource: opn-lab2
         vm_attrs: 
-          tenant_id: "test2"
+          tenant_id: "lab2"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
@@ -56,9 +56,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test3
+      - compute_resource: opn-lab3
         vm_attrs: 
-          tenant_id: "test3"
+          tenant_id: "lab3"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
@@ -67,9 +67,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test4
+      - compute_resource: opn-lab4
         vm_attrs: 
-          tenant_id: "test4"
+          tenant_id: "lab4"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
@@ -78,9 +78,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test5
+      - compute_resource: opn-lab5
         vm_attrs: 
-          tenant_id: "test5"
+          tenant_id: "lab5"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
@@ -89,9 +89,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test6
+      - compute_resource: opn-lab6
         vm_attrs: 
-          tenant_id: "test6"
+          tenant_id: "lab6"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
@@ -100,9 +100,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test7
+      - compute_resource: opn-lab7
         vm_attrs: 
-          tenant_id: "test7"
+          tenant_id: "lab7"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
@@ -111,9 +111,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test8
+      - compute_resource: opn-lab8
         vm_attrs: 
-          tenant_id: "test8"
+          tenant_id: "lab8"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8efe6693-c78b-4e54-8371-4b032169f551
@@ -136,9 +136,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test1
+      - compute_resource: opn-lab1
         vm_attrs: 
-          tenant_id: "test1"
+          tenant_id: "lab1"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
@@ -147,9 +147,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test2
+      - compute_resource: opn-lab2
         vm_attrs: 
-          tenant_id: "test2"
+          tenant_id: "lab2"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
@@ -158,9 +158,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test3
+      - compute_resource: opn-lab3
         vm_attrs: 
-          tenant_id: "test3"
+          tenant_id: "lab3"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
@@ -169,9 +169,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test4
+      - compute_resource: opn-lab4
         vm_attrs: 
-          tenant_id: "test4"
+          tenant_id: "lab4"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
@@ -180,9 +180,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test5
+      - compute_resource: opn-lab5
         vm_attrs: 
-          tenant_id: "test5"
+          tenant_id: "lab5"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
@@ -191,9 +191,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test6
+      - compute_resource: opn-lab6
         vm_attrs: 
-          tenant_id: "test6"
+          tenant_id: "lab6"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
@@ -202,9 +202,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test7
+      - compute_resource: opn-lab7
         vm_attrs: 
-          tenant_id: "test7"
+          tenant_id: "lab7"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
@@ -213,9 +213,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test8
+      - compute_resource: opn-lab8
         vm_attrs: 
-          tenant_id: "test8"
+          tenant_id: "lab8"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 0fb4de1f-e248-44d5-9949-4a14ad9551f4
@@ -238,9 +238,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test1
+      - compute_resource: opn-lab1
         vm_attrs: 
-          tenant_id: "test1"
+          tenant_id: "lab1"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
@@ -249,9 +249,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test2
+      - compute_resource: opn-lab2
         vm_attrs: 
-          tenant_id: "test2"
+          tenant_id: "lab2"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
@@ -260,9 +260,9 @@ foreman_compute_profil:
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
 
-      - compute_resource: opn-test3
+      - compute_resource: opn-lab3
         vm_attrs: 
-          tenant_id: "test3"
+          tenant_id: "lab3"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
@@ -270,9 +270,9 @@ foreman_compute_profil:
           size_gb: 8
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
-      - compute_resource: opn-test4
+      - compute_resource: opn-lab4
         vm_attrs: 
-          tenant_id: "test4"
+          tenant_id: "lab4"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
@@ -280,9 +280,9 @@ foreman_compute_profil:
           size_gb: 8
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
-      - compute_resource: opn-test5
+      - compute_resource: opn-lab5
         vm_attrs: 
-          tenant_id: "test5"
+          tenant_id: "lab5"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
@@ -290,9 +290,9 @@ foreman_compute_profil:
           size_gb: 8
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
-      - compute_resource: opn-test6
+      - compute_resource: opn-lab6
         vm_attrs: 
-          tenant_id: "test6"
+          tenant_id: "lab6"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
@@ -300,9 +300,9 @@ foreman_compute_profil:
           size_gb: 8
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
-      - compute_resource: opn-test7
+      - compute_resource: opn-lab7
         vm_attrs: 
-          tenant_id: "test7"
+          tenant_id: "lab7"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
@@ -310,9 +310,9 @@ foreman_compute_profil:
           size_gb: 8
           nics:
             - 3225e32e-fb3b-4d4b-bf08-40f69e4e6e75
-      - compute_resource: opn-test8
+      - compute_resource: opn-lab8
         vm_attrs: 
-          tenant_id: "test8"
+          tenant_id: "lab8"
           availability_zone: "nova"
           image_ref: d0479e26-e4af-4964-99fb-4dbdde87a43f
           flavor_ref: 8ef6b6a6-bf43-46a2-acde-48e27d09815f
