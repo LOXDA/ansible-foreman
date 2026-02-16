@@ -2,8 +2,8 @@
 
 foreman_subnets:
 
-  - name: VLAN5
-    description: VLAN5
+  - name: externe
+    description: externe network
     network: 192.168.135.0
     mask: 255.255.255.0
     gateway: 192.168.135.1
@@ -27,16 +27,291 @@ foreman_subnets:
     organizations:
       - OPN
 
-  - name: VLAN5_ADM
-    description: VLAN5_ADM
-    network: 192.168.5.0
+  - name: monitoring
+    description: app-monitoring
+    network: 192.168.19.0
     mask: 255.255.255.0
-    gateway: 192.168.5.1
+    gateway: 192.168.19.1
     dns_primary: 192.168.133.249
     dns_secondary: 192.168.133.251
     ipam: Internal DB
-    from_ip: 192.168.5.14
-    to_ip: 192.168.5.244
+    from_ip: 192.168.19.4
+    to_ip: 192.168.19.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: foreman
+    description: app-foreman
+    network: 192.168.20.0
+    mask: 255.255.255.0
+    gateway: 192.168.20.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.20.4
+    to_ip: 192.168.20.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: billing
+    description: app-billing
+    network: 192.168.21.0
+    mask: 255.255.255.0
+    gateway: 192.168.21.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.21.4
+    to_ip: 192.168.21.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: status
+    description: app-status
+    network: 192.168.22.0
+    mask: 255.255.255.0
+    gateway: 192.168.22.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.22.4
+    to_ip: 192.168.22.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: lab1
+    description: lab1
+    network: 192.168.11.0
+    mask: 255.255.255.0
+    gateway: 192.168.11.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.11.4
+    to_ip: 192.168.11.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: lab2
+    description: lab2
+    network: 192.168.12.0
+    mask: 255.255.255.0
+    gateway: 192.168.12.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.12.4
+    to_ip: 192.168.12.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: lab3
+    description: lab3
+    network: 192.168.13.0
+    mask: 255.255.255.0
+    gateway: 192.168.13.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.13.4
+    to_ip: 192.168.13.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: lab4
+    description: lab4
+    network: 192.168.14.0
+    mask: 255.255.255.0
+    gateway: 192.168.14.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.14.4
+    to_ip: 192.168.14.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: lab5
+    description: lab5
+    network: 192.168.15.0
+    mask: 255.255.255.0
+    gateway: 192.168.15.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.15.4
+    to_ip: 192.168.15.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: lab6
+    description: lab6
+    network: 192.168.16.0
+    mask: 255.255.255.0
+    gateway: 192.168.16.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.16.4
+    to_ip: 192.168.16.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: lab7
+    description: lab7
+    network: 192.168.17.0
+    mask: 255.255.255.0
+    gateway: 192.168.17.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.17.4
+    to_ip: 192.168.17.250
+    boot_mode: Static
+    # dhcp_proxy: "{{ foreman_host_proxy }}"
+    # tftp_proxy: "{{ foreman_host_proxy }}"
+    # httpboot_proxy: "{{ foreman_host_proxy }}"
+    # template_proxy: "{{ foreman_host_proxy }}"
+    # discovery_proxy: "{{ foreman_host_proxy }}"
+    remote_execution_proxies: "{{ foreman_host_proxy }}"
+    mtu: 1500
+    domains:
+      - opn.lab
+    locations:
+      - OPN
+    organizations:
+      - OPN
+
+  - name: lab8
+    description: lab8
+    network: 192.168.18.0
+    mask: 255.255.255.0
+    gateway: 192.168.18.1
+    dns_primary: 192.168.133.249
+    dns_secondary: 192.168.133.251
+    ipam: Internal DB
+    from_ip: 192.168.18.4
+    to_ip: 192.168.18.250
     boot_mode: Static
     # dhcp_proxy: "{{ foreman_host_proxy }}"
     # tftp_proxy: "{{ foreman_host_proxy }}"

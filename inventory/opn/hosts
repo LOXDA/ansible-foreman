@@ -19,8 +19,8 @@ smtp.opn.lab ansible_host=192.168.133.244
 [tfm:vars]
 ansible_user=debian
 opn_autoip=false
-opn_project=admin
-opn_network=vlan5_adm
+opn_project=app-foreman
+opn_network=FOREMAN
 opn_sg=ALLOW_ALL
 
 [tfm:children]
@@ -30,29 +30,29 @@ tfm_proxy
 tfm_puppet
 
 [tfm_app]
-tfm-app.opn.lab         opn_flavor=m2.large opn_image=Debian-11
+tfm-app.opn.lab         opn_flavor=m2.large opn_image=Debian-12
 
 [tfm_db]
-tfm-db.opn.lab          opn_flavor=m2.small opn_image=Debian-11
+tfm-db.opn.lab          opn_flavor=m2.medium opn_image=Debian-12
 
 [tfm_proxy]
-tfm-proxy.opn.lab       opn_flavor=m2.medium opn_image=Debian-11
-tfm-proxy-lan.opn.lab
+tfm-proxy.opn.lab       opn_flavor=m2.small opn_image=Debian-12
+tfm-proxy-lan.opn.lab   opn_flavor=m2.small opn_image=Debian-12
 
 [tfm_proxy_salt]
-tfm-proxy-salt.opn.lab  opn_flavor=m2.medium opn_image=Debian-11
+tfm-proxy-salt.opn.lab  opn_flavor=m2.small opn_image=Debian-12
 
 [tfm_proxy:children]
 tfm_proxy_salt
 
 [tfm_puppet]
-tfm-puppet.opn.lab      opn_flavor=m2.medium opn_image=Debian-11
+tfm-puppet.opn.lab      opn_flavor=m2.medium opn_image=Debian-12
 
 [monitoring:vars]
-ansible_user=debian 
+ansible_user=debian
 opn_autoip=false
-opn_project=admin
-opn_network=vlan5_adm
+opn_project=app-monitoring
+opn_network=MONITORING
 opn_sg=ALLOW_ALL
 
 [monitoring:children]

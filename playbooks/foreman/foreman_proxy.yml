@@ -29,18 +29,28 @@
   tasks:
     - name: fix isc-dhcp-server omapi bug with debian >10
       block:
+
+      - name: Download libssl1 package from Buster
+        ansible.builtin.apt:
+          deb: http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1w-0+deb11u3_amd64.deb
+
+      - name: Download libisc-export1105 package from Buster
+        ansible.builtin.apt:
+          deb: http://ftp.fr.debian.org/debian/pool/main/b/bind9-libs/libisc-export1105_9.11.19+dfsg-2.1_amd64.deb
+
+      - name: Install libdns-export1110 package from Buster
+        ansible.builtin.apt:
+          deb: http://ftp.fr.debian.org/debian/pool/main/b/bind9-libs/libdns-export1110_9.11.19+dfsg-2.1_amd64.deb
+
       - name: Download libirs-export161 package from Buster
         ansible.builtin.apt:
           deb: http://cdn-fastly.deb.debian.org/debian/pool/main/b/bind9-libs/libirs-export161_9.11.19+dfsg-2.1_amd64.deb
-      - name: Download libssl1 package from Buster
-        ansible.builtin.apt:
-          deb: http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb10u6_amd64.deb
-      - name: Download libisc-export1100 package from Buster
-        ansible.builtin.apt:
-          deb: http://cdn-fastly.deb.debian.org/debian-security/pool/main/b/bind9/libisc-export1100_9.11.5.P4+dfsg-5.1+deb10u11_amd64.deb
-      - name: Install libdns-export1104 package from Buster
-        ansible.builtin.apt:
-          deb: http://cdn-fastly.deb.debian.org/debian-security/pool/main/b/bind9/libdns-export1104_9.11.5.P4+dfsg-5.1+deb10u11_amd64.deb
+
+
+#      - name: Install libdns-export1104 package from Buster
+#        ansible.builtin.apt:
+#          deb: http://cdn-fastly.deb.debian.org/debian-security/pool/main/b/bind9/libdns-export1104_9.11.5.P4+dfsg-5.1+deb10u11_amd64.deb
+
       - name: Download isc-dhcp-server package from Buster
         get_url:
           url: http://cdn-fastly.deb.debian.org/debian/pool/main/i/isc-dhcp/isc-dhcp-server_4.4.1-2+deb10u1_amd64.deb

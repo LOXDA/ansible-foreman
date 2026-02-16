@@ -8,23 +8,15 @@ collections:
   - name: devsec.hardening
   - name: theforeman.foreman
   - name: theforeman.operations
-  # - name: theforeman.foreman_scap_client
   - name: openstack.cloud
-  # - name: community.vmware
+  # - name: vmware.vmware
   # - name: lae.proxmox
   - name: icinga.icinga
   - name: middleware_automation.keycloak
   # - name: community.hashi_vault
   # - name: netbox.netbox
-  # - name: cisco.ise
-  # - name: cisco.aci
   # - name: cisco.ios
   # - name: cisco.nxos
-  # - name: cisco.asa
-  # - name: f5networks.f5_modules
-  # - name: f5networks.f5_bigip
-  # - name: paloaltonetworks.panos
-  # - name: juniper.device
 
 roles:
   - name: geerlingguy.mysql

@@ -1,6 +1,7 @@
 ---
 
-- hosts: localhost
+- name: Create Host in openstack
+  hosts: localhost
   serial: 1
   gather_facts: false
 
@@ -53,26 +54,29 @@
 
     - block:
 
-      - name: "Create a host in foreman on openstack"
-        delegate_to: localhost
-        theforeman.foreman.host:
-          name: "{{ lookup('community.general.random_pet') }}.opn.lab"
-          state: present
-        register: host
+        - name: "Create a host in foreman on openstack"
+          delegate_to: localhost
+          theforeman.foreman.host:
+            username: "{{ username }}"
+            password: "{{ password }}"
+            server_url: "{{ foreman_url_app }}"
+            name: "{{ lookup('community.general.random_pet') }}.opn.lab"
+            state: present
+          register: host
 
-      - name: Display host created
-        ansible.builtin.debug:
-          msg: |
-            Name: {{host.entity.hosts[0].name}}
-            FQDN: fqdn
-            IPaddr: ipaddr
+        - name: Display host created
+          ansible.builtin.debug:
+            msg: |
+              Name: {{ host.entity.hosts[0].name }}
+              FQDN: fqdn
+              IPaddr: ipaddr
 
-            debug: {{host.entity.hosts[0]}}
+              debug: {{ host.entity.hosts[0] }}
 
       # loop: "{{ range(0,2) | list }}"
       # loop_control:
       #   pause: 60
-      ignore_errors: true
+      # ignore_errors: true
 
     # - name: Test2 api
     #   ansible.builtin.uri:
@@ -92,7 +96,7 @@
     # - name: Display Target Variables
     #   ansible.builtin.debug:
     #     msg: '{{uri_output.json.results}}'
-  
+
     # - name: Test api
     #   ansible.builtin.uri:
     #     user: "admin"

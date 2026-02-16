@@ -1,9 +1,9 @@
 ---
 
 # defaults file for common
-foreman_version: '3.13'
+foreman_version: '3.14'
 puppet_version: puppet7
-postgresql_version: 13
+postgresql_version: 15
 
 foreman_db_username: "{{ vault_foreman_db_username }}"
 foreman_db_password: "{{ vault_foreman_db_password }}"

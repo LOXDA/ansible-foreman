@@ -1,7 +1,7 @@
 ---
 
 # defaults file for common
-foreman_version: '3.13'
+foreman_version: '3.14'
 puppet_version: puppet7
 
 # install options
