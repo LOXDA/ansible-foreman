@@ -1,26 +1,30 @@
 ---
-
-# - hosts: "{{ target | default('all') }}"
-- hosts: all
+- name: Déploiement de la configuration des certificats
+  hosts: all
   gather_facts: true
   become: true
 
   tasks:
+    - name: S'assurer que le paquet ca-certificates est installé
+      ansible.builtin.apt:
+        name: ca-certificates
+        state: present
+        update_cache: yes
 
-  - name: Update CA Certificates
-    ansible.builtin.apt:
-      name: ca-certificates
-      update_cache: yes
+    - name: Déployer les certificats CA personnalisés
+      ansible.builtin.copy:
+        dest: "/usr/local/share/ca-certificates/{{ item.name | basename }}"
+        content: "{{ item.filecontent }}"
+        owner: root
+        group: root
+        mode: 0644
+      loop: "{{ vault_ca_certs_files | default([]) }}"
+      notify: mettre à jour les certificats ca
+      when: vault_ca_certs_files is defined
 
-  - name: Creating certs file in /usr/local/share/ca-certificates
-    ansible.builtin.copy:
-      dest: "{{ item.name }}"
-      content: "{{ item.filecontent }}"
-      owner: root
-      group: root
-      mode: 0644
-    loop: "{{ vault_ca_certs_files }}"
-
-  - name: Update ca-certificates
-    ansible.builtin.shell: |
-      update-ca-certificates
+  handlers:
+    - name: mettre à jour les certificats ca
+      ansible.builtin.command: update-ca-certificates
+      changed_when: false
+      args:
+        warn: false
