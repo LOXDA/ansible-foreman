@@ -48,24 +48,27 @@
 
   pre_tasks:
 
-    - name: Install CA Certificates
+    - name: Installer le paquet CA Certificates
       ansible.builtin.apt:
         name: ca-certificates
 
-    - name: Creating certs file in /usr/local/share/ca-certificates
+    - name: Déployer les fichiers de certificats personnalisés
       ansible.builtin.copy:
         dest: "{{ item.name }}"
         content: "{{ item.filecontent }}"
         owner: root
         group: root
         mode: 0644
-      loop: "{{ vault_ca_certs_files }}"
+      loop: "{{ vault_ca_certs_files | default([]) }}"
+      when: vault_ca_certs_files is defined
 
-    - name: Update ca-certificates
-      ansible.builtin.shell: |
-        update-ca-certificates
+    - name: Mettre à jour les certificats CA
+      ansible.builtin.command: update-ca-certificates
+      changed_when: false
+      args:
+        warn: false
 
-    - name: Creates directory
+    - name: Créer le répertoire pour les certificats Icinga2
       ansible.builtin.file:
         path: /var/lib/icinga2/certs
         state: directory
@@ -74,7 +77,7 @@
         mode: 0775
         recurse: yes
 
-    - name: Copy icinga2CA certs file in /var/lib/icinga2/certs/ca.crt
+    - name: Copier le certificat CA Icinga2 dans le répertoire approprié
       ansible.builtin.copy:
         remote_src: true
         src: /usr/local/share/ca-certificates/icinga2CA.crt

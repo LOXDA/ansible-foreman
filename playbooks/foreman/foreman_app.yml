@@ -1,6 +1,6 @@
 ---
-
-- hosts: tfm_app
+- name: Déploiement de l'application Foreman
+  hosts: tfm_app
   gather_facts: true
   become: true
   roles:
@@ -14,14 +14,16 @@
   gather_facts: true
   become: true
   tasks:
-    - name: Fetch settings.yaml
+    - name: Récupérer le fichier de configuration settings.yaml
       slurp:
         src: /etc/foreman/settings.yaml
       register: settingsyaml
-    - name: Fetch oauth_consumer_key
+
+    - name: Extraire la clé OAuth consumer
       set_fact:
         oauth_consumer_key: "{{ settingsyaml['content'] | b64decode | regex_findall(':oauth_consumer_key: (.+)') | first }}"
-    - name: Fetch oauth_consumer_secret
+
+    - name: Extraire le secret OAuth consumer
       set_fact:
         oauth_consumer_secret: "{{ settingsyaml['content'] | b64decode | regex_findall(':oauth_consumer_secret: (.+)') | first }}"
   tags:

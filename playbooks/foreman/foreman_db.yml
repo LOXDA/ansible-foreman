@@ -1,6 +1,6 @@
 ---
-
-- hosts: tfm_db
+- name: Déploiement de la base de données Foreman
+  hosts: tfm_db
   gather_facts: true
   become: true
   roles:
