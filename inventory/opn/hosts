@@ -1,6 +1,5 @@
 ; [mutu]
 ; m0
-
 ; [dns]
 ; ns1
 
@@ -30,23 +29,23 @@ tfm_proxy
 tfm_puppet
 
 [tfm_app]
-tfm-app.opn.lab         opn_flavor=m2.large opn_image=Debian-12
+tfm-app.foreman.opn.lab         opn_flavor=m2.large opn_image=Debian-12
 
 [tfm_db]
-tfm-db.opn.lab          opn_flavor=m2.medium opn_image=Debian-12
+tfm-db.foreman.opn.lab          opn_flavor=m2.medium opn_image=Debian-12
 
 [tfm_proxy]
-tfm-proxy.opn.lab       opn_flavor=m2.small opn_image=Debian-12
-tfm-proxy-lan.opn.lab   opn_flavor=m2.small opn_image=Debian-12
+tfm-proxy.foreman.opn.lab       opn_flavor=m2.small opn_image=Debian-12
+tfm-proxy-lan.foreman.opn.lab   opn_flavor=m2.small opn_image=Debian-12
 
 [tfm_proxy_salt]
-tfm-proxy-salt.opn.lab  opn_flavor=m2.small opn_image=Debian-12
+tfm-proxy-salt.foreman.opn.lab  opn_flavor=m2.small opn_image=Debian-12
 
 [tfm_proxy:children]
 tfm_proxy_salt
 
 [tfm_puppet]
-tfm-puppet.opn.lab      opn_flavor=m2.medium opn_image=Debian-12
+tfm-puppet.foreman.opn.lab      opn_flavor=m2.medium opn_image=Debian-12
 
 [monitoring:vars]
 ansible_user=debian
@@ -62,13 +61,13 @@ monitoring_app
 monitoring_sat
 
 [monitoring_db]
-mon-db.opn.lab          opn_flavor=m2.medium opn_image=Debian-12
+mon-db.monitoring.opn.lab          opn_flavor=m2.medium opn_image=Debian-12
 
 [monitoring_web]
-mon-web.opn.lab         opn_flavor=m2.medium opn_image=Debian-12
+mon-web.monitoring.opn.lab         opn_flavor=m2.medium opn_image=Debian-12
 
 [monitoring_app]
-mon-app.opn.lab         opn_flavor=m2.medium opn_image=Debian-12
+mon-app.monitoring.opn.lab         opn_flavor=m2.medium opn_image=Debian-12
 
 [monitoring_sat]
-mon-sat.opn.lab         opn_flavor=m2.medium opn_image=Debian-12
+mon-sat.monitoring.opn.lab         opn_flavor=m2.medium opn_image=Debian-12

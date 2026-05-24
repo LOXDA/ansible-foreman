@@ -8,7 +8,7 @@ git submodule update --remote
 # ansible-playbook -i inventory/opn playbooks/deploy_ldap.yml
 
 # deploy theforeman
-ansible-playbook -i inventory/opn playbooks/create_hosts.yml --limit tfm
+ansible-playbook -i inventory/opn playbooks/create_instance.yml --limit tfm
 ansible-playbook -i inventory/opn playbooks/deploy_foreman.yml
 
 # provisioning

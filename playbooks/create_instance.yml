@@ -6,7 +6,7 @@
 
   module_defaults:
     group/openstack.cloud.openstack:
-      cloud: opn
+      cloud: default
       auth:
         project_name: "{{ opn_project }}"
 

@@ -1,0 +1,33 @@
+---
+
+collections:
+  - name: community.general
+  - name: community.postgresql
+  - name: community.mysql
+  - name: community.crypto
+  - name: devsec.hardening
+  - name: theforeman.foreman
+  - name: theforeman.operations
+  - name: openstack.cloud
+  # - name: vmware.vmware
+  # - name: lae.proxmox
+  - name: icinga.icinga
+  - name: middleware_automation.keycloak
+  # - name: community.hashi_vault
+  # - name: netbox.netbox
+  # - name: cisco.ios
+  # - name: cisco.nxos
+
+roles:
+  - name: geerlingguy.mysql
+  - name: geerlingguy.apache
+  - name: ansible-role-bind
+    src: https://github.com/bertvv/ansible-role-bind.git
+  - name: ansible-role-grub
+    src: https://github.com/robertdebock/ansible-role-grub.git
+  - name: ansible-role-openldap
+    src: https://github.com/criecm/ansible-role-openldap.git
+  - name: ansible-openldap
+    src: https://github.com/ajanis/ansible-openldap.git
+  - name: ansible-role-deploy-git-repos
+    src: https://github.com/gcoop-libre/ansible-role-deploy-git-repos.git
