@@ -1,3 +1,3 @@
 #!/bin/bash
 git pull
-git submodule update --remote
+git submodule update init --remote
