@@ -1,0 +1,48 @@
+name: Arc A770 Local Stack
+version: 0.0.1
+schema: v1
+
+models:
+  - name: Gemma 4 12B (Chat & Edit)
+    provider: ollama
+    model: gemma4:12b
+    apiBase: http://192.168.133.72:11434
+    roles:
+      - chat
+      - edit
+      - apply
+    defaultCompletionOptions:
+      contextLength: 16384
+      temperature: 0.2
+      num_predict: 2048
+
+  - name: Qwen 2.5 Coder 1.5B (Autocomplete)
+    provider: ollama
+    model: qwen2.5-coder:1.5b
+    apiBase: http://192.168.133.72:11434
+    roles:
+      - autocomplete
+    autocompleteOptions:
+      debounceDelay: 250
+      maxPromptTokens: 1536
+      onlyMyCode: true
+
+  - name: Nomic Embed (Codebase)
+    provider: ollama
+    model: nomic-embed-text:latest
+    apiBase: http://192.168.133.72:11434
+    roles:
+      - embed
+
+context:
+  - provider: code
+  - provider: docs
+  - provider: diff
+  - provider: terminal
+  - provider: problems
+  - provider: folder
+  - provider: codebase
+  - provider: file
+  - provider: currentFile
+  - provider: open
+  - provider: repo-map
