@@ -1,4 +1,5 @@
 ansible
+ansible-lint
 psycopg2 
 dnspython
 passlib
